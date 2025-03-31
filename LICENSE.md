@@ -1,1 +1,1 @@
-No using anything I write here thanks
+You can view my files, but don't copy anything that's here thanks
