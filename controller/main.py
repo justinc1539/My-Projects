@@ -55,7 +55,7 @@ from time import sleep
 
 # AutoCloser
 # driver = webdriver.Chrome()
-# driver.get(f'https://www.luscious.net/albums/double-assjob_413621')
+# driver.get(f'')
 # while 1:
 #     try:
 #         driver.find_element('css selector', '[data-element="close-button"]').click()
