@@ -93,6 +93,7 @@ window.addEventListener("keydown", (event) => {
     }
     // Logic to change speed values
     else if (event.shiftKey && event.key === " ") {
+        blockKeyEvents(event);
         speedModIter = 4;
         aVideo.playbackRate = 1;
         flashSpeedIndicator(`${aVideo.playbackRate}x ± ${speedModifiers[speedModIter]}x`);
