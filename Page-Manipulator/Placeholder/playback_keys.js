@@ -63,6 +63,7 @@ DOWNLOAD VID ^^^ */
 // Variables
 const navModifiers = [0.05, 0.25, 1, 5, 30];
 const speedModifiers = [0.0001, 0.001, 0.01, 0.1, 0.25, 1, 5, 10];
+let highlightOutline = true;
 let overlayTimeout;
 let currentIndex = 0;
 let videos;
@@ -106,7 +107,9 @@ styles.innerHTML = `
     opacity: 1;
   }
 
+
   .highlighted {
+    position: relative !important;
     outline: 4px solid #3b82f6 !important;
     outline-offset: 4px;
     box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
@@ -147,7 +150,7 @@ function flashIndicator(text, showTime=1000) {
 }
 
 function highlightVideos(theVids) {
-    theVids.forEach(v => {
+    theVids.forEach(video => {
         // Prevent wrapping a video twice if the script runs again
         if (video.parentElement.classList.contains('video-highlight-container')) return;
     
@@ -173,7 +176,7 @@ function highlightVideo(index) {
   
   if (index >= 0 && index < videos.length) {
     const targetVideo = videos[index];
-    targetVideo.parentElement.classList.add('highlighted');
+    if (highlightOutline) targetVideo.parentElement.classList.add('highlighted');
     targetVideo.focus();
   }
 }
@@ -252,6 +255,10 @@ async function waitForVideos() {
       blockKeyEvents(event);
       currentIndex = 0;
       flashIndicator(`Enabled Program (Esc to end)`, 3000);
+  } else if (event.ctrlKey && event.altKey && ["H", "h"].includes(event.key)) {
+      blockKeyEvents(event);
+      highlightOutline = !highlightOutline;
+      flashIndicator(`Outline ${highlightOutline ? "En" : "Dis"}abled`);
   }
 
       (aVideo => {
@@ -282,15 +289,16 @@ Ctrl + \` - Restart Program
 
 Tab - Select Next Video
 Shift + Tab - Select Previous Video
+
+Ctrl + Alt + H - Hide Outline (in case it doesn't work or hides the video)
 ====================================================================
 Play/Pause
 Space/K/Enter - Play/Pause
 ====================================================================
-Loop
-Alt + L - Toggle Loop
-====================================================================
-Picture-in-Picture
-Alt + P - Toggle Picture-in-Picture for selected Video
+Controls
+Ctrl + Alt + C - Show all Controls
+Ctrl + Alt + L - Toggle Loop
+Ctrl + Alt + P - Toggle Picture-in-Picture
 ====================================================================
 Navigation
 Comma - Go back 1 frame
@@ -461,25 +469,28 @@ Ctrl + Shift - Finish Cut Customization/Confirm Cut Deletion`, 2**16);
                 aVideo.paused ? aVideo.play() : aVideo.pause();
                 flashIndicator(`Video ${aVideo.paused ? "Paused" : "Playing"}`);
             }
-            // Loop feature
-            else if (event.altKey && ["L", "l"].includes(event.key)) {
+            // Controls feature
+            else if (event.ctrlKey && event.altKey && ["C", "c"].includes(event.key)) {
+                blockKeyEvents(event);
+                aVideo.controls = !aVideo.controls;
+                flashIndicator(`Controls ${aVideo.controls ? "En" : "Dis"}abled`);
+            } else if (event.ctrlKey && event.altKey && ["L", "l"].includes(event.key)) {
                 blockKeyEvents(event);
                 aVideo.loop = !aVideo.loop;
                 flashIndicator(`Loop ${aVideo.loop ? "En" : "Dis"}abled`);
-            }
-            // Picture-in-Picture feature
-            else if (event.altKey && ["P", "p"].includes(event.key)) {
+            } else if (event.ctrlKey && event.altKey && ["P", "p"].includes(event.key)) {
                 blockKeyEvents(event);
                 if (aVideo.hasAttribute('__pip__')) {
                     document.exitPictureInPicture();
                     flashIndicator("Ended Picture-in-Picture");
                 } else {
                     if (document.pictureInPictureElement) document.exitPictureInPicture();
+                    aVideo.removeAttribute("disablePictureInPicture");
+                    aVideo.requestPictureInPicture();
                     aVideo.setAttribute('__pip__', true);
                     aVideo.addEventListener('leavepictureinpicture', event => {
                         aVideo.removeAttribute('__pip__');
                     }, { once: true });
-                    aVideo.requestPictureInPicture();
                     flashIndicator(`Started Picure-in-Picture for Video ${currentIndex+1}`);
                 }
             }
