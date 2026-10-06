@@ -1,4 +1,4 @@
-// V10.5.2026
+// V10.6.2026
 // Active websites: all
 
 /* DOWNLOAD VID VVV
@@ -228,11 +228,11 @@ async function waitForVideos() {
     
     flashIndicator("Ctrl + Shift + / for shortcuts", 3000);
     window.addEventListener("keydown", (event) => {
+  // Selecting Video feature
   if (!['INPUT', 'TEXTAREA'].includes(event.target.tagName) && event.key === 'Tab') {
-    event.preventDefault();
-    event.stopImmediatePropagation();
+    blockKeyEvents(event);
 
-    if (videos.length === 0) return; // Make sure Tab/Shift + Tab only happens IF THERE IS AT LEAST 1 VIDEO
+    if (videos.length === 0 || currentIndex === null) return; // Make sure Tab/Shift + Tab only happens IF THERE IS AT LEAST 1 VIDEO
 
     if (event.shiftKey) {
       // Shift + Tab: Move backward
@@ -244,6 +244,14 @@ async function waitForVideos() {
 
     highlightVideo(currentIndex);
     flashIndicator(`Selected Video ${currentIndex+1}`);
+  } else if (currentIndex !== null && event.key === "Escape") {
+      blockKeyEvents(event);
+      currentIndex = null;
+      flashIndicator(`Disabled Program (Ctrl + \` to restart)`, 3000);
+  } else if (currentIndex === null && event.ctrlKey && event.key === "`") {
+      blockKeyEvents(event);
+      currentIndex = 0;
+      flashIndicator(`Enabled Program (Esc to end)`, 3000);
   }
 
       (aVideo => {
@@ -269,11 +277,20 @@ async function waitForVideos() {
                 flashIndicator(`Click this box to close
 ====================================================================
 Selecting Video
+Esc - End Program
+Ctrl + \` - Restart Program
+
 Tab - Select Next Video
 Shift + Tab - Select Previous Video
 ====================================================================
 Play/Pause
 Space/K/Enter - Play/Pause
+====================================================================
+Loop
+Alt + L - Toggle Loop
+====================================================================
+Picture-in-Picture
+Alt + P - Toggle Picture-in-Picture for selected Video
 ====================================================================
 Navigation
 Comma - Go back 1 frame
@@ -444,6 +461,28 @@ Ctrl + Shift - Finish Cut Customization/Confirm Cut Deletion`, 2**16);
                 aVideo.paused ? aVideo.play() : aVideo.pause();
                 flashIndicator(`Video ${aVideo.paused ? "Paused" : "Playing"}`);
             }
+            // Loop feature
+            else if (event.altKey && ["L", "l"].includes(event.key)) {
+                blockKeyEvents(event);
+                aVideo.loop = !aVideo.loop;
+                flashIndicator(`Loop ${aVideo.loop ? "En" : "Dis"}abled`);
+            }
+            // Picture-in-Picture feature
+            else if (event.altKey && ["P", "p"].includes(event.key)) {
+                blockKeyEvents(event);
+                if (aVideo.hasAttribute('__pip__')) {
+                    document.exitPictureInPicture();
+                    flashIndicator("Ended Picture-in-Picture");
+                } else {
+                    if (document.pictureInPictureElement) document.exitPictureInPicture();
+                    aVideo.setAttribute('__pip__', true);
+                    aVideo.addEventListener('leavepictureinpicture', event => {
+                        aVideo.removeAttribute('__pip__');
+                    }, { once: true });
+                    aVideo.requestPictureInPicture();
+                    flashIndicator(`Started Picure-in-Picture for Video ${currentIndex+1}`);
+                }
+            }
             // Navigation feature
             else if ([",", "."].includes(event.key)) {
                 blockKeyEvents(event);
@@ -488,8 +527,8 @@ Ctrl + Shift - Finish Cut Customization/Confirm Cut Deletion`, 2**16);
                 }
                 flashIndicator(`Volume: ${Math.round(100 * aVideo.volume)}%${aVideo.muted ? " (Muted)" : ""}`)
             } else if (["M", "m"].includes(event.key)) {
-                aVideo.muted = !aVideo.muted
-                flashIndicator(`${aVideo.muted ? "M" : "Unm"}uted`)
+                aVideo.muted = !aVideo.muted;
+                flashIndicator(`${aVideo.muted ? "M" : "Unm"}uted`);
             }
         }
       })(videos[currentIndex]);
