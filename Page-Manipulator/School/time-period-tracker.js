@@ -1,4 +1,4 @@
-// V9.21.2026
+// V10.7.2026
 // Active Websites: All
 if (window.location.href === "https://pcti.instructure.com/?login_success=0") {
     while (document.body.firstChild) {
@@ -62,6 +62,7 @@ if (window.location.href.includes("https://pcti.instructure.com")) {
         // box.textContent = new Date().toLocaleTimeString();
         currentTime = new Date().toLocaleTimeString();
         box.textContent = `${currentTime} ${getCurrentPeriod()}`;
+        // box.textContent = "9:48:04 AM Period 3 (9:46 AM-10:26 AM)"; // TODO: DELETE
     }, 100);
 
     // Dragging logic
@@ -70,6 +71,7 @@ if (window.location.href.includes("https://pcti.instructure.com")) {
     let offsetY = 0;
 
     box.addEventListener("mousedown", e => {
+        event.preventDefault();
         isDragging = true;
 
         // Remove centering transform once dragging starts
