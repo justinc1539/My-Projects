@@ -1,4 +1,4 @@
-// V10.6.2026
+// V10.7.2026
 // Active Websites: All
 
 try {
@@ -669,10 +669,7 @@ Calc.observe('change', function() {
     autoSaveGraph();
 });
 } else if (url.includes("https://runestone.academy")) { // CSAWESOME
-    alert(`Be sure to Ctrl + F the following:
-Check Me
-Save & Run
-Next >`);
+    alert("Be sure to Ctrl + F \"Check Me\" and \"Save & Run\"!")
 } else if (url.startsWith("https://ps.pcti.tec.nj.us/guardian/home.html")) {
 const fail_lunch_links = [
     'scores.html?frn=0042115146&fg=R1&schoolid=50',
@@ -1496,6 +1493,7 @@ if (window.location.href.includes("https://pcti.instructure.com")) {
     let offsetY = 0;
 
     box.addEventListener("mousedown", e => {
+        event.preventDefault();
         isDragging = true;
 
         // Remove centering transform once dragging starts
