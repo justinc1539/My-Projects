@@ -66,6 +66,13 @@ function showPopup(message) {
 
 function main() {
 try {
+// Fill in empty Canvas Refined Custom Tasks
+// <span style="color:#cccccc;font-size:12px;margin-top:-2px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;box-sizing:border-box;padding-right:22px;">
+setInterval(() => {
+    document.querySelectorAll('span[style="color:#cccccc;font-size:12px;margin-top:-2px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;box-sizing:border-box;padding-right:22px;"]').forEach(ele => {
+        ele.innerHTML = "<span style='color:black'>Custom Task</span>";
+    });
+}, 1);
 // URL LOGIC VVV
 if (url.match(/^https:\/\/example\.com\/?(?:\?.*)?$/)) {
     document.documentElement.innerHTML = "";
