@@ -86,6 +86,7 @@ durationOverlay.addEventListener('click', () => {
     setTimeout(() => {durationOverlay.innerText = "";}, 200);
     durationOverlay.classList.remove('show');
 });
+durationOverlay.style.top = "90%";
 document.body.appendChild(durationOverlay);
 
 const styles = document.createElement('style');
@@ -148,14 +149,14 @@ function formatTime(seconds) {
     return `${hours}:${minutes}:${secs}.${fraction ? fraction : 0}`;
 }
 
-function flashIndicator(text, showTime=1000) {
-  videoOverlay.innerText = text;
-  videoOverlay.classList.add('show');
+function flashIndicator(text, showTime=1000, overlay=videoOverlay) {
+  overlay.innerText = text;
+  overlay.classList.add('show');
   
   clearTimeout(overlayTimeout); // Reset the hide timer if the user keeps pressing keys
   overlayTimeout = setTimeout(() => {
-    setTimeout(() => {videoOverlay.innerText = "";}, 200);
-    videoOverlay.classList.remove('show');
+    setTimeout(() => {overlay.innerText = "";}, 200);
+    overlay.classList.remove('show');
   }, showTime);
 }
 
