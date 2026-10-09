@@ -64,6 +64,7 @@ DOWNLOAD VID ^^^ */
 const navModifiers = [0.05, 0.25, 1, 5, 30];
 const speedModifiers = [0.0001, 0.001, 0.01, 0.1, 0.25, 1, 5, 10];
 let highlightOutline = true;
+let durationOutlineIndex = 0;
 let overlayTimeout;
 let currentIndex = 0;
 let videos;
@@ -221,13 +222,14 @@ async function waitForVideos() {
 
     setInterval(() => {
         videos.forEach(v => {
+            if (v === videos[currentIndex]) {
+                flashIndicator(`${formatTime(v.currentTime)}:${formatTime(v.duration)}`, 1, durationOverlay);
+            }
             if (v.replay) {
                 if (v.currentTime < v.replayStart || v.currentTime > v.replayEnd) {
                         v.currentTime = v.replayStart;
                     }
             }
-        });
-        videos.forEach(v => {
             if (v.allowCuts) {
                 for (let i = 0; i < v.cuts.length; i++) {
                     if (v.cuts[i]) {
@@ -270,6 +272,14 @@ async function waitForVideos() {
       blockKeyEvents(event);
       highlightOutline = !highlightOutline;
       flashIndicator(`Outline ${highlightOutline ? "En" : "Dis"}abled`);
+  } else if (event.ctrlKey && event.altKey && ["D", "d"].includes(event.key)) {
+      blockKeyEvents(event);
+      if (durationOutlineIndex === 0) {
+          null;
+      } else if (durationOutlineIndex === 1) {
+          null;
+      }
+      flashIndicator(`Outline ${highlightOutline ? "En" : "Dis"}abled`);
   }
 
       (aVideo => {
@@ -302,6 +312,7 @@ Tab - Select Next Video
 Shift + Tab - Select Previous Video
 
 Ctrl + Alt + H - Hide Outline (in case it doesn't work or hides the video)
+Ctrl + Alt + D - Toggle Duration Outline
 ====================================================================
 Play/Pause
 Space/K/Enter - Play/Pause
