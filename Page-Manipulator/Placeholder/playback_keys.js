@@ -63,10 +63,9 @@ DOWNLOAD VID ^^^ */
 // Variables
 const navModifiers = [0.05, 0.25, 1, 5, 30];
 const speedModifiers = [0.0001, 0.001, 0.01, 0.1, 0.25, 1, 5, 10];
-const durationRounding = [0]
+const durationRounding = [null, 2, -1]
 let highlightOutline = true;
 let durationOutlineIndex = 0;
-let overlayTimeout;
 let currentIndex = 0;
 let videos;
 
@@ -78,9 +77,9 @@ videoOverlay.addEventListener('click', () => {
     setTimeout(() => {videoOverlay.innerText = "";}, 200);
     videoOverlay.classList.remove('show');
 });
+videoOverlay.overlayTimeout = null;
 document.body.appendChild(videoOverlay);
 
-// Overlays
 const durationOverlay = document.createElement('div');
 durationOverlay.id = 'custom-video-overlay';
 durationOverlay.addEventListener('click', () => {
@@ -89,6 +88,7 @@ durationOverlay.addEventListener('click', () => {
     durationOverlay.classList.remove('show');
 });
 durationOverlay.style.top = "90%";
+durationOverlay.overlayTimeout = null;
 document.body.appendChild(durationOverlay);
 
 const styles = document.createElement('style');
@@ -145,7 +145,7 @@ function formatTime(seconds, roundFraction=null) {
     let fraction = String(seconds).split('.')[1];
     if (fraction) {
         fraction = "." + fraction;
-        if (roundFraction !== null) fraction = fraction.slice(0, roundFraction);
+        if (roundFraction !== null) fraction = fraction.slice(0, roundFraction + 1);
     } else fraction = "";
 
     let hours = Math.floor(wholeSeconds / 3600);
@@ -163,8 +163,8 @@ function flashIndicator(text, showTime=1000, overlay=videoOverlay) {
   overlay.innerText = text;
   overlay.classList.add('show');
   
-  clearTimeout(overlayTimeout); // Reset the hide timer if the user keeps pressing keys
-  overlayTimeout = setTimeout(() => {
+  clearTimeout(overlay.overlayTimeout); // Reset the hide timer if the user keeps pressing keys
+  overlay.overlayTimeout = setTimeout(() => {
     setTimeout(() => {overlay.innerText = "";}, 200);
     overlay.classList.remove('show');
   }, showTime);
@@ -231,8 +231,8 @@ async function waitForVideos() {
 
     setInterval(() => {
         videos.forEach(v => {
-            if (v === videos[currentIndex]) {
-                flashIndicator(`${formatTime(v.currentTime)}:${formatTime(v.duration)}`, 1, durationOverlay);
+            if (durationOutlineIndex !== -1 && v === videos[currentIndex]) {
+                flashIndicator(`${formatTime(v.currentTime, durationRounding[durationOutlineIndex])}:${formatTime(v.duration, durationRounding[durationOutlineIndex])}`, 1, durationOverlay);
             }
             if (v.replay) {
                 if (v.currentTime < v.replayStart || v.currentTime > v.replayEnd) {
@@ -283,12 +283,13 @@ async function waitForVideos() {
       flashIndicator(`Outline ${highlightOutline ? "En" : "Dis"}abled`);
   } else if (event.ctrlKey && event.altKey && ["D", "d"].includes(event.key)) {
       blockKeyEvents(event);
-      if (durationOutlineIndex === 0) {
-          null;
-      } else if (durationOutlineIndex === 1) {
-          null;
+      if (durationOutlineIndex === durationRounding.length - 1) {
+          // TODO: Disable outline
+          durationOutlineIndex = -1;
+      } else {
+          durationOutlineIndex = (durationOutlineIndex + 1) % durationRounding.length;
       }
-      flashIndicator(`Outline ${highlightOutline ? "En" : "Dis"}abled`);
+      flashIndicator(`${durationOutlineIndex}\n${durationRounding[durationOutlineIndex]}`);
   }
 
       (aVideo => {
