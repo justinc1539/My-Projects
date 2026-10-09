@@ -63,6 +63,7 @@ DOWNLOAD VID ^^^ */
 // Variables
 const navModifiers = [0.05, 0.25, 1, 5, 30];
 const speedModifiers = [0.0001, 0.001, 0.01, 0.1, 0.25, 1, 5, 10];
+const durationRounding = [0]
 let highlightOutline = true;
 let durationOutlineIndex = 0;
 let overlayTimeout;
@@ -138,16 +139,19 @@ function getDecimalCount(num) {
   return cleanStr.split('.')[1].length;
 }
 
-function formatTime(seconds) {
+function formatTime(seconds, roundFraction=null) {
     if (isNaN(seconds)) return seconds;
-    const wholeSeconds = Math.floor(seconds);
-    const fraction = String(seconds).split('.')[1];
+    let wholeSeconds = Math.floor(seconds);
+    let fraction = "." + String(seconds).split('.')[1];
+    if (roundFraction !== null) fraction = fraction.slice(0, roundFraction);
 
-    const hours   = String(Math.floor(wholeSeconds / 3600)).padStart(2, "0");
-    const minutes = String(Math.floor((wholeSeconds % 3600) / 60)).padStart(2, "0");
-    const secs    = String(wholeSeconds % 60).padStart(2, "0");
+    let hours = Math.floor(wholeSeconds / 3600);
+    if (hours > 0) hours = String(hours).padStart(2, "0") + ":";
+    let minutes = Math.floor((wholeSeconds % 3600) / 60);
+    if (minutes > 0 || hours > 0) minutes = String(minutes).padStart(2, "0") + ":";
+    let secs = String(wholeSeconds % 60).padStart(2, "0");
 
-    return `${hours}:${minutes}:${secs}.${fraction ? fraction : 0}`;
+    return `${hours}${minutes}${secs}${fraction}`;
 }
 
 function flashIndicator(text, showTime=1000, overlay=videoOverlay) {
