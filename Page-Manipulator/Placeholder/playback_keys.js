@@ -139,13 +139,13 @@ function getDecimalCount(num) {
   return cleanStr.split('.')[1].length;
 }
 
-function formatTime(seconds, roundFraction=null) {
+function formatTime(seconds, truncation=null) {
     if (isNaN(seconds)) return seconds;
     let wholeSeconds = Math.floor(seconds);
     let fraction = String(seconds).split('.')[1];
     if (fraction) {
         fraction = "." + fraction;
-        if (roundFraction !== null) fraction = fraction.slice(0, roundFraction + 1);
+        if (truncation !== null) fraction = fraction.slice(0, truncation + 1);
     } else fraction = "";
 
     let hours = Math.floor(wholeSeconds / 3600);
@@ -232,7 +232,7 @@ async function waitForVideos() {
     setInterval(() => {
         videos.forEach(v => {
             if (durationOutlineIndex !== -1 && v === videos[currentIndex]) {
-                flashIndicator(`${formatTime(v.currentTime, durationRounding[durationOutlineIndex])}:${formatTime(v.duration, durationRounding[durationOutlineIndex])}`, 1, durationOverlay);
+                flashIndicator(`${formatTime(v.currentTime, durationRounding[durationOutlineIndex])} / ${formatTime(v.duration, durationRounding[durationOutlineIndex])}`, 1, durationOverlay);
             }
             if (v.replay) {
                 if (v.currentTime < v.replayStart || v.currentTime > v.replayEnd) {
@@ -284,12 +284,18 @@ async function waitForVideos() {
   } else if (event.ctrlKey && event.altKey && ["D", "d"].includes(event.key)) {
       blockKeyEvents(event);
       if (durationOutlineIndex === durationRounding.length - 1) {
-          // TODO: Disable outline
           durationOutlineIndex = -1;
+          flashIndicator("Video Duration Hidden");
       } else {
           durationOutlineIndex = (durationOutlineIndex + 1) % durationRounding.length;
+          if (durationRounding[durationOutlineIndex] === null) {
+              flashIndicator("Video Duration Shown");
+          } else if (durationRounding[durationOutlineIndex] === -1) {
+              flashIndicator("Video Duration Truncated to the nearest Second");
+          } else {
+              flashIndicator(`Video Duration Truncated to ${durationRounding[durationOutlineIndex]} Digits`);
+          }
       }
-      flashIndicator(`${durationOutlineIndex}\n${durationRounding[durationOutlineIndex]}`);
   }
 
       (aVideo => {
