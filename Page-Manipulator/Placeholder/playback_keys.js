@@ -169,8 +169,9 @@ function flashIndicator(text, showTime=1000, overlay=videoOverlay) {
   overlay.classList.add('show');
   
   clearTimeout(overlay.overlayTimeout); // Reset the hide timer if the user keeps pressing keys
+  clearTimeout(overlay.clearTextTimeout);
   overlay.overlayTimeout = setTimeout(() => {
-    setTimeout(() => {overlay.innerText = "";}, 200);
+    overlay.clearTextTimeout = setTimeout(() => {overlay.innerText = "";}, 200);
     overlay.classList.remove('show');
   }, showTime);
 }
