@@ -65,30 +65,30 @@ const navModifiers = [0.05, 0.25, 1, 5, 30];
 const speedModifiers = [0.0001, 0.001, 0.01, 0.1, 0.25, 1, 5, 10];
 const durationRounding = [null, 2, -1]
 let highlightOutline = true;
-let durationOutlineIndex = 0;
+let durationOutlineIndex = 1;
 let currentIndex = 0;
 let videos;
 
 // Overlays
 const videoOverlay = document.createElement('div');
 videoOverlay.id = 'custom-video-overlay';
+videoOverlay.overlayTimeout = null;
 videoOverlay.addEventListener('click', () => {
-    clearTimeout(overlayTimeout);
+    clearTimeout(videoOverlay.overlayTimeout);
     setTimeout(() => {videoOverlay.innerText = "";}, 200);
     videoOverlay.classList.remove('show');
 });
-videoOverlay.overlayTimeout = null;
 document.body.appendChild(videoOverlay);
 
 const durationOverlay = document.createElement('div');
 durationOverlay.id = 'custom-video-overlay';
+durationOverlay.overlayTimeout = null;
 durationOverlay.addEventListener('click', () => {
-    clearTimeout(overlayTimeout);
+    clearTimeout(durationOverlay.overlayTimeout);
     setTimeout(() => {durationOverlay.innerText = "";}, 200);
     durationOverlay.classList.remove('show');
 });
 durationOverlay.style.top = "90%";
-durationOverlay.overlayTimeout = null;
 document.body.appendChild(durationOverlay);
 
 const styles = document.createElement('style');
@@ -146,14 +146,15 @@ function formatTime(seconds, truncation=null) {
     if (fraction) {
         fraction = "." + fraction;
         if (truncation !== null) fraction = fraction.slice(0, truncation + 1);
-    } else fraction = "";
+    } else if (truncation !== null && truncation > 0) fraction = "." + "0".repeat(truncation);
+    else fraction = "";
 
     let hours = Math.floor(wholeSeconds / 3600);
-    if (hours > 0) hours = String(hours).padStart(2, "0") + ":";
-    else hours = "";
     let minutes = Math.floor((wholeSeconds % 3600) / 60);
     if (minutes > 0 || hours > 0) minutes = String(minutes).padStart(2, "0") + ":";
     else minutes = "";
+    if (hours > 0) hours = String(hours).padStart(2, "0") + ":";
+    else hours = "";
     let secs = String(wholeSeconds % 60).padStart(2, "0");
 
     return `${hours}${minutes}${secs}${fraction}`;
@@ -316,7 +317,7 @@ async function waitForVideos() {
             const quality = aVideo.getVideoPlaybackQuality?.();
             const fps = (quality && quality.totalVideoFrames && quality.totalFrameDelay)
                 ? quality.totalVideoFrames / quality.totalFrameDelay
-                : 60;
+                : 100;
             if (event.ctrlKey && event.key === "?") {
                 flashIndicator(`Click this box to close
 ====================================================================
