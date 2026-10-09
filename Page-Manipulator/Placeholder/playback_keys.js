@@ -142,13 +142,18 @@ function getDecimalCount(num) {
 function formatTime(seconds, roundFraction=null) {
     if (isNaN(seconds)) return seconds;
     let wholeSeconds = Math.floor(seconds);
-    let fraction = "." + String(seconds).split('.')[1];
-    if (roundFraction !== null) fraction = fraction.slice(0, roundFraction);
+    let fraction = String(seconds).split('.')[1];
+    if (fraction) {
+        fraction = "." + fraction;
+        if (roundFraction !== null) fraction = fraction.slice(0, roundFraction);
+    } else fraction = "";
 
     let hours = Math.floor(wholeSeconds / 3600);
     if (hours > 0) hours = String(hours).padStart(2, "0") + ":";
+    else hours = "";
     let minutes = Math.floor((wholeSeconds % 3600) / 60);
     if (minutes > 0 || hours > 0) minutes = String(minutes).padStart(2, "0") + ":";
+    else minutes = "";
     let secs = String(wholeSeconds % 60).padStart(2, "0");
 
     return `${hours}${minutes}${secs}${fraction}`;
