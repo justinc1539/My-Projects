@@ -1,4 +1,4 @@
-// V10.6.2026
+// V10.9.2026
 // Active websites: all
 
 /* DOWNLOAD VID VVV
@@ -68,19 +68,29 @@ let overlayTimeout;
 let currentIndex = 0;
 let videos;
 
-// Overlay
-const speedOverlay = document.createElement('div');
-speedOverlay.id = 'custom-speed-overlay';
-speedOverlay.addEventListener('click', () => {
+// Overlays
+const videoOverlay = document.createElement('div');
+videoOverlay.id = 'custom-video-overlay';
+videoOverlay.addEventListener('click', () => {
     clearTimeout(overlayTimeout);
-    setTimeout(() => {speedOverlay.innerText = "";}, 200);
-    speedOverlay.classList.remove('show');
+    setTimeout(() => {videoOverlay.innerText = "";}, 200);
+    videoOverlay.classList.remove('show');
 });
-document.body.appendChild(speedOverlay);
+document.body.appendChild(videoOverlay);
+
+// Overlays
+const durationOverlay = document.createElement('div');
+durationOverlay.id = 'custom-video-overlay';
+durationOverlay.addEventListener('click', () => {
+    clearTimeout(overlayTimeout);
+    setTimeout(() => {durationOverlay.innerText = "";}, 200);
+    durationOverlay.classList.remove('show');
+});
+document.body.appendChild(durationOverlay);
 
 const styles = document.createElement('style');
 styles.innerHTML = `
-  #custom-speed-overlay {
+  #custom-video-overlay {
     position: fixed;
     top: 10%;
     left: 50%;
@@ -103,7 +113,7 @@ styles.innerHTML = `
     overflow-x: auto;          /* Enables horizontal scrolling if text is a massive single line */
     white-space: pre-wrap;     /* Optional: Forces long text blocks to break lines cleanly */
   }
-  #custom-speed-overlay.show {
+  #custom-video-overlay.show {
     opacity: 1;
   }
 
@@ -139,13 +149,13 @@ function formatTime(seconds) {
 }
 
 function flashIndicator(text, showTime=1000) {
-  speedOverlay.innerText = text;
-  speedOverlay.classList.add('show');
+  videoOverlay.innerText = text;
+  videoOverlay.classList.add('show');
   
   clearTimeout(overlayTimeout); // Reset the hide timer if the user keeps pressing keys
   overlayTimeout = setTimeout(() => {
-    setTimeout(() => {speedOverlay.innerText = "";}, 200);
-    speedOverlay.classList.remove('show');
+    setTimeout(() => {videoOverlay.innerText = "";}, 200);
+    videoOverlay.classList.remove('show');
   }, showTime);
 }
 
