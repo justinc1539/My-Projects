@@ -73,9 +73,11 @@ let videos;
 const videoOverlay = document.createElement('div');
 videoOverlay.id = 'custom-video-overlay';
 videoOverlay.overlayTimeout = null;
+videoOverlay.clearTextTimeout = null;
 videoOverlay.addEventListener('click', () => {
     clearTimeout(videoOverlay.overlayTimeout);
-    setTimeout(() => {videoOverlay.innerText = "";}, 200);
+    clearTimeout(videoOverlay.clearTextTimeout);
+    videoOverlay.clearTextTimeout = setTimeout(() => {videoOverlay.innerText = "";}, 200);
     videoOverlay.classList.remove('show');
 });
 document.body.appendChild(videoOverlay);
@@ -83,9 +85,11 @@ document.body.appendChild(videoOverlay);
 const durationOverlay = document.createElement('div');
 durationOverlay.id = 'custom-video-overlay';
 durationOverlay.overlayTimeout = null;
+durationOverlay.clearTextTimeout = null;
 durationOverlay.addEventListener('click', () => {
     clearTimeout(durationOverlay.overlayTimeout);
-    setTimeout(() => {durationOverlay.innerText = "";}, 200);
+    clearTimeout(durationOverlay.clearTextTimeout);
+    durationOverlay.clearTextTimeout = setTimeout(() => {durationOverlay.innerText = "";}, 200);
     durationOverlay.classList.remove('show');
 });
 durationOverlay.style.top = "90%";
