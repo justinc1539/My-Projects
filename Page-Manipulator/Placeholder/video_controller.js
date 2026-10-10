@@ -374,6 +374,7 @@ Play/Pause\n\
 Space/K/Enter - Play/Pause\n\
 ====================================================================\n\
 Controls\n\
+F - Toggle Fullscreen\n\
 Ctrl + Alt + C - Show all Controls\n\
 Ctrl + Alt + L - Toggle Loop\n\
 Ctrl + Alt + P - Toggle Picture-in-Picture\n\
@@ -537,7 +538,23 @@ Ctrl + Shift - Finish Cut Customization/Confirm Cut Deletion`, 2**16);
                 flashIndicator(`Video ${aVideo.paused ? "Paused" : "Playing"}`);
             }
             // Controls feature
-            else if (event.ctrlKey && event.altKey && ["C", "c"].includes(event.key)) {
+            else if (["F", "f"].includes(event.key)) {
+                blockKeyEvents(event);
+                if (!document.fullscreenElement) {
+                    if (aVideo.requestFullscreen) {
+                        aVideo.requestFullscreen();
+                        flashIndicator("Entered Fullscreen");
+                    } else if (aVideo.webkitRequestFullscreen) {
+                        aVideo.webkitRequestFullscreen();
+                        flashIndicator("Entered Fullscreen");
+                    } else {
+                        flashIndicator("Fullscreen not available");
+                    }
+                } else if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                    flashIndicator("Exited Fullscreen");
+                }
+            } else if (event.ctrlKey && event.altKey && ["C", "c"].includes(event.key)) {
                 blockKeyEvents(event);
                 aVideo.controls = !aVideo.controls;
                 flashIndicator(`Controls ${aVideo.controls ? "En" : "Dis"}abled`);
