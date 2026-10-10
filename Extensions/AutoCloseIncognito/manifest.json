@@ -1,0 +1,24 @@
+{
+  "manifest_version": 3,
+  "name": "Auto Close Incognito",
+  "version": "9.27.2026",
+  "description": "Automatically closes any new Incognito tab as soon as it opens.",
+  "permissions": ["tabs"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "icons": {
+      "16": "icon.png",
+      "32": "icon.png",
+      "48": "icon.png",
+      "128": "icon.png"
+  },
+  "action": {
+    "default_icon": {
+      "16": "icon.png",
+      "32": "icon.png",
+      "48": "icon.png",
+      "128": "icon.png"
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "manifest_version": 3,
+  "name": "YouTube Element Hider/Anti YouTube Rabbit Hole",
+  "version": "9.12.2026",
+  "description": "Hides specific target section elements on YouTube./what do you call the pheneonemon on youtube where i click a video on youtube and after i finish watching it i notice oh wow there's an interesting looking video on the right side scroll list so i click the video on youtube and after i finish watching it i notice oh wow there's an interesting looking video on the right side scroll list so i click the video on youtube and after i finish watching it i notice oh wow there's an interesting looking video on the right side scroll list so i",
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.youtube.com/watch*",
+        "https://www.youtube.com/live/*"
+      ],
+      "exclude_matches": [
+        "https://www.youtube.com/results*"
+      ],
+      "css": ["styles.css"]
+    }
+  ]
+}

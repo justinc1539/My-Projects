@@ -1,0 +1,3 @@
+#contents.ytd-item-section-renderer:has(yt-lockup-view-model.ytLockupViewModelWrapper) {
+  display: none !important;
+}

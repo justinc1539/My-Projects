@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            width: 600px; <!-- Originally 400px -->
+            padding: 10px;
+        }
+        #chatLog {
+            border: 1px solid #ccc;
+            height: 300px;
+            overflow-y: auto;
+            padding: 8px;
+            margin-bottom: 10px;
+            white-space: pre-wrap;
+            background: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+
+<h3>Google Docs Chat</h3>
+
+<label>Your Name:</label>
+<input id="usernameInput" style="width: 100%; margin-bottom: 10px;">
+<!-- <button id="saveUsernameBtn">Save Username</button> -->
+
+<hr>
+
+<!-- <div id="chatLog">Loading messages...</div> -->
+<iframe id="logFrame"
+        style="width:100%; height:360px; border:1px solid #ccc;"
+        src="https://docs.google.com/document/d/1IUJCA0hUdt662fPFUmwV1nA27J09HWLl_h1qacalKKs/view">
+</iframe>
+
+<input id="msg" placeholder="Type message" style="width: 100%;"><br><br>
+<button id="sendBtn">Send</button>
+<input type="file" id="imageUpload" accept="image/*" style="display:none;">
+<button id="uploadBtn">Upload</button>
+<button id="removeUploadBtn" style="display:none;">Remove Upload</button>
+<span id="uploadedFileName" style="margin-left:10px;"></span>
+<img id="myImageTagId" style="max-width:100px; display:block; margin-top:5px;">
+
+<script src="popup.js"></script>
+</body>
+</html>
