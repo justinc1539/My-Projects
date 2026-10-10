@@ -63,9 +63,9 @@ DOWNLOAD VID ^^^ */
 // Variables
 const navModifiers = [0.05, 0.25, 1, 5, 30];
 const speedModifiers = [0.0001, 0.001, 0.01, 0.1, 0.25, 0.5, 1, 5, 10];
-const durationRounding = [null, 2, -1]
+const durationRounding = [null, -1, 2]
 let highlightOutline = true;
-let durationOutlineIndex = 1;
+let durationOutlineIndex = 2;
 let currentIndex = 0;
 let videos;
 
@@ -269,11 +269,11 @@ async function waitForVideos() {
       currentIndex = null;
       flashIndicator(`Disabled Program (Ctrl + \` to restart)`, 3000);
   } else if (currentIndex === null) {
-      
-  } else if (event.ctrlKey && event.key === "`") {
-      blockKeyEvents(event);
-      currentIndex = 0;
-      flashIndicator(`Enabled Program (Esc to end)`, 3000);
+      if (event.ctrlKey && event.key === "`") {
+          blockKeyEvents(event);
+          currentIndex = 0;
+          flashIndicator(`Enabled Program (Esc to end)`, 3000);
+      }
   } else if (!['INPUT', 'TEXTAREA'].includes(event.target.tagName) && event.key === 'Tab') {
     blockKeyEvents(event);
 
