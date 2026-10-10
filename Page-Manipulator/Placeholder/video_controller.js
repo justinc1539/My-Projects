@@ -176,6 +176,7 @@ function flashIndicator(text, showTime=1000, overlay=videoOverlay) {
   }, showTime);
 }
 
+/* // TODO: Why does the other highlightVideos() work?
 function highlightVideos(theVids) {
     theVids.forEach(video => {
         // Prevent wrapping a video twice if the script runs again
@@ -194,6 +195,35 @@ function highlightVideos(theVids) {
         // Make the video programmatically focusable
         video.setAttribute('tabindex', '0');
     })
+}
+*/
+function highlightVideos(theVids) {
+  theVids.forEach(video => {
+    // Check if we've already highlighted this video
+    if (video.dataset.highlighted === 'true') return;
+    video.dataset.highlighted = 'true';
+
+    // Ensure video is focusable without changing DOM structure
+    video.setAttribute('tabindex', '0');
+
+    // Create a visual overlay matching the video's bounding rect
+    const rect = video.getBoundingClientRect();
+    const highlightBox = document.createElement('div');
+    highlightBox.className = 'video-highlight-overlay';
+    
+    // Style as an overlay without moving the video element
+    Object.assign(highlightBox.style, {
+      position: 'absolute',
+      top: `${rect.top + window.scrollY}px`,
+      left: `${rect.left + window.scrollX}px`,
+      width: `${rect.width}px`,
+      height: `${rect.height}px`,
+      pointerEvents: 'none', // Prevents blocking player UI clicks
+      zIndex: '9999'
+    });
+
+    document.body.appendChild(highlightBox);
+  });
 }
 
 function highlightVideo(index) {
