@@ -62,7 +62,7 @@ DOWNLOAD VID ^^^ */
 
 // Variables
 const navModifiers = [0.05, 0.25, 1, 5, 30];
-const speedModifiers = [0.0001, 0.001, 0.01, 0.1, 0.25, 1, 5, 10];
+const speedModifiers = [0.0001, 0.001, 0.01, 0.1, 0.25, 0.5, 1, 5, 10];
 const durationRounding = [null, 2, -1]
 let highlightOutline = true;
 let durationOutlineIndex = 1;
@@ -96,7 +96,7 @@ durationOverlay.style.top = "90%";
 document.body.appendChild(durationOverlay);
 
 const styles = document.createElement('style');
-styles.innerHTML = `
+styles.textContent = `
   #custom-video-overlay {
     position: fixed;
     top: 10%;
@@ -200,6 +200,8 @@ function highlightVideo(index) {
   videos.forEach(video => {
     video.parentElement.classList.remove('highlighted');
   });
+
+  if (index === null) return;
   
   if (index >= 0 && index < videos.length) {
     const targetVideo = videos[index];
@@ -236,31 +238,43 @@ async function waitForVideos() {
     });
 
     setInterval(() => {
-        videos.forEach(v => {
-            if (durationOutlineIndex !== -1 && v === videos[currentIndex]) {
-                flashIndicator(`${formatTime(v.currentTime, durationRounding[durationOutlineIndex])} / ${formatTime(v.duration, durationRounding[durationOutlineIndex])}`, 1, durationOverlay);
-            }
-            if (v.replay) {
-                if (v.currentTime < v.replayStart || v.currentTime > v.replayEnd) {
-                        v.currentTime = v.replayStart;
-                    }
-            }
-            if (v.allowCuts) {
-                for (let i = 0; i < v.cuts.length; i++) {
-                    if (v.cuts[i]) {
-                        if (v.cuts[i][0] < v.currentTime && v.currentTime < v.cuts[i][1]) {
-                            v.currentTime = v.cuts[i][1];
+        if (currentIndex !== null) {
+            videos.forEach(v => {
+                if (durationOutlineIndex !== -1 && v === videos[currentIndex]) {
+                    flashIndicator(`${formatTime(v.currentTime, durationRounding[durationOutlineIndex])} / ${formatTime(v.duration, durationRounding[durationOutlineIndex])}`, 1, durationOverlay);
+                }
+                if (v.replay) {
+                    if (v.currentTime < v.replayStart || v.currentTime > v.replayEnd) {
+                            v.currentTime = v.replayStart;
+                        }
+                }
+                if (v.allowCuts) {
+                    for (let i = 0; i < v.cuts.length; i++) {
+                        if (v.cuts[i]) {
+                            if (v.cuts[i][0] < v.currentTime && v.currentTime < v.cuts[i][1]) {
+                                v.currentTime = v.cuts[i][1];
+                            }
                         }
                     }
                 }
-            }
-        });
+            });
+        }
     }, 1);
     
     flashIndicator("Ctrl + Shift + / for shortcuts", 3000);
     window.addEventListener("keydown", (event) => {
   // Selecting Video feature
-  if (!['INPUT', 'TEXTAREA'].includes(event.target.tagName) && event.key === 'Tab') {
+  if (currentIndex !== null && event.key === "Escape") {
+      blockKeyEvents(event);
+      currentIndex = null;
+      flashIndicator(`Disabled Program (Ctrl + \` to restart)`, 3000);
+  } else if (currentIndex === null) {
+      
+  } else if (event.ctrlKey && event.key === "`") {
+      blockKeyEvents(event);
+      currentIndex = 0;
+      flashIndicator(`Enabled Program (Esc to end)`, 3000);
+  } else if (!['INPUT', 'TEXTAREA'].includes(event.target.tagName) && event.key === 'Tab') {
     blockKeyEvents(event);
 
     if (videos.length === 0 || currentIndex === null) return; // Make sure Tab/Shift + Tab only happens IF THERE IS AT LEAST 1 VIDEO
@@ -275,14 +289,6 @@ async function waitForVideos() {
 
     highlightVideo(currentIndex);
     flashIndicator(`Selected Video ${currentIndex+1}`);
-  } else if (currentIndex !== null && event.key === "Escape") {
-      blockKeyEvents(event);
-      currentIndex = null;
-      flashIndicator(`Disabled Program (Ctrl + \` to restart)`, 3000);
-  } else if (currentIndex === null && event.ctrlKey && event.key === "`") {
-      blockKeyEvents(event);
-      currentIndex = 0;
-      flashIndicator(`Enabled Program (Esc to end)`, 3000);
   } else if (event.ctrlKey && event.altKey && ["H", "h"].includes(event.key)) {
       blockKeyEvents(event);
       highlightOutline = !highlightOutline;
@@ -304,7 +310,7 @@ async function waitForVideos() {
       }
   }
 
-      (aVideo => {
+      if (videos.length > 0 && currentIndex !== null) (aVideo => {
         if (!['INPUT', 'TEXTAREA'].includes(event.target.tagName)) {
             // Defining attributes
             if (!("replayStart" in aVideo)) aVideo.replayStart = 0;
@@ -324,75 +330,62 @@ async function waitForVideos() {
                 ? quality.totalVideoFrames / quality.totalFrameDelay
                 : 100;
             if (event.ctrlKey && event.key === "?") {
-                flashIndicator(`Click this box to close
-====================================================================
-Selecting Video
-Esc - End Program
-Ctrl + \` - Restart Program
-
-Tab - Select Next Video
-Shift + Tab - Select Previous Video
-
-Ctrl + Alt + H - Hide Outline (in case it doesn't work or hides the video)
-Ctrl + Alt + D - Toggle Duration Outline
-====================================================================
-Play/Pause
-Space/K/Enter - Play/Pause
-====================================================================
-Controls
-Ctrl + Alt + C - Show all Controls
-Ctrl + Alt + L - Toggle Loop
-Ctrl + Alt + P - Toggle Picture-in-Picture
-====================================================================
-Navigation
-Comma - Go back 1 frame
-Period - Go forward 1 frame
-
-Numbers (0-9) = Go to percentage of video length
-
-Left Arrow - Go back by Navigation Modifier
-Right Arrow - Go forward by Navigation Modifier
-J - Go back by 2 * Navigation Modifier
-L - Go forward by 2 * Navigation Modifier
-
-Ctrl + Left Arrow - Decrease Navigation Modifier
-Ctrl + Right Arrow - Increase Navigation Modifier
-====================================================================
-Volume
-Up Arrow - Increase Volume by Volume Modifier
-Down Arrow - Decrease Volume by Volume Modifier
-
-Ctrl + Up Arrow - Increase Volume Modifier
-Ctrl + Down Arrow - Decrease Volume Modifier
-
-M - Toggle mute
-====================================================================
-Playback Rate/Speed
-Shift + Space - Reset Playback Rate and Speed Modifier
-
-Shift + Comma (Less Than) - Decrease Playback Rate by Speed Modifier
-Shift + Period (Greater Than) - Increase Playback Rate by Speed Modifier
-
-Ctrl + Shift + Comma (Ctrl + Less Than) - Decrease Speed Modifier
-Ctrl + Shift + Period (Ctrl + Greater Than) - Increase Speed Modifier
-====================================================================
-Replay
-Shift + Up Arrow - Cycle Enabling Replay and/or Cuts
-Shift + Down Arrow - Disable Replay and Cuts
-
-Shift + Left Arrow - Set Replay Start
-Shift + Right Arrow - Set Replay End
-====================================================================
-Cut
-Shift + Up Arrow - Cycle Enabling Replay and/or Cuts
-Shift + Down Arrow - Disable Replay and Cuts
-
-Shift + Numbers (0-9) - Set Cut Customization (e.g. Shift + 1 + 9 - Customize Cut 19)
-Shift + Left Arrow (while Customizing Cut) - Set Cut Start
-Shift + Right Arrow (while Customizing Cut) - Set Cut End
-
-Ctrl + Shift + Numbers (0-9) - Set Cut Deletion (e.g. Shift + 1 + 9 - Delete Cut 19)
-
+                flashIndicator(`Click this box to close\n\
+====================================================================\n\
+Selecting Video\n\
+Esc - End Program\n\
+Ctrl + \` - Restart Program\n\n\
+Tab - Select Next Video\n\
+Shift + Tab - Select Previous Video\n\n\
+Ctrl + Alt + H - Hide Outline (in case it doesn't work or hides the video)\n\
+Ctrl + Alt + D - Toggle Duration Outline\n\
+====================================================================\n\
+Play/Pause\n\
+Space/K/Enter - Play/Pause\n\
+====================================================================\n\
+Controls\n\
+Ctrl + Alt + C - Show all Controls\n\
+Ctrl + Alt + L - Toggle Loop\n\
+Ctrl + Alt + P - Toggle Picture-in-Picture\n\
+====================================================================\n\
+Navigation\n\
+Comma - Go back 1 frame\n\
+Period - Go forward 1 frame\n\n\
+Numbers (0-9) = Go to percentage of video length\n\n\
+Left Arrow - Go back by Navigation Modifier\n\
+Right Arrow - Go forward by Navigation Modifier\n\
+J - Go back by 2 * Navigation Modifier\n\
+L - Go forward by 2 * Navigation Modifier\n\n\
+Ctrl + Left Arrow - Decrease Navigation Modifier\n\
+Ctrl + Right Arrow - Increase Navigation Modifier\n\
+====================================================================\n\
+Volume\n\
+Up Arrow - Increase Volume by Volume Modifier\n\
+Down Arrow - Decrease Volume by Volume Modifier\n\n\
+Ctrl + Up Arrow - Increase Volume Modifier\n\
+Ctrl + Down Arrow - Decrease Volume Modifier\n\n\
+M - Toggle mute\n\
+====================================================================\n\
+Playback Rate/Speed\n\
+Shift + Space - Reset Playback Rate and Speed Modifier\n\n\
+Shift + Comma (Less Than) - Decrease Playback Rate by Speed Modifier\n\
+Shift + Period (Greater Than) - Increase Playback Rate by Speed Modifier\n\n\
+Ctrl + Shift + Comma (Ctrl + Less Than) - Decrease Speed Modifier\n\
+Ctrl + Shift + Period (Ctrl + Greater Than) - Increase Speed Modifier\n\
+====================================================================\n\
+Replay\n\
+Shift + Up Arrow - Cycle Enabling Replay and/or Cuts\n\
+Shift + Down Arrow - Disable Replay and Cuts\n\n\
+Shift + Left Arrow - Set Replay Start\n\
+Shift + Right Arrow - Set Replay End\n\
+====================================================================\n\
+Cut\n\
+Shift + Up Arrow - Cycle Enabling Replay and/or Cuts\n\
+Shift + Down Arrow - Disable Replay and Cuts\n\n\
+Shift + Numbers (0-9) - Set Cut Customization (e.g. Shift + 1 + 9 - Customize Cut 19)\n\
+Shift + Left Arrow (while Customizing Cut) - Set Cut Start\n\
+Shift + Right Arrow (while Customizing Cut) - Set Cut End\n\n\
+Ctrl + Shift + Numbers (0-9) - Set Cut Deletion (e.g. Shift + 1 + 9 - Delete Cut 19)\n\n\
 Ctrl + Shift - Finish Cut Customization/Confirm Cut Deletion`, 2**16);
             }
             // Playback Rate/Speed feature
