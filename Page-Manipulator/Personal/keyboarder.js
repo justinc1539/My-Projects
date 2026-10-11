@@ -11,14 +11,60 @@
         mouseY = e.clientY;
     });
 
-    // Listen for key presses
-    window.addEventListener('keydown', (e) => {
-        // // Skip pure modifier keys to keep it clean
-        // if (["Control", "Alt", "Shift", "Meta"].includes(e.key)) return;
+    const queue = [];
+    const keyDelay = 0;
 
-        // 1. Create the floating key element
+    // Shared key handler function
+    function handleKeyDown(e) {
+        if (["Control", "Alt", "Shift", "Meta"].includes(e.key)) return;
+
+        let text = e.key === " " ? "Space" : e.key;
+        let modifiers = [];
+        
+        if (e.ctrlKey) modifiers.push("Ctrl");
+        if (e.altKey) modifiers.push("Alt");
+        if (e.shiftKey) modifiers.push("Shift");
+        if (e.metaKey) modifiers.push("Meta");
+
+        if (modifiers.length > 0) {
+            text = modifiers.join(" + ") + " + " + text;
+        }
+
+        queue.push({
+            text: text,
+            x: mouseX,
+            y: mouseY
+        });
+    }
+
+    // 1. Listen on the main window
+    window.addEventListener('keydown', handleKeyDown);
+
+    // 2. Attempt to listen inside the iframe (Works if same-origin)
+    const iframe = document.getElementById('html5game');
+    if (iframe) {
+        try {
+            // Wait for iframe to load if necessary, or attach directly
+            const iframeWindow = iframe.contentWindow;
+            if (iframeWindow) {
+                iframeWindow.addEventListener('keydown', handleKeyDown);
+            }
+        } catch (err) {
+            console.warn("Cross-origin iframe security blocks direct event monitoring from the parent page.");
+        }
+    }
+
+    // Process the queue one item every keyDelay ms
+    setInterval(() => {
+        if (queue.length === 0) return;
+        const item = queue.shift();
+        spawnKey(item.text, item.x, item.y);
+    }, keyDelay);
+
+    // Physics and animation function
+    function spawnKey(text, startX, startY) {
         const el = document.createElement('div');
-        el.textContent = e.key === " " ? "Space" : e.key;
+        el.textContent = text;
         el.style.cssText = `
             position: fixed;
             left: 0;
@@ -35,26 +81,24 @@
             pointer-events: none;
             z-index: 999999;
             will-change: transform;
+            white-space: nowrap;
         `;
         document.documentElement.appendChild(el);
 
-        // 2. Set up initial physics variables at cursor coordinates
-        let x = mouseX;
-        let y = mouseY;
-        let vx = -7;       // Constant speed moving left
-        let vy = -9;       // Initial upward velocity (negative values move up on screen)
-        const gravity = 0.5; // Acceleration pulling it down every frame
+        let x = startX;
+        let y = startY;
+        let vx = -7;       
+        let vy = -9;       
+        const gravity = 0.5; 
 
-        // 3. Animation loop using requestAnimationFrame
         function animate() {
-            vy += gravity; // Apply gravity acceleration to vertical velocity
-            x += vx;       // Move horizontally (left)
-            y += vy;       // Move vertically (up then down)
+            vy += gravity; 
+            x += vx;       
+            y += vy;       
 
             el.style.transform = `translate(${x}px, ${y}px)`;
 
-            // Clean up elements once they fall off the screen boundaries
-            if (y > window.innerHeight + 100 || x < -100) {
+            if (y > window.innerHeight + 100 || x < -200) {
                 el.remove();
             } else {
                 requestAnimationFrame(animate);
@@ -62,5 +106,5 @@
         }
 
         requestAnimationFrame(animate);
-    });
+    }
 })();
