@@ -106,7 +106,7 @@ window.addEventListener('keydown', (e) => {
 
 window.addEventListener('keyup', (e) => {
     if (e.shiftKey || e.altKey) modSmoothness = false;
-});
+}, true);
 
 box.textContent = "Alt + Shift + Scroll Wheel to Increase/Decrease Smoothness";
 boxTimeout = setTimeout(() => {box.style.display = "none";}, 5000);
