@@ -1,102 +1,66 @@
 // V10.11.2026
 // Active Websites: All
 
-const HORIZONTAL_SCALE = 1;
-let horizontalScale = HORIZONTAL_SCALE;
+(function () {
+    // Track the current cursor position
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
 
-// 1. Create the box element
-const box = document.createElement('div');
-box.id = 'cursor-hi-box';
-box.textContent = '';
-box.style.cssText = `
-    position: fixed;
-    top: 0;
-    left: 0;
-    padding: 8px 16px;
-    background: #ffffff;
-    color: #000000;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    font-family: sans-serif;
-    font-weight: bold;
-    font-size: 14px;
-    pointer-events: none;
-    z-index: 999999;
-    display: none;
-    transform: translate(15px, 15px);
-`;
+    window.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+    });
 
-// Append to document.documentElement so it escapes the body's transform space!
-document.documentElement.appendChild(box);
+    // Listen for key presses
+    window.addEventListener('keydown', (e) => {
+        // // Skip pure modifier keys to keep it clean
+        // if (["Control", "Alt", "Shift", "Meta"].includes(e.key)) return;
 
-// 2. Mouse move handler for both panning and cursor tracking
-window.addEventListener('mousemove', (e) => {
-    box.style.left = `${e.clientX}px`;
-    box.style.top = `${e.clientY}px`;
-});
+        // 1. Create the floating key element
+        const el = document.createElement('div');
+        el.textContent = e.key === " " ? "Space" : e.key;
+        el.style.cssText = `
+            position: fixed;
+            left: 0;
+            top: 0;
+            padding: 6px 10px;
+            background: #ffffff;
+            color: #000000;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            font-family: sans-serif;
+            font-weight: bold;
+            font-size: 14px;
+            pointer-events: none;
+            z-index: 999999;
+            will-change: transform;
+        `;
+        document.documentElement.appendChild(el);
 
-let smoothness = 1;
-let modSmoothness = false;
-// document.body.style.transform = `scaleX(${horizontalScale})`;
+        // 2. Set up initial physics variables at cursor coordinates
+        let x = mouseX;
+        let y = mouseY;
+        let vx = -7;       // Constant speed moving left
+        let vy = -9;       // Initial upward velocity (negative values move up on screen)
+        const gravity = 0.5; // Acceleration pulling it down every frame
 
-// 1. Force the document and body to be extra wide instead of scaling/stretching
-document.documentElement.style.width = `${horizontalScale * 100}vw`;
-document.body.style.width = `${horizontalScale * 100}vw`;
-document.body.style.transformOrigin = 'top left';
+        // 3. Animation loop using requestAnimationFrame
+        function animate() {
+            vy += gravity; // Apply gravity acceleration to vertical velocity
+            x += vx;       // Move horizontally (left)
+            y += vy;       // Move vertically (up then down)
 
-// Clear any old transforms
-document.body.style.transform = 'none';
-document.body.style.transformOrigin = 'top left';
-document.body.style.transition = `transform 0s cubic-bezier(0.1, 0.9, 0.2, 1)`;
+            el.style.transform = `translate(${x}px, ${y}px)`;
 
-window.addEventListener('mousemove', (e) => {
-    const mouseNormX = (e.clientX / window.innerWidth) * 2 - 1;
-    const maxScrollOffset = horizontalScale*window.innerWidth; // How far it slides
-    const targetX = mouseNormX * (-maxScrollOffset / 2); 
-    
-    // TODO: Fix translateX equation for various horizontalScale
-    // document.body.style.transform = `translateX(-${horizontalScale * 100 * e.clientX / (window.innerWidth - 2)}%) scaleX(${horizontalScale})`;
-    // document.body.style.transform = `translateX(${targetX}px) scaleX(${horizontalScale})`;
-    document.body.style.transform = `translateX(${targetX}px)`;
-    // document.body.style.transform = `translateX(${-0.892*horizontalScale*window.innerWidth}px) scaleX(${horizontalScale})`;
-});
-
-window.addEventListener('wheel', (e) => {
-    if (modSmoothness) {
-        e.preventDefault();
-        e.stopPropagation();
-        if (e.deltaY < 0) smoothness++;
-        else smoothness = Math.max(-1, smoothness - 1);
-        document.body.style.transition = `transform ${smoothness}s cubic-bezier(0.1, 0.9, 0.2, 1)`;
-        const feedback = smoothness === -1 ? " (Off)" : smoothness === 0 ? " (Lagless)" : smoothness === 1 ? " (Default)" : smoothness === 3 ? " (Smooth)" : ""
-        if (smoothness !== -1) {
-            horizontalScale = HORIZONTAL_SCALE;
-            document.documentElement.style.width = `${horizontalScale * 100}vw`;
-            document.body.style.width = `${horizontalScale * 100}vw`;
-            document.body.style.transformOrigin = 'top left';
-        } else {
-            horizontalScale = 0;
-            document.documentElement.style.width = "";
-            document.body.style.width = "";
-            document.body.style.transformOrigin = "";
+            // Clean up elements once they fall off the screen boundaries
+            if (y > window.innerHeight + 100 || x < -100) {
+                el.remove();
+            } else {
+                requestAnimationFrame(animate);
+            }
         }
-        if (box) {
-            box.textContent = `Smoothness: ${smoothness} seconds${feedback}`;
-            box.style.display = "";
-        }
-    }
-}, {passive:false});
 
-window.addEventListener('keydown', (e) => {
-    if (e.shiftKey && e.altKey) modSmoothness = true;
-});
-
-window.addEventListener('keyup', (e) => {
-    if (e.shiftKey || e.altKey) modSmoothness = false;
-});
-
-if (box) {
-    box.textContent = "Alt + Shift + Scroll Wheel to Increase/Decrease Smoothness";
-    box.style.display = "";
-}
+        requestAnimationFrame(animate);
+    });
+})();
