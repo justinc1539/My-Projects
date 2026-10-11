@@ -126,16 +126,11 @@ window.addEventListener('wheel', (e) => {
         e.stopPropagation();
         e.stopImmediatePropagation();
         if (e.deltaY < 0) scale++;
-        else scale = Math.max(0, scale - 1);
+        else scale = Math.max(1, scale - 1);
 
-        const feedback = scale === 0 ? " (Off)" : "";
-        if (scale !== 0) {
-            document.documentElement.style.width = `${scale * 100}vw`;
-            document.body.style.width = `${scale * 100}vw`;
-        } else {
-            document.documentElement.style.width = "";
-            document.body.style.width = "";
-        }
+        const feedback = scale === 1 ? " (Default)" : "";
+        document.documentElement.style.width = `${scale * 100}vw`;
+        document.body.style.width = `${scale * 100}vw`;
 
         clearTimeout(boxTimeout);
         box.textContent = `Scale: ${scale}x${feedback}`;
