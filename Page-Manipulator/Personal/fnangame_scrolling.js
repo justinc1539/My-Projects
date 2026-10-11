@@ -1,6 +1,8 @@
 // V10.11.2026
 // Active Websites: All
 
+const horizontalScale = 3;
+
 // 1. Create the box element
 const box = document.createElement('div');
 box.id = 'cursor-hi-box';
@@ -42,15 +44,32 @@ document.body.style.transition = `transform ${smoothness}s cubic-bezier(0.1, 0.9
 
 window.addEventListener('mousemove', (e) => {
     if (smoothness !== -1) {
-        const maxXScrollOffset = window.innerWidth;
-        const mouseNormX = (e.clientX / maxXScrollOffset) * 2 - 1;
-        const targetX = mouseNormX * (-maxXScrollOffset / 2);
+        // const maxXScrollOffset = window.innerWidth;
+        // const mouseNormX = (e.clientX / maxXScrollOffset) * 2 - 1;
+        // const targetX = mouseNormX * (-maxXScrollOffset / 2);
         
-        const maxYScrollOffset = window.innerHeight;
-        const mouseNormY = (e.clientY / maxYScrollOffset) * 2 - 1;
-        const targetY = mouseNormY * (-maxYScrollOffset / 2);
+        // const maxYScrollOffset = window.innerHeight;
+        // const mouseNormY = (e.clientY / maxYScrollOffset) * 2 - 1;
+        // const targetY = mouseNormY * (-maxYScrollOffset / 2);
         
-        document.body.style.transform = `translateX(${targetX}px) translateY(${targetY}px)`;
+        // document.body.style.transform = `translateX(${targetX}px) translateY(${targetY}px)`;
+        
+    // 1. Force the document and body to be extra wide instead of scaling/stretching
+    document.documentElement.style.width = `${horizontalScale * 100}vw`;
+    document.body.style.width = `${horizontalScale * 100}vw`;
+    // document.body.style.transformOrigin = 'top left';
+        
+        // 1. Get normalized mouse position from -1 (left edge) to 1 (right edge)
+        const mouseNormX = (e.clientX / window.innerWidth) * 2 - 1; 
+        
+        // 2. Calculate max offset scaled by horizontalScale
+        const maxScrollOffset = horizontalScale * window.innerWidth; 
+        
+        // 3. Compute targetX centered symmetrically in the [-scaleX, scaleX] range
+        const targetX = mouseNormX * (-maxScrollOffset / 2); 
+        
+        document.body.style.transform = `translateX(${targetX}px)`;
+        window.scrollTo((document.documentElement.scrollWidth - window.innerWidth) / 2, window.scrollY);
     }
 });
 
