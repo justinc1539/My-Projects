@@ -48,16 +48,6 @@ document.body.style.transition = `transform ${smoothness}s cubic-bezier(0.1, 0.9
 
 window.addEventListener('mousemove', (e) => {
     if (smoothness !== -1) {
-        // const maxXScrollOffset = window.innerWidth;
-        // const mouseNormX = (e.clientX / maxXScrollOffset) * 2 - 1;
-        // const targetX = mouseNormX * (-maxXScrollOffset / 2);
-        
-        // const maxYScrollOffset = window.innerHeight;
-        // const mouseNormY = (e.clientY / maxYScrollOffset) * 2 - 1;
-        // const targetY = mouseNormY * (-maxYScrollOffset / 2);
-        
-        // document.body.style.transform = `translateX(${targetX}px) translateY(${targetY}px)`;
-        
         // 1. Get normalized mouse position from -1 (left edge) to 1 (right edge)
         const mouseNormX = (e.clientX / window.innerWidth) * 2 - 1; 
         
@@ -97,11 +87,19 @@ window.addEventListener('mousemove', (e) => {
         const maxScrollLeft = document.documentElement.scrollWidth - window.innerWidth;
         const targetScrollLeft = ((scaled + 1) / 2) * maxScrollLeft;
 
-        window.scrollTo({
-            top: window.scrollY,
-            left: targetScrollLeft,
-            behavior: 'instant'
-        });
+        if (smoothness === 0) {
+            window.scrollTo({
+                top: window.scrollY,
+                left: targetScrollLeft,
+                behavior: 'instant'
+            });
+        } else if (scale > 1) {
+            window.scrollTo({
+                top: window.scrollY,
+                left: (e.clientX / window.innerWidth) * (document.documentElement.scrollWidth - window.innerWidth),
+                behavior: 'instant'
+            });
+        }
     }
 });
 
