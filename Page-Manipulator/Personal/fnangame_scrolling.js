@@ -1,7 +1,11 @@
 // V10.11.2026
 // Active Websites: All
 
-const horizontalScale = 3;
+let scale = 1;
+
+// 1. Force the document and body to be extra wide instead of scaling/stretching
+document.documentElement.style.width = `${scale * 100}vw`;
+document.body.style.width = `${scale * 100}vw`;
 
 // 1. Create the box element
 const box = document.createElement('div');
@@ -36,6 +40,7 @@ window.addEventListener('mousemove', (e) => {
 
 let smoothness = 1;
 let modSmoothness = false;
+let modScale = false;
 let boxTimeout;
 
 // Clear any old transforms
@@ -54,21 +59,25 @@ window.addEventListener('mousemove', (e) => {
         
         // document.body.style.transform = `translateX(${targetX}px) translateY(${targetY}px)`;
         
-    // 1. Force the document and body to be extra wide instead of scaling/stretching
-    document.documentElement.style.width = `${horizontalScale * 100}vw`;
-    document.body.style.width = `${horizontalScale * 100}vw`;
-    // document.body.style.transformOrigin = 'top left';
-        
         // 1. Get normalized mouse position from -1 (left edge) to 1 (right edge)
         const mouseNormX = (e.clientX / window.innerWidth) * 2 - 1; 
         
-        // 2. Calculate max offset scaled by horizontalScale
-        const maxScrollOffset = horizontalScale * window.innerWidth; 
+        // 2. Calculate max offset scaled by scale
+        const maxXScrollOffset = scale * window.innerWidth; 
         
         // 3. Compute targetX centered symmetrically in the [-scaleX, scaleX] range
-        const targetX = mouseNormX * (-maxScrollOffset / 2); 
+        const targetX = mouseNormX * (-maxXScrollOffset / 2); 
         
-        document.body.style.transform = `translateX(${targetX}px)`;
+        // 1. Get normalized mouse position from -1 (left edge) to 1 (right edge)
+        const mouseNormY = (e.clientY / window.innerWidth) * 2 - 1; 
+        
+        // 2. Calculate max offset scaled by scale
+        const maxYScrollOffset = scale * window.innerWidth; 
+        
+        // 3. Compute targetY centered symmetrically in the [-scaleY, scaleY] range
+        const targetY = mouseNormY * (-maxYScrollOffset / 2); 
+        
+        document.body.style.transform = `translateX(${targetX}px) translateY(${targetY}px)`;
         window.scrollTo((document.documentElement.scrollWidth - window.innerWidth) / 2, window.scrollY);
     }
 });
@@ -81,26 +90,61 @@ window.addEventListener('wheel', (e) => {
         if (e.deltaY < 0) smoothness = Math.min(5, smoothness + 1);
         else smoothness = Math.max(-1, smoothness - 1);
 
-        const feedback = smoothness === -1 ? " (Off)" : smoothness === 0 ? " (Lagless)" : smoothness === 1 ? " (Default)" : smoothness === 3 ? " (Smooth)" : smoothness === 1 ? " (Default)" : smoothness === 5 ? " (Slow)" : ""
+        const feedback = smoothness === -1 ? " (Off)" : smoothness === 0 ? " (Lagless)" : smoothness === 1 ? " (Default)" : smoothness === 3 ? " (Smooth)" : smoothness === 1 ? " (Default)" : smoothness === 5 ? " (Slow)" : "";
         if (smoothness !== -1) {
             document.body.style.transition = `transform ${smoothness}s cubic-bezier(0.1, 0.9, 0.2, 1)`;
         } else {
             document.body.style.transform = 'none';
             document.body.style.transition = "";
         }
+
         clearTimeout(boxTimeout);
         box.textContent = `Smoothness: ${smoothness} seconds${feedback}`;
+        box.style.display = "";
+        boxTimeout = setTimeout(() => {box.style.display = "none";}, 1000);
+    } else if (modScale) {
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        console.log(`old: ${scale}`)
+        if (e.deltaY < 0) scale++;
+        else scale = Math.max(0, scale - 1);
+        console.log(`new: ${scale}`)
+
+        const feedback = scale === 0 ? " (Off)" : "";
+        if (scale !== 0) {
+            document.documentElement.style.width = `${scale * 100}vw`;
+            document.body.style.width = `${scale * 100}vw`;
+        } else {
+            document.documentElement.style.width = "";
+            document.body.style.width = "";
+        }
+
+        clearTimeout(boxTimeout);
+        box.textContent = `Scale: ${scale}x${feedback}`;
         box.style.display = "";
         boxTimeout = setTimeout(() => {box.style.display = "none";}, 1000);
     }
 }, {passive: false, capture: true});
 
 window.addEventListener('keydown', (e) => {
-    if (e.shiftKey && e.altKey) modSmoothness = true;
+    if (e.altKey) {
+        if (e.shiftKey) {
+            modSmoothness = true;
+            modScale = false;
+        } else {
+            modSmoothness = false;
+            modScale = true;
+        }
+    }
 }, true);
 
 window.addEventListener('keyup', (e) => {
-    if (e.shiftKey || e.altKey) modSmoothness = false;
+    if (e.shiftKey) modSmoothness = false;
+    if (e.altKey) {
+        modSmoothness = false;
+        modScale = false;
+    }
 }, true);
 
 box.textContent = "Alt + Shift + Scroll Wheel to Increase/Decrease Smoothness";
