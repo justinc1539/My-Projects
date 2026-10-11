@@ -1,5 +1,8 @@
-// V10.10.2026
+// V10.11.2026
 // Active Websites: All
+
+const HORIZONTAL_SCALE = 1;
+let horizontalScale = HORIZONTAL_SCALE;
 
 // 1. Create the box element
 const box = document.createElement('div');
@@ -33,23 +36,67 @@ window.addEventListener('mousemove', (e) => {
     box.style.top = `${e.clientY}px`;
 });
 
-let text = "";
-window.addEventListener('keydown', (e) => {
-    if (!["Control", "Alt", "Shift", "Meta"].includes(e.key)) {
-        if (["Enter", "Space"].includes(box.textContent)) box.textContent = "";
-        if (e.key === "Backspace") box.textContent = box.textContent.slice(0, box.textContent.length - text.length)
-        else {
-            text = e.key;
-            if (e.ctrlKey) text = "Ctrl + " + text;
-            if (e.altKey) text = "Alt + " + text;
-            // if (e.shiftKey) text = "Shift + " + text;
-            if (e.metaKey) text = "Meta + " + text;
+let smoothness = 1;
+let modSmoothness = false;
+// document.body.style.transform = `scaleX(${horizontalScale})`;
 
-            if (e.key === "Enter") box.textContent = e.key;
-            // else if (e.key === " ") box.textContent = "Space";
-            else box.textContent += text;
+// 1. Force the document and body to be extra wide instead of scaling/stretching
+document.documentElement.style.width = `${horizontalScale * 100}vw`;
+document.body.style.width = `${horizontalScale * 100}vw`;
+document.body.style.transformOrigin = 'top left';
+
+// Clear any old transforms
+document.body.style.transform = 'none';
+document.body.style.transformOrigin = 'top left';
+document.body.style.transition = `transform 0s cubic-bezier(0.1, 0.9, 0.2, 1)`;
+
+window.addEventListener('mousemove', (e) => {
+    const mouseNormX = (e.clientX / window.innerWidth) * 2 - 1;
+    const maxScrollOffset = horizontalScale*window.innerWidth; // How far it slides
+    const targetX = mouseNormX * (-maxScrollOffset / 2); 
+    
+    // TODO: Fix translateX equation for various horizontalScale
+    // document.body.style.transform = `translateX(-${horizontalScale * 100 * e.clientX / (window.innerWidth - 2)}%) scaleX(${horizontalScale})`;
+    // document.body.style.transform = `translateX(${targetX}px) scaleX(${horizontalScale})`;
+    document.body.style.transform = `translateX(${targetX}px)`;
+    // document.body.style.transform = `translateX(${-0.892*horizontalScale*window.innerWidth}px) scaleX(${horizontalScale})`;
+});
+
+window.addEventListener('wheel', (e) => {
+    if (modSmoothness) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (e.deltaY < 0) smoothness++;
+        else smoothness = Math.max(-1, smoothness - 1);
+        document.body.style.transition = `transform ${smoothness}s cubic-bezier(0.1, 0.9, 0.2, 1)`;
+        const feedback = smoothness === -1 ? " (Off)" : smoothness === 0 ? " (Lagless)" : smoothness === 1 ? " (Default)" : smoothness === 3 ? " (Smooth)" : ""
+        if (smoothness !== -1) {
+            horizontalScale = HORIZONTAL_SCALE;
+            document.documentElement.style.width = `${horizontalScale * 100}vw`;
+            document.body.style.width = `${horizontalScale * 100}vw`;
+            document.body.style.transformOrigin = 'top left';
+        } else {
+            horizontalScale = 0;
+            document.documentElement.style.width = "";
+            document.body.style.width = "";
+            document.body.style.transformOrigin = "";
         }
-        
-        box.style.display = box.textContent.length > 0 ? "" : "none";
+        if (box) {
+            box.textContent = `Smoothness: ${smoothness} seconds${feedback}`;
+            box.style.display = "";
+        }
     }
-}, true);
+}, {passive:false});
+
+window.addEventListener('keydown', (e) => {
+    if (e.shiftKey && e.altKey) modSmoothness = true;
+});
+
+window.addEventListener('keyup', (e) => {
+    if (e.shiftKey || e.altKey) modSmoothness = false;
+});
+
+if (box) {
+    box.textContent = "Alt + Shift + Scroll Wheel to Increase/Decrease Smoothness";
+    box.style.display = "";
+}
