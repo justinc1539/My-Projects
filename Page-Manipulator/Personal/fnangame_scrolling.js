@@ -79,6 +79,7 @@ window.addEventListener('mousemove', (e) => {
         
         document.body.style.transform = `translateX(${targetX}px) translateY(${targetY}px)`;
         window.scrollTo((document.documentElement.scrollWidth - window.innerWidth) / 2, window.scrollY);
+        console.log(`${window.scrollX}, ${window.scrollY}`)
     }
 });
 
@@ -132,7 +133,7 @@ window.addEventListener('keydown', (e) => {
         if (e.shiftKey) {
             modSmoothness = true;
             modScale = false;
-        } else {
+        } else if (e.ctrlKey) {
             modSmoothness = false;
             modScale = true;
         }
@@ -141,6 +142,7 @@ window.addEventListener('keydown', (e) => {
 
 window.addEventListener('keyup', (e) => {
     if (e.shiftKey) modSmoothness = false;
+    if (e.ctrlKey) modScale = false;
     if (e.altKey) {
         modSmoothness = false;
         modScale = false;
