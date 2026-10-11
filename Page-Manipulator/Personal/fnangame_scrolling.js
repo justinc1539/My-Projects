@@ -1,3 +1,5 @@
+// V10.10.2026
+// Active Websites: All
 const HORIZONTAL_SCALE = 1;
 let smoothness = 0;
 let modSmoothness = false;
