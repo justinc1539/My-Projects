@@ -31,12 +31,6 @@ box.style.cssText = `
 // Append to document.documentElement so it escapes the body's transform space!
 document.documentElement.appendChild(box);
 
-// 2. Mouse move handler for both panning and cursor tracking
-window.addEventListener('mousemove', (e) => {
-    box.style.left = `${e.clientX}px`;
-    box.style.top = `${e.clientY}px`;
-});
-
 let smoothness = 1;
 let modSmoothness = false;
 let modScale = false;
@@ -47,6 +41,9 @@ document.body.style.transform = 'none';
 document.body.style.transition = `transform ${smoothness}s cubic-bezier(0.1, 0.9, 0.2, 1)`;
 
 window.addEventListener('mousemove', (e) => {
+    box.style.left = `${e.clientX}px`;
+    box.style.top = `${e.clientY}px`;
+
     if (smoothness !== -1) {
         // 1. Get normalized mouse position from -1 (left edge) to 1 (right edge)
         const mouseNormX = (e.clientX / window.innerWidth) * 2 - 1; 
