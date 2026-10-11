@@ -48,7 +48,7 @@ document.body.style.transformOrigin = 'top left';
 // Clear any old transforms
 document.body.style.transform = 'none';
 document.body.style.transformOrigin = 'top left';
-document.body.style.transition = `transform 0s cubic-bezier(0.1, 0.9, 0.2, 1)`;
+document.body.style.transition = `transform ${smoothness}s cubic-bezier(0.1, 0.9, 0.2, 1)`;
 
 window.addEventListener('mousemove', (e) => {
     if (smoothness !== -1) {
