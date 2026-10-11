@@ -102,7 +102,7 @@ window.addEventListener('wheel', (e) => {
 
 window.addEventListener('keydown', (e) => {
     if (e.shiftKey && e.altKey) modSmoothness = true;
-});
+}, true);
 
 window.addEventListener('keyup', (e) => {
     if (e.shiftKey || e.altKey) modSmoothness = false;
