@@ -38,7 +38,7 @@
     }
 
     // 1. Listen on the main window
-    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keydown', handleKeyDown, true);
 
     // 2. Attempt to listen inside the iframe (Works if same-origin)
     const iframe = document.getElementById('html5game');
@@ -47,7 +47,7 @@
             // Wait for iframe to load if necessary, or attach directly
             const iframeWindow = iframe.contentWindow;
             if (iframeWindow) {
-                iframeWindow.addEventListener('keydown', handleKeyDown);
+                iframeWindow.addEventListener('keydown', handleKeyDown, true);
             }
         } catch (err) {
             console.warn("Cross-origin iframe security blocks direct event monitoring from the parent page.");
