@@ -1,74 +1,37 @@
-(function () {
-    const HORIZONTAL_SCALE = 1;
-    document.body.style.transformOrigin = 'top left';
-    document.body.style.transform = `scaleX(${HORIZONTAL_SCALE})`;
+const HORIZONTAL_SCALE = 1;
+let smoothness = 0;
+let modSmoothness = false;
+document.body.style.transformOrigin = 'top left';
+document.body.style.transform = `scaleX(${HORIZONTAL_SCALE})`;
 
-    // 1. Clean up existing stage if it already exists
-    let oldStage = document.getElementById('curved-tv-stage');
-    if (oldStage) oldStage.remove();
+document.body.style.transition = `transform 0s cubic-bezier(0.1, 0.9, 0.2, 1)`;
 
-    document.documentElement.style.overflow = 'hidden';
-    document.documentElement.style.background = '#0b0b0b';
+window.addEventListener('mousemove', (e) => {
+    const mouseNormX = (e.clientX / window.innerWidth) * 2 - 1;
+    const maxScrollOffset = HORIZONTAL_SCALE*window.innerWidth; // How far it slides
+    const targetX = mouseNormX * (-maxScrollOffset / 2); 
     
-    const stage = document.createElement('div');
-    stage.id = 'curved-tv-stage';
-    stage.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        overflow: hidden;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    `;
+    // TODO: Fix translateX equation for various HORIZONTAL_SCALE
+    // document.body.style.transform = `translateX(-${HORIZONTAL_SCALE * 100 * e.clientX / (window.innerWidth - 2)}%) scaleX(${HORIZONTAL_SCALE})`;
+    document.body.style.transform = `translateX(${targetX}px) scaleX(${HORIZONTAL_SCALE})`;
+    // document.body.style.transform = `translateX(${-0.892*HORIZONTAL_SCALE*window.innerWidth}px) scaleX(${HORIZONTAL_SCALE})`;
+});
 
-    // Create an extra-wide container to pan across
-    const panner = document.createElement('div');
-    panner.style.cssText = `
-        position: absolute;
-        width: 200vw;
-        height: 100vh;
-        display: flex;
-        transform: translateX(0px);
-        transition: transform 0.05s ease-out;
-    `;
-
-    const contentWrapper = document.createElement('div');
-    contentWrapper.style.cssText = `
-        width: 200vw;
-        min-height: 100vh;
-        background: white;
-        position: relative;
-        overflow-y: auto;
-        overflow-x: hidden;
-        scrollbar-width: none;
-    `;
-    while (document.body.firstChild) {
-        contentWrapper.appendChild(document.body.firstChild);
-    }
-
-    panner.appendChild(contentWrapper);
-    stage.appendChild(panner);
-    document.body.appendChild(stage);
-
-    // 2. Smooth mouse panning (moves left/right cleanly without any 3D slant)
-    window.addEventListener('mousemove', (e) => {
-        const mouseNormX = (e.clientX / window.innerWidth) * 2 - 1; // -1 to 1
-        const maxScrollOffset = .5*HORIZONTAL_SCALE*window.innerWidth; // How far it slides
-        const targetX = mouseNormX * (-maxScrollOffset / 2); 
-        
-        panner.style.transform = `translateX(${targetX}px)`;
-    });
-
-    // 3. Custom wheel scroll handler
-    window.addEventListener('wheel', (event) => {
+window.addEventListener('wheel', (e) => {
+    if (modSmoothness) {
         event.preventDefault();
-        contentWrapper.scrollBy({
-            top: event.deltaY,
-            left: 0,
-            behavior: 'auto'
-        });
-    }, { passive: false });
-})();
+        event.stopPropagation();
+        if (e.deltaY < 0) smoothness++;
+        else smoothness = Math.max(0, smoothness - 1);
+        document.body.style.transition = `transform ${smoothness}s cubic-bezier(0.1, 0.9, 0.2, 1)`;
+        console.log(smoothness);
+    }
+});
+
+window.addEventListener('keydown', (e) => {
+    if (e.shiftKey && e.altKey) modSmoothness = true;
+});
+
+window.addEventListener('keyup', (e) => {
+    if (e.shiftKey || e.altKey) modSmoothness = false;
+});
