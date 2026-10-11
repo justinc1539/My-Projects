@@ -9,7 +9,6 @@ document.body.style.width = `${scale * 100}vw`;
 
 // 1. Create the box element
 const box = document.createElement('div');
-box.id = 'cursor-hi-box';
 box.textContent = '';
 box.style.cssText = `
     position: fixed;
@@ -69,7 +68,7 @@ window.addEventListener('mousemove', (e) => {
         const targetX = mouseNormX * (-maxXScrollOffset / 2); 
         
         // 1. Get normalized mouse position from -1 (left edge) to 1 (right edge)
-        const mouseNormY = (e.clientY / window.innerWidth) * 2 - 1; 
+        const mouseNormY = (e.clientY / window.innerWidth) * 2 - 0.5;
         
         // 2. Calculate max offset scaled by scale
         const maxYScrollOffset = scale * window.innerWidth; 
@@ -77,13 +76,37 @@ window.addEventListener('mousemove', (e) => {
         // 3. Compute targetY centered symmetrically in the [-scaleY, scaleY] range
         const targetY = mouseNormY * (-maxYScrollOffset / 2); 
         
+        // TODO: Checkup
         document.body.style.transform = `translateX(${targetX}px) translateY(${targetY}px)`;
-        window.scrollTo((document.documentElement.scrollWidth - window.innerWidth) / 2, window.scrollY);
-        console.log(`${window.scrollX}, ${window.scrollY}`)
+        // document.body.style.transform = `translateY(${targetY}px)`;
+
+        // 1. Get mouse position as a ratio from 0 to 1
+        const mouseRatio = e.clientX / window.innerWidth;
+        
+        // 2. Calculate distance from the center (0.5)
+        let distanceFromCenter = mouseRatio - 0.5; // Ranges from -0.5 (left) to 0.5 (right)
+        
+        // 3. Multiply sensitivity so reaching 25% from center (0.25 or 0.75) hits max scroll
+        // A factor of 4 means 0.25 * 4 = 1.0 (full limit)
+        let scaled = distanceFromCenter * 8;
+        
+        // 4. Clamp the value between -1 and 1 so it stops cleanly at the edges
+        scaled = Math.max(-1, Math.min(1, scaled));
+        
+        // 5. Map the -1 to 1 range across the actual scrollable width (centered)
+        const maxScrollLeft = document.documentElement.scrollWidth - window.innerWidth;
+        const targetScrollLeft = ((scaled + 1) / 2) * maxScrollLeft;
+
+        window.scrollTo({
+            top: window.scrollY,
+            left: targetScrollLeft,
+            behavior: 'instant'
+        });
     }
 });
 
 window.addEventListener('wheel', (e) => {
+    // console.log(`${window.scrollX}, ${window.scrollY}`)
     if (modSmoothness) {
         e.preventDefault();
         e.stopPropagation();
@@ -107,10 +130,8 @@ window.addEventListener('wheel', (e) => {
         e.preventDefault();
         e.stopPropagation();
         e.stopImmediatePropagation();
-        console.log(`old: ${scale}`)
         if (e.deltaY < 0) scale++;
         else scale = Math.max(0, scale - 1);
-        console.log(`new: ${scale}`)
 
         const feedback = scale === 0 ? " (Off)" : "";
         if (scale !== 0) {
