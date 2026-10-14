@@ -1,4 +1,4 @@
-// V10.7.2026
+// V10.14.2026
 // Active Websites: All
 
 try {
@@ -446,7 +446,8 @@ else if (url.includes("https://ps.pcti.tec.nj.us/guardian/r") && url.includes("_
             alert("Fetch blocked by CORS or network error");
             console.error(err);
         });
-} else if (url.startsWith("https://ps.pcti.tec.nj.us/guardian/scores.html")) {
+// PowerSchool Grade Modifier
+} else if (false && url.startsWith("https://ps.pcti.tec.nj.us/guardian/scores.html")) {
 setInterval(() => {
 if (url.startsWith("https://ps.pcti.tec.nj.us/guardian/scores.html?frn=0042115146")) {
   // Update flags table data to completed
