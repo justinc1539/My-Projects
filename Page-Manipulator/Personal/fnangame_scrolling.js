@@ -1,4 +1,4 @@
-// V10.11.2026
+// V10.15.2026
 // Active Websites: All
 
 let scale = 1;
@@ -31,7 +31,7 @@ box.style.cssText = `
 // Append to document.documentElement so it escapes the body's transform space!
 document.documentElement.appendChild(box);
 
-let smoothness = 1;
+let smoothness = 3;
 let modSmoothness = false;
 let modScale = false;
 let boxTimeout;
@@ -49,7 +49,7 @@ window.addEventListener('mousemove', (e) => {
         const mouseNormX = (e.clientX / window.innerWidth) * 2 - 1; 
         
         // 2. Calculate max offset scaled by scale
-        const maxXScrollOffset = scale * window.innerWidth; 
+        const maxXScrollOffset = Math.round(scale) * window.innerWidth; 
         
         // 3. Compute targetX centered symmetrically in the [-scaleX, scaleX] range
         const targetX = mouseNormX * (-maxXScrollOffset / 2); 
@@ -58,7 +58,7 @@ window.addEventListener('mousemove', (e) => {
         const mouseNormY = (e.clientY / window.innerWidth) * 2 - 0.5;
         
         // 2. Calculate max offset scaled by scale
-        const maxYScrollOffset = scale * window.innerWidth; 
+        const maxYScrollOffset = Math.round(scale) * window.innerWidth; 
         
         // 3. Compute targetY centered symmetrically in the [-scaleY, scaleY] range
         const targetY = mouseNormY * (-maxYScrollOffset / 2); 
@@ -90,7 +90,7 @@ window.addEventListener('mousemove', (e) => {
                 left: targetScrollLeft,
                 behavior: 'instant'
             });
-        } else if (scale > 1) {
+        } else if (Math.round(scale) > 1) {
             window.scrollTo({
                 top: window.scrollY,
                 left: (e.clientX / window.innerWidth) * (document.documentElement.scrollWidth - window.innerWidth),
@@ -106,34 +106,36 @@ window.addEventListener('wheel', (e) => {
         e.preventDefault();
         e.stopPropagation();
         e.stopImmediatePropagation();
-        if (e.deltaY < 0) smoothness = Math.min(5, smoothness + 1);
-        else smoothness = Math.max(-1, smoothness - 1);
+        if (e.deltaY < 0) smoothness = Math.min(5, smoothness - e.deltaY / 100);
+        else smoothness = Math.max(-1, smoothness - e.deltaY / 100);
+        const roundedSmoothness = Math.round(smoothness)
 
-        const feedback = smoothness === -1 ? " (Off)" : smoothness === 0 ? " (Lagless)" : smoothness === 1 ? " (Default)" : smoothness === 3 ? " (Smooth)" : smoothness === 1 ? " (Default)" : smoothness === 5 ? " (Slow)" : "";
-        if (smoothness !== -1) {
-            document.body.style.transition = `transform ${smoothness}s cubic-bezier(0.1, 0.9, 0.2, 1)`;
+        const feedback = roundedSmoothness === -1 ? " (Off)" : roundedSmoothness === 0 ? " (Lagless)" : roundedSmoothness === 1 ? " (Default)" : roundedSmoothness === 3 ? " (Smooth)" : roundedSmoothness === 1 ? " (Default)" : roundedSmoothness === 5 ? " (Slow)" : "";
+        if (roundedSmoothness !== -1) {
+            document.body.style.transition = `transform ${roundedSmoothness}s cubic-bezier(0.1, 0.9, 0.2, 1)`;
         } else {
             document.body.style.transform = 'none';
             document.body.style.transition = "";
         }
 
         clearTimeout(boxTimeout);
-        box.textContent = `Smoothness: ${smoothness} seconds${feedback}`;
+        box.textContent = `Smoothness: ${roundedSmoothness} seconds${feedback}`;
         box.style.display = "";
         boxTimeout = setTimeout(() => {box.style.display = "none";}, 1000);
     } else if (modScale) {
         e.preventDefault();
         e.stopPropagation();
         e.stopImmediatePropagation();
-        if (e.deltaY < 0) scale++;
-        else scale = Math.max(1, scale - 1);
+        if (e.deltaY < 0) scale -= e.deltaY / 100;
+        else scale = Math.max(1, scale - e.deltaY / 100);
+        const roundedScale = Math.round(scale)
 
-        const feedback = scale === 1 ? " (Default)" : "";
-        document.documentElement.style.width = `${scale * 100}vw`;
-        document.body.style.width = `${scale * 100}vw`;
+        const feedback = roundedScale === 1 ? " (Default)" : "";
+        document.documentElement.style.width = `${roundedScale * 100}vw`;
+        document.body.style.width = `${roundedScale * 100}vw`;
 
         clearTimeout(boxTimeout);
-        box.textContent = `Scale: ${scale}x${feedback}`;
+        box.textContent = `Scale: ${roundedScale}x${feedback}`;
         box.style.display = "";
         boxTimeout = setTimeout(() => {box.style.display = "none";}, 1000);
     }
