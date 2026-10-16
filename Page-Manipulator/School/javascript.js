@@ -1,4 +1,4 @@
-// V10.14.2026
+// V10.15.2026
 // Active Websites: All
 
 try {
@@ -371,7 +371,8 @@ box.dispatchEvent(new Event("input", { bubbles: true }));
     //         response.value = 1;
     //     });
     // });
-} else if (url.match(/^https:\/\/pcti\.instructure\.com\/?(?:\?.*)?$/) || url.match(/^https:\/\/pcti\.instructure\.com\/courses\/\d+(?:\?.*)?$/)) {
+// Double Canvas Grade (1/4)
+} else if (false && url.match(/^https:\/\/pcti\.instructure\.com\/?(?:\?.*)?$/) || url.match(/^https:\/\/pcti\.instructure\.com\/courses\/\d+(?:\?.*)?$/)) {
   document.querySelectorAll('div.event-details p').forEach(p => {
     const html = p.innerHTML.trim();
 
@@ -446,7 +447,28 @@ else if (url.includes("https://ps.pcti.tec.nj.us/guardian/r") && url.includes("_
             alert("Fetch blocked by CORS or network error");
             console.error(err);
         });
-// PowerSchool Grade Modifier
+// CollegeBoard Score Faker (hide_collegeboard.js)
+} else if (false && url.includes("https://apclassroom.collegeboard.org/")) {
+    setInterval(() => {
+        // Deselect current answer
+        document.querySelectorAll(".letter.--chosen").forEach(letter => {letter.className = "letter"});
+        
+        // Auto select correct answer
+        document.querySelectorAll(".AccessibilityWrapper.mcq-option").forEach(option => {if (!option.className.includes("--correct") && option.querySelector(".response-analysis-wrapper").querySelector(".icon.--correct")) option.click();});
+        document.querySelectorAll(".AccessibilityWrapper.mcq-option.--correct").forEach(letter => {letter.querySelector(".letter").className = "letter --chosen"});
+        
+        // Move percentage line to the very right
+        document.querySelector(".percentage-line.percentage-line__right").style.marginRight = "0%"
+        
+        // Set score to max
+        document.querySelectorAll(".flex.items-center.h-8.dark.performance-score").forEach(score => score.textContent = `${score.textContent.split("/")[1]}/${score.textContent.split("/")[1]}`)
+        
+        // Change all responses to correct
+        document.querySelectorAll(".font-normal.text-default.text-red-500").forEach(s => {s.textContent = "1/1";s.className = ".font-normal text-default text-green-500"})
+        document.querySelectorAll(".x-mark-big").forEach(mark => mark.className = "v-mark-big");
+        document.querySelector('span[data-test-performance-icon-score="true"]').textContent = "1/1";
+    }, 1);
+// Double PowerSchool Grade Modifier
 } else if (false && url.startsWith("https://ps.pcti.tec.nj.us/guardian/scores.html")) {
 setInterval(() => {
 if (url.startsWith("https://ps.pcti.tec.nj.us/guardian/scores.html?frn=0042115146")) {
@@ -754,7 +776,8 @@ for (let cell of gpaCells) {
     if (!cell.textContent.includes(newGPA)) {cell.textContent += '5.2'};
     break;
   }
-}} else if (/^https:\/\/pcti\.instructure\.com\/courses\/\d+\/assignments(?:\/\d+)?(?:\/submissions\/\d+)?\/?(?:\?.*)?$/.test(url)) {
+// Double Canvas Grade (2/4)
+}} else if (false && /^https:\/\/pcti\.instructure\.com\/courses\/\d+\/assignments(?:\/\d+)?(?:\/submissions\/\d+)?\/?(?:\?.*)?$/.test(url)) {
 setInterval(() => {
     // Find all grade elements that match the pattern
     const el = document.querySelector('.module > div')
@@ -813,7 +836,8 @@ document.querySelectorAll('span.score-display').forEach(span => {
   }
 });
 }, 1);
-} else if (/^https:\/\/pcti\.instructure\.com\/courses\/\d+\/grades(?:\?.*)?$/.test(url)) {
+// Double Canvas Grade (3/4)
+} else if (false && /^https:\/\/pcti\.instructure\.com\/courses\/\d+\/grades(?:\?.*)?$/.test(url)) {
     if (!url.endsWith("?grading_period_id=0")) {
 const match = url.match(/^https:\/\/pcti\.instructure\.com\/courses\/(\d+)\/grades(?:\?.*)?$/);
 if (match) {
@@ -852,7 +876,8 @@ document.querySelectorAll('span.possible.points_possible').forEach(span => {
     span.textContent = `${doubled} / ${match[2]}`;
   }
 });
-} else if (url.match(/^https:\/\/pcti\.instructure\.com\/grades(?:\?.*)?$/)) {
+// Double Canvas Grade (4/4)
+} else if (false && url.match(/^https:\/\/pcti\.instructure\.com\/grades(?:\?.*)?$/)) {
 setInterval(() => {
   document.querySelectorAll('td.percent').forEach(link => {
     link.textContent = "200%";
