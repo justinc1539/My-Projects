@@ -1,4 +1,4 @@
-// V10.15.2026
+// V10.16.2026
 // Active Websites: All
 
 let scale = 1;
@@ -35,6 +35,26 @@ let smoothness = 3;
 let modSmoothness = false;
 let modScale = false;
 let boxTimeout;
+let clientY = window.innerHeight * 0.5;
+
+setInterval(() => {
+    // TODO: Have cursor scroll if it is in top or bottom 10% of screen
+    // TODO: and have scroll speed based on how fast it scrolls
+    const height = window.innerHeight;
+    if (clientY < height * 0.1) {
+        window.scrollTo({
+            top: window.scrollY - 20 * ((0.1 * height - clientY)/(0.1 * height)),
+            left: window.scrollX,
+            behavior: 'instant'
+        });
+    } else if (clientY > height * 0.9) {
+        window.scrollTo({
+            top: window.scrollY + 20 * (1 - (height - clientY) / 100),
+            left: window.scrollX,
+            behavior: 'instant'
+        });
+    }
+}, 10);
 
 // Clear any old transforms
 document.body.style.transform = 'none';
@@ -43,6 +63,7 @@ document.body.style.transition = `transform ${smoothness}s cubic-bezier(0.1, 0.9
 window.addEventListener('mousemove', (e) => {
     box.style.left = `${e.clientX}px`;
     box.style.top = `${e.clientY}px`;
+    clientY = e.clientY;
 
     if (smoothness !== -1) {
         // 1. Get normalized mouse position from -1 (left edge) to 1 (right edge)
@@ -90,12 +111,6 @@ window.addEventListener('mousemove', (e) => {
                 left: targetScrollLeft,
                 behavior: 'instant'
             });
-        } else if (Math.round(scale) > 1) {
-            window.scrollTo({
-                top: window.scrollY,
-                left: (e.clientX / window.innerWidth) * (document.documentElement.scrollWidth - window.innerWidth),
-                behavior: 'instant'
-            });
         }
     }
 });
@@ -123,6 +138,7 @@ window.addEventListener('wheel', (e) => {
         box.style.display = "";
         boxTimeout = setTimeout(() => {box.style.display = "none";}, 1000);
     } else if (modScale) {
+        alert(67)
         e.preventDefault();
         e.stopPropagation();
         e.stopImmediatePropagation();
@@ -149,6 +165,7 @@ window.addEventListener('keydown', (e) => {
         } else if (e.ctrlKey) {
             modSmoothness = false;
             modScale = true;
+            // alert(modScale)
         }
     }
 }, true);
