@@ -1,4 +1,4 @@
-// V10.10.2026
+// V10.16.2026
 // Active websites: all
 
 /* DOWNLOAD VID VVV
@@ -63,7 +63,7 @@ DOWNLOAD VID ^^^ */
 // Variables
 const navModifiers = [0.05, 0.25, 1, 5, 30];
 const speedModifiers = [0.0001, 0.001, 0.01, 0.1, 0.25, 0.5, 1, 5, 10];
-const durationRounding = [null, -1, 2]
+const durationRounding = [null, -1, 2];
 let highlightOutline = true;
 let durationOutlineIndex = 2;
 let currentIndex = 0;
@@ -346,7 +346,6 @@ async function waitForVideos() {
             if (!("replayStart" in aVideo)) aVideo.replayStart = 0;
             if (!("replayEnd" in aVideo)) aVideo.replayEnd = aVideo.duration;
             if (!("cuts" in aVideo)) aVideo.cuts = [];
-            // TODO: change below ex-variables to attributes
             if (!("navModIter" in aVideo)) aVideo.navModIter = 3;
             if (!("speedModIter" in aVideo)) aVideo.speedModIter = 4;
             if (!("replay" in aVideo)) aVideo.replay = false;
@@ -354,6 +353,7 @@ async function waitForVideos() {
             if (!("cutIter" in aVideo)) aVideo.cutIter = "";
             if (!("deleteCutIter" in aVideo)) aVideo.deleteCutIter = "";
             if (!("volMod" in aVideo)) aVideo.volMod = 0.1;
+            if (!("savedTimeStamps" in aVideo)) aVideo.savedTimeStamps = [];
         
             const quality = aVideo.getVideoPlaybackQuality?.();
             const fps = (quality && quality.totalVideoFrames && quality.totalFrameDelay)
@@ -383,12 +383,15 @@ Navigation\n\
 Comma - Go back 1 frame\n\
 Period - Go forward 1 frame\n\n\
 Numbers (0-9) = Go to percentage of video length\n\n\
+
 Left Arrow - Go back by Navigation Modifier\n\
 Right Arrow - Go forward by Navigation Modifier\n\
 J - Go back by 2 * Navigation Modifier\n\
 L - Go forward by 2 * Navigation Modifier\n\n\
 Ctrl + Left Arrow - Decrease Navigation Modifier\n\
 Ctrl + Right Arrow - Increase Navigation Modifier\n\
+
+Ctrl + Z - Undo to last timestamp before Navigation
 ====================================================================\n\
 Volume\n\
 Up Arrow - Increase Volume by Volume Modifier\n\
@@ -579,6 +582,7 @@ Ctrl + Shift - Finish Cut Customization/Confirm Cut Deletion`, 2**16);
                 }
             }
             // Navigation feature
+            // TODO: Checkup UNDO feature (Ctrl + Z)
             else if ([",", "."].includes(event.key)) {
                 blockKeyEvents(event);
                 aVideo.currentTime += event.key === "," ? -1/fps : 1/fps;
@@ -593,16 +597,27 @@ Ctrl + Shift - Finish Cut Customization/Confirm Cut Deletion`, 2**16);
               flashIndicator(`±${navModifiers[aVideo.navModIter]}s`);
             } else if (/^Digit[0-9]$/.test(event.code)) {
                 blockKeyEvents(event);
+                aVideo.savedTimeStamps.push([aVideo.currentTime, "Go to percentage of video length"]);
                 aVideo.currentTime = aVideo.duration * JSON.parse(event.code.replace("Digit", "")) / 10;
                 flashIndicator(`${JSON.parse(event.code.replace("Digit", "")) * 10}% of Video Duration`);
             } else if (["ArrowLeft", "ArrowRight"].includes(event.key)) {
                 blockKeyEvents(event);
+                aVideo.savedTimeStamps.push([aVideo.currentTime, `Go ${event.key === "ArrowLeft" ? "back" : "forward"} by Navigation Modifier`]);
                 aVideo.currentTime += event.key === "ArrowLeft" ? -navModifiers[aVideo.navModIter] : navModifiers[aVideo.navModIter];
                 flashIndicator(`${event.key === "ArrowLeft" ? "-" : "+"}${navModifiers[aVideo.navModIter]}s`);
             } else if (["j", "l"].includes(event.key.toLowerCase())) {
                 blockKeyEvents(event);
+                aVideo.savedTimeStamps.push([aVideo.currentTime, `Go ${event.key.toLowerCase() === "j" ? "back" : "forward"} by 2 * Navigation Modifier`]);
                 aVideo.currentTime += event.key.toLowerCase() === "j" ? -2 * navModifiers[aVideo.navModIter] : 2 * navModifiers[aVideo.navModIter];
-                flashIndicator(`${event.key === "j" ? "-" : "+"}${2 * navModifiers[aVideo.navModIter]}s`);
+                flashIndicator(`${event.key.toLowerCase() === "j" ? "-" : "+"}${2 * navModifiers[aVideo.navModIter]}s`);
+            } else if (event.ctrlKey && ["z", "Z"].includes(event.key)) {
+                blockKeyEvents(event);
+                const timeStamp = aVideo.savedTimeStamps.pop();
+                if (timeStamp) {
+                    flashIndicator(`Undo to ${formatTime(timeStamp[0]} (Rolled back from "${timeStamp[1]}")`);
+                } else {
+                    flashIndicator("No Recent Navigation");
+                }
             }
             // Volume feature
             else if (event.ctrlKey && ["ArrowDown", "ArrowUp"].includes(event.key)) {
