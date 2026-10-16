@@ -354,6 +354,7 @@ async function waitForVideos() {
             if (!("deleteCutIter" in aVideo)) aVideo.deleteCutIter = "";
             if (!("volMod" in aVideo)) aVideo.volMod = 0.1;
             if (!("savedTimeStamps" in aVideo)) aVideo.savedTimeStamps = [];
+            if (!("savedUndos" in aVideo)) aVideo.savedUndos = [];
         
             const quality = aVideo.getVideoPlaybackQuality?.();
             const fps = (quality && quality.totalVideoFrames && quality.totalFrameDelay)
@@ -392,6 +393,7 @@ Ctrl + Left Arrow - Decrease Navigation Modifier\n\
 Ctrl + Right Arrow - Increase Navigation Modifier\n\
 
 Ctrl + Z - Undo to last timestamp before Navigation
+Ctrl + Y - Redo to last timestamp before Undo
 ====================================================================\n\
 Volume\n\
 Up Arrow - Increase Volume by Volume Modifier\n\
@@ -582,7 +584,6 @@ Ctrl + Shift - Finish Cut Customization/Confirm Cut Deletion`, 2**16);
                 }
             }
             // Navigation feature
-            // TODO: Checkup UNDO feature (Ctrl + Z)
             else if ([",", "."].includes(event.key)) {
                 blockKeyEvents(event);
                 aVideo.currentTime += event.key === "," ? -1/fps : 1/fps;
@@ -614,9 +615,21 @@ Ctrl + Shift - Finish Cut Customization/Confirm Cut Deletion`, 2**16);
                 blockKeyEvents(event);
                 const timeStamp = aVideo.savedTimeStamps.pop();
                 if (timeStamp) {
-                    flashIndicator(`Undo to ${formatTime(timeStamp[0]} (Rolled back from "${timeStamp[1]}")`);
+                    aVideo.savedUndos.push([timeStamp, aVideo.currentTime]);
+                    aVideo.currentTime = timeStamp[0];
+                    flashIndicator(`Undo to ${formatTime(timeStamp[0])} (Rolled back from "${timeStamp[1]}")`);
                 } else {
                     flashIndicator("No Recent Navigation");
+                }
+            } else if (event.ctrlKey && ["y", "Y"].includes(event.key)) {
+                blockKeyEvents(event);
+                const recentUndo = aVideo.savedUndos.pop();
+                if (recentUndo) {
+                    aVideo.savedTimeStamps.push(recentUndo[0]);
+                    aVideo.currentTime = recentUndo[1];
+                    flashIndicator(`Redo to ${formatTime(recentUndo[1])} (Rolled from "${recentUndo[0][1]}")`);
+                } else {
+                    flashIndicator("No Recent Undos");
                 }
             }
             // Volume feature
