@@ -35,11 +35,25 @@ let smoothness = 3;
 let modSmoothness = false;
 let modScale = false;
 let boxTimeout;
+let clientX = window.innerWidth * 0.5;
 let clientY = window.innerHeight * 0.5;
 
 setInterval(() => {
-    // TODO: Have cursor scroll if it is in top or bottom 10% of screen
-    // TODO: and have scroll speed based on how fast it scrolls
+    const width = window.innerWeidth;
+    if (clientX < width * 0.1) {
+        window.scrollTo({
+            top: window.scrollY,
+            left: window.scrollX - 20 * ((0.1 * width - clientX)/(0.1 * width)),
+            behavior: 'instant'
+        });
+    } else if (clientX > width * 0.9) {
+        window.scrollTo({
+            top: window.scrollY,
+            left: window.scrollX + 20 * (1 - (width - clientX) / 100),
+            behavior: 'instant'
+        });
+    }
+
     const height = window.innerHeight;
     if (clientY < height * 0.1) {
         window.scrollTo({
@@ -61,13 +75,15 @@ document.body.style.transform = 'none';
 document.body.style.transition = `transform ${smoothness}s cubic-bezier(0.1, 0.9, 0.2, 1)`;
 
 window.addEventListener('mousemove', (e) => {
-    box.style.left = `${e.clientX}px`;
-    box.style.top = `${e.clientY}px`;
+    clientX = e.clientX;
     clientY = e.clientY;
+
+    box.style.left = `${clientX}px`;
+    box.style.top = `${e.clientY}px`;
 
     if (smoothness !== -1) {
         // 1. Get normalized mouse position from -1 (left edge) to 1 (right edge)
-        const mouseNormX = (e.clientX / window.innerWidth) * 2 - 1; 
+        const mouseNormX = (clientX / window.innerWidth) * 2 - 1; 
         
         // 2. Calculate max offset scaled by scale
         const maxXScrollOffset = Math.round(scale) * window.innerWidth; 
@@ -89,7 +105,7 @@ window.addEventListener('mousemove', (e) => {
         // document.body.style.transform = `translateY(${targetY}px)`;
 
         // 1. Get mouse position as a ratio from 0 to 1
-        const mouseRatio = e.clientX / window.innerWidth;
+        const mouseRatio = clientX / window.innerWidth;
         
         // 2. Calculate distance from the center (0.5)
         let distanceFromCenter = mouseRatio - 0.5; // Ranges from -0.5 (left) to 0.5 (right)
@@ -106,12 +122,37 @@ window.addEventListener('mousemove', (e) => {
         const targetScrollLeft = ((scaled + 1) / 2) * maxScrollLeft;
 
         if (smoothness === 0) {
-            window.scrollTo({
-                top: window.scrollY,
-                left: targetScrollLeft,
-                behavior: 'instant'
-            });
+            // window.scrollTo({
+            //     top: window.scrollY,
+            //     left: targetScrollLeft,
+            //     behavior: 'instant'
+            // });
         }
+    }
+});
+
+document.addEventListener('mouseleave', (event) => {
+    if (clientX < window.innerWidth * 0.1) {
+        clientX = 0;
+        // box.style.left = `${clientX}px`;
+        // window.scrollTo({
+        //     top: window.scrollY,
+        //     left: clientX,
+        //     behavior: 'instant'
+        // });
+    } else if (clientX > window.innerWidth * 0.9) {
+        clientX = window.innerWidth;
+        // box.style.left = `${clientX}px`;
+        // window.scrollTo({
+        //     top: window.scrollY,
+        //     left: clientX,
+        //     behavior: 'instant'
+        // });
+    }
+    if (clientY < window.innerHeight * 0.1) {
+        clientY = 0;
+    } else if (clientY > window.innerHeight * 0.9) {
+        clientY = window.innerHeight;
     }
 });
 
