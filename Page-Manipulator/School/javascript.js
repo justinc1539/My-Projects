@@ -1,4 +1,4 @@
-// V10.15.2026
+// V10.18.2026
 // Active Websites: All
 
 try {
@@ -1561,6 +1561,11 @@ document.addEventListener('keyup', (event) => {
     } else if (event.key === "Alt") {
         altHeld = false;
     }
+});
+// Reset state if window loses focus to prevent stuck keys
+window.addEventListener('blur', () => {
+    ctrlHeld = false;
+    altHeld = false;
 });
 const cmdPopup = false;
 if (cmdPopup) {
