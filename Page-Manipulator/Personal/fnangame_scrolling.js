@@ -1,6 +1,7 @@
-// V10.16.2026
+// V10.19.2026
 // Active Websites: All
 
+let smoothness = 1;
 let scale = 1;
 
 // 1. Force the document and body to be extra wide instead of scaling/stretching
@@ -31,7 +32,6 @@ box.style.cssText = `
 // Append to document.documentElement so it escapes the body's transform space!
 document.documentElement.appendChild(box);
 
-let smoothness = 3;
 let modSmoothness = false;
 let modScale = false;
 let boxTimeout;
