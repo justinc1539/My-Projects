@@ -1,4 +1,4 @@
-# Very basic tetris running blocks through grid
+# Very basic blox running blocks through grid
 # Turtle only stamping the colors based on the number in the grid
 # Blocks falling as number in the grid
 # Look at the youtube tutorial by Christian Thompson
@@ -10,7 +10,7 @@ import time
 delay = 0.1  # For time/sleep
 
 win = turtle.Screen()
-win.title('Tetris using Python 3 and Turtle')
+win.title('Blox using Python 3 and Turtle')
 win.bgcolor('black')
 win.setup(600, 800)
 win.tracer(0)
@@ -91,7 +91,7 @@ border.lt(90)
 border.fd(490)  # Up
 border.up()
 border.goto(0, 260)
-border.write("TETRIS", align='center', font=('Courier', 36, 'normal'))
+border.write("BLOX", align='center', font=('Courier', 36, 'normal'))
 
 pen = turtle.Turtle()
 pen.up()
