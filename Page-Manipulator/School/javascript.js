@@ -1,4 +1,4 @@
-// V10.18.2026
+// V10.19.2026
 // Active Websites: All
 
 try {
@@ -1283,6 +1283,7 @@ if (false) {
 }, 1000);
 
 // Proximity transparency logic
+// TODO: Change all vars into lets
 var clientX = Infinity;
 var clientY = Infinity;
 var oldClientX = Infinity;
