@@ -1,12 +1,15 @@
 // V10.19.2026
 // Active Websites: All
 
-let smoothness = 1;
+let smoothness = 3;
 let scale = 1;
 
 // 1. Force the document and body to be extra wide instead of scaling/stretching
 document.documentElement.style.width = `${scale * 100}vw`;
 document.body.style.width = `${scale * 100}vw`;
+
+// document.documentElement.style.height = `${scale * 100}vw`;
+// document.body.style.height = `${scale * 100}vw`;
 
 // 1. Create the box element
 const box = document.createElement('div');
@@ -39,33 +42,64 @@ let clientX = window.innerWidth * 0.5;
 let clientY = window.innerHeight * 0.5;
 
 setInterval(() => {
-    const width = window.innerWeidth;
+    const width = window.innerWidth;
     if (clientX < width * 0.1) {
         window.scrollTo({
             top: window.scrollY,
-            left: window.scrollX - 20 * ((0.1 * width - clientX)/(0.1 * width)),
+            left: window.scrollX - scale * 20 * ((0.1 * width - clientX)/(0.1 * width)),
             behavior: 'instant'
+        });
+        document.querySelectorAll('*').forEach(element => {
+          element.scrollTo({
+            top: element.scrollY,
+            left: element.scrollX - scale * 20 * ((0.1 * width - clientX)/(0.1 * width)),
+            behavior: 'instant'
+          });
         });
     } else if (clientX > width * 0.9) {
         window.scrollTo({
             top: window.scrollY,
-            left: window.scrollX + 20 * (1 - (width - clientX) / 100),
+            left: window.scrollX + scale * 20 * (1 - (width - clientX) / 100),
             behavior: 'instant'
+        });
+        document.querySelectorAll('*').forEach(element => {
+          element.scrollTo({
+            top: element.scrollY,
+            left: element.scrollX + scale * 20 * ((0.1 * width - clientX)/(0.1 * width)),
+            behavior: 'instant'
+          });
         });
     }
 
     const height = window.innerHeight;
     if (clientY < height * 0.1) {
         window.scrollTo({
-            top: window.scrollY - 20 * ((0.1 * height - clientY)/(0.1 * height)),
+            top: window.scrollY - scale * 20 * ((0.1 * height - clientY)/(0.1 * height)),
             left: window.scrollX,
             behavior: 'instant'
         });
+        document.querySelectorAll('*').forEach(element => {
+          element.scrollTo({
+            top: element.scrollY - scale * 20 * ((0.1 * height - clientY)/(0.1 * height)),
+            left: element.scrollX,
+            behavior: 'instant'
+          });
+        });
     } else if (clientY > height * 0.9) {
         window.scrollTo({
-            top: window.scrollY + 20 * (1 - (height - clientY) / 100),
+            top: window.scrollY + scale * 20 * (1 - (height - clientY) / 100),
             left: window.scrollX,
             behavior: 'instant'
+        });
+        // TODO Have it work for all elements
+        document.querySelectorAll('*').forEach(element => {
+          element.style.overflowY = "auto";
+        //   element.scrollTo({
+        //     top: element.scrollY + scale * 20 * ((0.1 * height - clientY)/(0.1 * height)),
+        //     left: element.scrollX,
+        //     behavior: 'instant'
+        //   });
+          element.scrollTop = element.scrollTop + scale * 20 * ((0.1 * height - clientY)/(0.1 * height));
         });
     }
 }, 10);
@@ -179,7 +213,6 @@ window.addEventListener('wheel', (e) => {
         box.style.display = "";
         boxTimeout = setTimeout(() => {box.style.display = "none";}, 1000);
     } else if (modScale) {
-        alert(67)
         e.preventDefault();
         e.stopPropagation();
         e.stopImmediatePropagation();
@@ -206,7 +239,6 @@ window.addEventListener('keydown', (e) => {
         } else if (e.ctrlKey) {
             modSmoothness = false;
             modScale = true;
-            // alert(modScale)
         }
     }
 }, true);
