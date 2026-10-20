@@ -1,4 +1,4 @@
-# Simple Tetris with python 3 and Turtle
+# Simple Blox with python 3 and Turtle
 # Relied quite a lot on the youtube tutorial by Christian Thompson
 # Game still in progress
 # collision check is not yet 100% and there is still some issues but working!!
@@ -314,7 +314,7 @@ class Border(turtle.Turtle):
         self.fd(490)  # Up
         self.up()
         self.goto(0, 260)
-        self.write("TETRIS", align='center', font=('Courier', 36, 'normal'))
+        self.write("BLOX", align='center', font=('Courier', 36, 'normal'))
 
 
 class Pen(turtle.Turtle):
@@ -330,7 +330,7 @@ class Game():
         self.delay = 0.15
 
         self.win = turtle.Screen()
-        self.win.title('Tetris using Python 3 and Turtle')
+        self.win.title('Blox using Python 3 and Turtle')
         self.win.bgcolor('black')
         self.win.setup(600, 800)
         self.win.tracer(0)
@@ -432,7 +432,7 @@ class Game():
 
         while self.waiting:
             self.win.bgcolor('black')
-            self.title.write('Tetris Game with Python 3 and Turtle\n\n Press the "space" key to continue',
+            self.title.write('Blox Game with Python 3 and Turtle\n\n Press the "space" key to continue',
                              align='center', font=('Courier', 24, 'normal'))
         self.title.clear()
 
