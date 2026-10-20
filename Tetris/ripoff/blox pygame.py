@@ -1,5 +1,5 @@
 # From book Learning Python by Building Games by Sachin Kafle
-# Pygame Tetris
+# Pygame Blox
 
 import pygame
 import random
@@ -251,9 +251,9 @@ def draw_next_shape(shape, surface):
 
 def draw_window(surface):
     surface.fill((0, 0, 0))
-    # Tetris Title
+    # Blox Title
     font = pygame.font.SysFont('comicsans', 60)
-    label = font.render('TETRIS', 1, (255, 255, 255))
+    label = font.render('BLOX', 1, (255, 255, 255))
 
     surface.blit(label, (top_left_x + play_width / 2 - (label.get_width() / 2), 30))
 
@@ -381,6 +381,6 @@ def main_menu():
 
 
 win = pygame.display.set_mode((s_width, s_height))
-pygame.display.set_caption('Tetris')
+pygame.display.set_caption('Blox')
 
 main_menu()  # start game
