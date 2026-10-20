@@ -49,26 +49,26 @@ setInterval(() => {
             left: window.scrollX - scale * 20 * ((0.1 * width - clientX)/(0.1 * width)),
             behavior: 'instant'
         });
-        document.querySelectorAll('*').forEach(element => {
+        /*document.querySelectorAll('*').forEach(element => {
           element.scrollTo({
             top: element.scrollY,
             left: element.scrollX - scale * 20 * ((0.1 * width - clientX)/(0.1 * width)),
             behavior: 'instant'
           });
-        });
+        });*/
     } else if (clientX > width * 0.9) {
         window.scrollTo({
             top: window.scrollY,
             left: window.scrollX + scale * 20 * (1 - (width - clientX) / 100),
             behavior: 'instant'
         });
-        document.querySelectorAll('*').forEach(element => {
+        /*document.querySelectorAll('*').forEach(element => {
           element.scrollTo({
             top: element.scrollY,
             left: element.scrollX + scale * 20 * ((0.1 * width - clientX)/(0.1 * width)),
             behavior: 'instant'
           });
-        });
+        });*/
     }
 
     const height = window.innerHeight;
@@ -78,21 +78,21 @@ setInterval(() => {
             left: window.scrollX,
             behavior: 'instant'
         });
-        document.querySelectorAll('*').forEach(element => {
+        /*document.querySelectorAll('*').forEach(element => {
           element.scrollTo({
             top: element.scrollY - scale * 20 * ((0.1 * height - clientY)/(0.1 * height)),
             left: element.scrollX,
             behavior: 'instant'
           });
-        });
+        });*/
     } else if (clientY > height * 0.9) {
         window.scrollTo({
             top: window.scrollY + scale * 20 * (1 - (height - clientY) / 100),
             left: window.scrollX,
             behavior: 'instant'
         });
-        // TODO Have it work for all elements
-        document.querySelectorAll('*').forEach(element => {
+        // TODO Have it work for all elements AND NOT LAG
+        /*document.querySelectorAll('*').forEach(element => {
           element.style.overflowY = "auto";
         //   element.scrollTo({
         //     top: element.scrollY + scale * 20 * ((0.1 * height - clientY)/(0.1 * height)),
@@ -100,7 +100,7 @@ setInterval(() => {
         //     behavior: 'instant'
         //   });
           element.scrollTop = element.scrollTop + scale * 20 * ((0.1 * height - clientY)/(0.1 * height));
-        });
+        });*/
     }
 }, 10);
 
