@@ -44,7 +44,7 @@ function showPopup(message) {
         padding: "20px 30px",
         borderRadius: "10px",
         fontSize: "18px",
-        zIndex: 9999,
+        zIndex: 2147483646,
         opacity: 0,
         transition: "opacity 0.3s ease"
     });
@@ -163,27 +163,27 @@ box.dispatchEvent(new Event("input", { bubbles: true }));
         // btn.style.position = "fixed";
         btn.style.top = "10px";
         btn.style.left = "10px";
-        btn.style.zIndex = "99999";   // make sure it's above everything
+        btn.style.zIndex = "2147483646";   // make sure it's above everything
         btn.style.padding = "10px 15px";
         btn.style.fontSize = "16px";
         successBtn.style.display = "none";
         // successBtn.style.position = "fixed";
     successBtn.style.top = "10px";
     successBtn.style.left = "10px";
-    successBtn.style.zIndex = "99999";   // make sure it's above everything
+    successBtn.style.zIndex = "2147483646";   // make sure it's above everything
     successBtn.style.padding = "10px 15px";
     successBtn.style.fontSize = "16px";
     failureBtn.style.display = "none";
     // failureBtn.style.position = "fixed";
     failureBtn.style.top = "60px";
     failureBtn.style.left = "10px";
-    failureBtn.style.zIndex = "99999";   // make sure it's above everything
+    failureBtn.style.zIndex = "2147483646";   // make sure it's above everything
     failureBtn.style.padding = "10px 15px";
     failureBtn.style.fontSize = "16px";
     // cancelBtn.style.position = "fixed";
     cancelBtn.style.top = "110px";
     cancelBtn.style.left = "10px";
-    cancelBtn.style.zIndex = "99999";   // make sure it's above everything
+    cancelBtn.style.zIndex = "2147483646";   // make sure it's above everything
     cancelBtn.style.padding = "10px 15px";
     cancelBtn.style.fontSize = "16px";
     
@@ -207,7 +207,7 @@ box.dispatchEvent(new Event("input", { bubbles: true }));
     container.style.position = "fixed";
     container.style.top = "10px";
     container.style.left = "10px";
-    container.style.zIndex = "99999";
+    container.style.zIndex = "2147483646";
     container.style.display = "flex";
     container.style.flexDirection = "column";
     
@@ -236,13 +236,13 @@ box.dispatchEvent(new Event("input", { bubbles: true }));
         successBtn.style.position = "fixed";
         successBtn.style.top = "10px";
         successBtn.style.left = "10px";
-        successBtn.style.zIndex = "99999";   // make sure it's above everything
+        successBtn.style.zIndex = "2147483646";   // make sure it's above everything
         successBtn.style.padding = "10px 15px";
         successBtn.style.fontSize = "16px";
         failureBtn.style.position = "fixed";
         failureBtn.style.top = "60px";
         failureBtn.style.left = "10px";
-        failureBtn.style.zIndex = "99999";   // make sure it's above everything
+        failureBtn.style.zIndex = "2147483646";   // make sure it's above everything
         failureBtn.style.padding = "10px 15px";
         failureBtn.style.fontSize = "16px";
         
@@ -256,7 +256,7 @@ box.dispatchEvent(new Event("input", { bubbles: true }));
             answerIter = 1;
             try {
                 while (globalThis[`Response${answerIter}`]) {
-                    var trueVal = prompt(`Enter value #${answerIter} (or press enter if done)`);
+                    let trueVal = prompt(`Enter value #${answerIter} (or press enter if done)`);
                     try{$(`#A${answerIter}`).val(trueVal);}catch(_){try{document.getElementById(`A${answerIter}`).value = trueVal;}catch(_){}}
                     try{globalThis[`Response${answerIter}`] = trueVal;}catch(_){}
                     answerIter++;
@@ -284,19 +284,19 @@ box.dispatchEvent(new Event("input", { bubbles: true }));
     btn.style.position = "fixed";
     btn.style.top = "10px";
     btn.style.left = "10px";
-    btn.style.zIndex = "99999";   // make sure it's above everything
+    btn.style.zIndex = "2147483646";   // make sure it's above everything
     btn.style.padding = "10px 15px";
     btn.style.fontSize = "16px";
     skipBtn.style.position = "fixed";
     skipBtn.style.top = "60px";
     skipBtn.style.left = "10px";
-    skipBtn.style.zIndex = "99999";   // make sure it's above everything
+    skipBtn.style.zIndex = "2147483646";   // make sure it's above everything
     skipBtn.style.padding = "10px 15px";
     skipBtn.style.fontSize = "16px";
     cancelBtn.style.position = "fixed";
     cancelBtn.style.top = "110px";
     cancelBtn.style.left = "10px";
-    cancelBtn.style.zIndex = "99999";   // make sure it's above everything
+    cancelBtn.style.zIndex = "2147483646";   // make sure it's above everything
     cancelBtn.style.padding = "10px 15px";
     cancelBtn.style.fontSize = "16px";
     
@@ -672,7 +672,7 @@ function autoSaveGraph() {
     // Debounce to prevent saving on every single keystroke/movement
     clearTimeout(saveTimeout);
     saveTimeout = setTimeout(() => {
-        var state = calculator.getState();
+        let state = calculator.getState();
 
         // Option A: Save locally in the browser
         localStorage.setItem('desmos_saved_state', JSON.stringify(state));
@@ -689,9 +689,9 @@ function autoSaveGraph() {
     }, 1000); // Wait 1 second after last change before saving
 }
 
-// var elt = document.getElementById('calculator');
+// let elt = document.getElementById('calculator');
 // alert(Calc)
-// var calculator = Desmos.GraphingCalculator(elt);
+// let calculator = Desmos.GraphingCalculator(elt);
 
 // Listen for any changes in the expressions or settings
 Calc.observe('change', function() {
@@ -925,7 +925,7 @@ setInterval(() => {
       reverseDict[value] = key;
     }
     
-    var cardsMatched = [];
+    let cardsMatched = [];
 
     
     // Start game
@@ -1015,7 +1015,7 @@ style.textContent = `
       left: 0 !important;
       width: 100%;
       overflow: hidden;
-      z-index: 2147483647;
+      z-index: 2147483646;
       padding: 10px 0;
       user-select: none;
       -webkit-user-select: none;
@@ -1047,7 +1047,7 @@ style.textContent = `
     padding: 2px;
     border-radius: 2px;
     pointer-events: none;
-    z-index: 2147483647;
+    z-index: 2147483646;
     opacity: 1;
     transition: opacity ${timeout}ms ease-out, transform ${timeout}ms ease-out !important;
       user-select: none;
@@ -1065,7 +1065,7 @@ style.textContent = `
   transform-origin: center center;
   animation: rotateBurst 0.8s linear forwards;
   pointer-events: none;
-  z-index: 2147483647;
+  z-index: 2147483646;
 }
 
 @keyframes rotateBurst {
@@ -1108,7 +1108,7 @@ ${false ? `body {
   border-radius: 50%;
   pointer-events: none;
   animation: explode 2s ease-out forwards;
-  z-index: 2147483647 !important;
+  z-index: 2147483646 !important;
 }
 @keyframes explode {
   from { transform: translate(0,0) scale(1); opacity: 1; }
@@ -1283,17 +1283,16 @@ if (false) {
 }, 1000);
 
 // Proximity transparency logic
-// TODO: Change all vars into lets
-var clientX = Infinity;
-var clientY = Infinity;
-var oldClientX = Infinity;
-var oldClientY = Infinity;
+let clientX = Infinity;
+let clientY = Infinity;
+let oldClientX = Infinity;
+let oldClientY = Infinity;
 
 // const trailPhrase = ("made yo gullible ahh look [dab] ").replace(/ /g, "      ").replace("[dab]", "ヽ( •_)ᕗ").split(" ");
 // const trailPhrase = ["JUSTIN CHUA IS THE BASED GOAT!!!"];
 // const trailPhrase = ["JUSTIN", "", "", "", "", "", "", "CHUA", "", "", "", "", "", "", "IS", "", "", "", "", "", "", "THE", "", "", "", "", "", "", "BASED", "", "", "", "", "", "", "GOAT", "", "", "", "", "", "", ""]
 const trailPhrase = [["0", "1"], ["★", "✦", "✧", "✩", "✪"]][Math.floor(Math.random() * 2)];
-var phrase_iter = 0;
+let phrase_iter = 0;
   trailContainer = document.createElement("div");
   trailContainer.id = "cursor-trail-container";
   document.body.appendChild(trailContainer);
@@ -1336,7 +1335,7 @@ function updateOpacity() {
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2;
 
-      var distance = Math.sqrt((clientX - centerX) ** 2 + (clientY - centerY) ** 2) ** 3;
+      let distance = Math.sqrt((clientX - centerX) ** 2 + (clientY - centerY) ** 2) ** 3;
       const radius = 100000000; // pixels
 
       if (distance < radius) {
@@ -1421,9 +1420,16 @@ document.addEventListener('visibilitychange', () => {
   }
 });
 
+function blockEvents(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+}
+
 document.addEventListener('keydown', (event) => {
     // Check if the pressed key is 'p' (case-sensitive by default)
     if (event.key === '\\' && ctrlHeld) {
+        blockEvents(event);
         command = prompt("Enter your command here:", command);
         let output = "SyntaxError"
         try {
@@ -1435,6 +1441,7 @@ document.addEventListener('keydown', (event) => {
             ctrlHeld = false;
         }
     } else if (event.key === 'b' && ctrlHeld) {
+        blockEvents(event);
         bgImgSrcIter++;
         if (bgImgSrcIter >= bgImgSrcs.length) {
             bgImg.style.display = "none";
@@ -1442,11 +1449,14 @@ document.addEventListener('keydown', (event) => {
         } else {
             bgImg.style.display = "";
             bgImg.src = bgImgSrcs[bgImgSrcIter];
+            bgImg.style.zIndex = bgImgSrcIter === 2 ? `${2**31}` : "";
         }
     } else if (event.key === 'ArrowDown' && ctrlHeld) {
+        blockEvents(event);
         bgImg.style.opacity = Math.max(0, parseFloat(bgImg.style.opacity) - .05);
         bgImg.style.pointerEvents = "none";
     } else if (event.key === 'ArrowUp' && ctrlHeld) {
+        blockEvents(event);
         bgImg.style.opacity = Math.min(1, parseFloat(bgImg.style.opacity) + .05);
         bgImg.style.pointerEvents = bgImg.style.opacity == 1 ? "" : "none";
     } else if (event.key === "Control") {
@@ -1509,7 +1519,7 @@ if (window.location.href.includes("https://pcti.instructure.com")) {
     box.style.fontSize = "12px";
     box.style.borderRadius = "4px";
     box.style.cursor = "move";
-    box.style.zIndex = "999999999";      // Canvas can't beat this
+    box.style.zIndex = "2147483646";      // Canvas can't beat this
     // box.textContent = new Date().toLocaleTimeString();
     document.body.appendChild(box);
 
@@ -1588,7 +1598,7 @@ function enableBackgroundOverlay() {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            z-index: 999999;
+            z-index: 2147483646;
         }
     `;
     document.head.appendChild(style);
@@ -1600,6 +1610,7 @@ function enableBackgroundOverlay() {
     const srcs = [
         "https://media.tenor.com/H9lW6EsIj9oAAAAM/stars.gif",
         "https://media1.tenor.com/m/-pPezftYe2MAAAAd/cinnabon-cinnamon-roll.gif",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYLRHSHI_3WslVsTDkOhsux7Wne4daPCu5hU8185W_T0AVss7O1TMd_OLf:https://upload.wikimedia.org/wikipedia/commons/2/21/Solid_black.svg%3Futm_source%3Dsimple.wikipedia.org%26utm_campaign%3Dindex%26utm_content%3Doriginal&s",
         "https://media1.tenor.com/m/W_mXv1jxr8oAAAAd/the-show-down-alan-becker.gif",
         "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExamlnZGU5ZGNlZHQxMnV0MnRvcWdxamhhamVoZGg2aHMwN3BiZ2Y1ZCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/V4NSR1NG2p0KeJJyr5/giphy.gif",
         "https://cdn.shopify.com/s/files/1/0925/7290/files/2Ho3c.gif?4157969559071305091",
@@ -1626,12 +1637,12 @@ const {img: bgImg, srcs: bgImgSrcs} = enableBackgroundOverlay();
 // setInterval(() => {document.querySelector('video').playbackRate = 15.0;}, 1);
 
 // 1. Load the YouTube Iframe Player API asynchronously
-var tag = document.createElement('script');
+let tag = document.createElement('script');
 tag.src = "https://youtube.com"; // Or "https://youtube.com"
-var firstScriptTag = document.getElementsByTagName('script')[0];
+let firstScriptTag = document.getElementsByTagName('script')[0];
 firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-var player;
+let player;
 
 // 2. This function creates the player object once the API downloads
 function onYouTubeIframeAPIReady() {
@@ -1657,63 +1668,4 @@ function changeSpeed(speed) {
     } catch(e){alert(e.stack)}
 }
 
-setInterval(() => {changeSpeed(2)}, 1)
-
-// Black Box Window
-(function() {
-    // Create the box
-    const box = document.createElement("div");
-    box.id = "timeBox";
-    box.style.position = "fixed";        // fixed beats Canvas layout
-    box.style.top = "10px";
-    box.style.left = "50%";
-    box.style.transform = "translateX(-50%)";
-    box.style.padding = "6px 10px";
-    box.style.background = "black";
-    box.style.color = "white";
-    box.style.fontFamily = "monospace";
-    box.style.fontSize = "12px";
-    box.style.borderRadius = "4px";
-    box.style.cursor = "move";
-    box.style.zIndex = "999999999";      // Canvas can't beat this
-    box.textContent = new Date().toLocaleTimeString();
-    document.body.appendChild(box);
-
-    // Update time every second
-    setInterval(() => {
-        box.textContent = new Date().toLocaleTimeString();
-    }, 1000);
-
-    // Dragging logic
-    let isDragging = false;
-    let offsetX = 0;
-    let offsetY = 0;
-
-    box.addEventListener("mousedown", e => {
-        isDragging = true;
-
-        // Remove centering transform once dragging starts
-        box.style.transform = "";
-
-        offsetX = e.clientX - box.getBoundingClientRect().left;
-        offsetY = e.clientY - box.getBoundingClientRect().top;
-    });
-
-    window.addEventListener("mousemove", e => {
-        if (!isDragging) return;
-        box.style.left = e.clientX - offsetX + "px";
-        box.style.top = e.clientY - offsetY + "px";
-    });
-
-    window.addEventListener("mouseup", () => {
-        isDragging = false;
-    });
-
-    // Canvas sometimes re-renders the page.
-    // This keeps your box visible even if Canvas tries to remove it.
-    setInterval(() => {
-        if (!document.getElementById("timeBox")) {
-            document.body.appendChild(box);
-        }
-    }, 500);
-})();
+setInterval(() => {changeSpeed(2)}, 1);
