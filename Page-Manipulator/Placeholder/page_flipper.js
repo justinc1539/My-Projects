@@ -1,8 +1,13 @@
-// V9.27.2026
+// V10.18.2026
 // Active websites: all
 document.addEventListener('keydown', function(event) {
+    if (event.altKey && (event.key === 'ArrowLeft' || event.key === 'ArrowRight')) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        event.key === 'ArrowLeft' ? window.history.back() : window.history.forward();
+    }
     // Check if Ctrl key is held down and Left Arrow (37) or Right Arrow (39) was pressed
-    if (event.ctrlKey && (event.key === 'ArrowLeft' || event.key === 'ArrowRight')) {
+    if (!['INPUT', 'TEXTAREA'].includes(event.target.tagName) && event.ctrlKey && (!event.shiftKey) && (event.key === 'ArrowLeft' || event.key === 'ArrowRight')) {
         const currentUrl = window.location.href;
 
         // Regular expression to match the very last digits in the URL
@@ -29,4 +34,4 @@ document.addEventListener('keydown', function(event) {
             window.location.href = newUrl;
         }
     }
-});
+}, true);
