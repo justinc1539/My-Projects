@@ -1,4 +1,4 @@
-// V10.16.2026
+// V10.21.2026
 // Active websites: all
 
 /* DOWNLOAD VID VVV
@@ -242,6 +242,7 @@ function highlightVideo(index) {
 
 function blockKeyEvents(e) {
     e.preventDefault();
+    e.stopPropagation();
     e.stopImmediatePropagation();
 }
 
@@ -360,6 +361,11 @@ async function waitForVideos() {
             const fps = (quality && quality.totalVideoFrames && quality.totalFrameDelay)
                 ? quality.totalVideoFrames / quality.totalFrameDelay
                 : 100;
+            // History Feature
+            if (event.altKey && (event.key === 'ArrowLeft' || event.key === 'ArrowRight')) {
+                blockKeyEvents(event);
+                event.key === 'ArrowLeft' ? window.history.back() : window.history.forward();
+            }
             if (event.ctrlKey && event.key === "?") {
                 flashIndicator(`Click this box to close\n\
 ====================================================================\n\
