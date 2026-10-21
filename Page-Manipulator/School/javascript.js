@@ -1,4 +1,4 @@
-// V10.19.2026
+// V10.21.2026
 // Active Websites: All
 
 try {
@@ -1301,12 +1301,15 @@ document.addEventListener("mousemove", e => {
   clientX = e.clientX;
   clientY = e.clientY;
 
+  // Cursor trail
   const bit = document.createElement("span");
   bit.textContent = trailPhrase[phrase_iter];
   phrase_iter = phrase_iter === trailPhrase.length - 1 ? 0 : phrase_iter + 1;
   bit.className = "floating-bit";
-  bit.style.left = `${clientX-5}px`;
-  bit.style.top =  `${clientY-10}px`;
+  const values = window.getComputedStyle(document.body).transform.match(/matrix\(([^)]+)\)/);
+  const parts = values[1].split(',').map(v => parseFloat(v.trim()));
+  bit.style.left = `${window.scrollX-parts[4]+clientX-5}px`;
+  bit.style.top =  `${window.scrollY-parts[5]+clientY-10}px`;
   trailContainer.appendChild(bit);
 
 //   // Force layout so the browser registers the initial state
@@ -1478,7 +1481,11 @@ function getCurrentPeriod() {
 
     function getMinutes() {
         const now = new Date();
-        return now.getHours() * 60 + now.getMinutes();
+        // return now.getHours() * 60 + now.getMinutes();
+        const njHour = parseInt(now.toLocaleString("en-US", { timeZone: "America/New_York", hour: "2-digit", hour12: false }), 10);
+        const njMinute = parseInt(now.toLocaleString("en-US", { timeZone: "America/New_York", minute: "2-digit" }), 10);
+        
+        return njHour * 60 + njMinute;
     }
 
     let period = "";
@@ -1526,9 +1533,8 @@ if (window.location.href.includes("https://pcti.instructure.com")) {
     // Update time every second
     setInterval(() => {
         // box.textContent = new Date().toLocaleTimeString();
-        currentTime = new Date().toLocaleTimeString();
+        currentTime = new Date().toLocaleTimeString("en-US", { timeZone: "America/New_York" });
         box.textContent = `${currentTime} ${getCurrentPeriod()}`;
-        // box.textContent = "9:48:04 AM Period 3 (9:46 AM-10:26 AM)"; // TODO: DELETE
     }, 100);
 
     // Dragging logic
