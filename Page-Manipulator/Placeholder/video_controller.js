@@ -295,13 +295,18 @@ async function waitForVideos() {
         }
     }, 1);
     
-    flashIndicator("Ctrl + Shift + / for shortcuts", 3000);
+    flashIndicator("Ctrl + Shift + / (Ctrl + ?) for shortcuts", 3000);
     window.addEventListener("keydown", (event) => {
       // Selecting Video feature
       if (currentIndex !== null && event.key === "Escape") {
           blockKeyEvents(event);
-          currentIndex = null;
-          flashIndicator(`Disabled Program (Ctrl + \` to restart)`, 3000);
+          if (textBoxes.includes(document.activeElement)) {
+              videos[currentIndex].focus();
+              flashIndicator("Exited Text Box");
+          } else {
+              currentIndex = null;
+              flashIndicator("Disabled Program (Ctrl + \` to restart)", 3000);
+          }
       } else if (currentIndex === null) {
           if (event.ctrlKey && event.key === "`") {
               blockKeyEvents(event);
@@ -383,10 +388,12 @@ async function waitForVideos() {
                 flashIndicator(`Click this box to close\n\
 ====================================================================\n\
 Selecting Video\n\
-Esc - End Program\n\
+Esc - Exit Text Box/End Program\n\
 Ctrl + \` - Restart Program\n\n\
 Tab - Select Next Video\n\
 Shift + Tab - Select Previous Video\n\n\
+Alt + Slash (/) - Select Next Text Box\n\
+Alt + Shift + Slash (/) (Alt + ?) - Select Previous Text Box\n\n\
 Ctrl + Alt + H - Hide Outline (in case it doesn't work or hides the video)\n\
 Ctrl + Alt + D - Toggle Duration Outline\n\
 ====================================================================\n\
