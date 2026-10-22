@@ -1,15 +1,20 @@
-// V10.19.2026
+// V10.22.2026
 // Active Websites: All
 
 let smoothness = 3;
 let scale = 1;
 
-// 1. Force the document and body to be extra wide instead of scaling/stretching
-document.documentElement.style.width = `${scale * 100}vw`;
-document.body.style.width = `${scale * 100}vw`;
+// 1. Force the document and body to be extra wide amd tall instead of scaling/stretching
+if (scale > 1) {
+    document.documentElement.style.width = `${scale * 100}vw`;
+    document.body.style.width = `${scale * 100}vw`;
 
-// document.documentElement.style.height = `${scale * 100}vw`;
-// document.body.style.height = `${scale * 100}vw`;
+    // document.documentElement.style.height = `${scale * 100}vw`;
+    // document.body.style.height = `${scale * 100}vw`;
+} else {
+    document.documentElement.style.width = "";
+    document.body.style.width = "";
+}
 
 // 1. Create the box element
 const box = document.createElement('div');
@@ -34,6 +39,28 @@ box.style.cssText = `
 
 // Append to document.documentElement so it escapes the body's transform space!
 document.documentElement.appendChild(box);
+
+function getTargetPos() {
+    // 1. Get normalized mouse position from -1 (left edge) to 1 (right edge)
+    const mouseNormX = (clientX / window.innerWidth) * 2 - 1; 
+    
+    // 2. Calculate max offset scaled by scale
+    const maxXScrollOffset = Math.round(scale) * window.innerWidth; 
+    
+    // 3. Compute targetX centered symmetrically in the [-scaleX, scaleX] range
+    const targetX = mouseNormX * (-maxXScrollOffset / 2); 
+    
+    // 1. Get normalized mouse position from -1 (left edge) to 1 (right edge)
+    const mouseNormY = (clientY / window.innerWidth) * 2 - 0.5;
+    
+    // 2. Calculate max offset scaled by scale
+    const maxYScrollOffset = Math.round(scale) * window.innerWidth; 
+    
+    // 3. Compute targetY centered symmetrically in the [-scaleY, scaleY] range
+    const targetY = mouseNormY * (-maxYScrollOffset / 2);
+    
+    return [targetX, targetY]
+}
 
 let modSmoothness = false;
 let modScale = false;
@@ -113,31 +140,16 @@ window.addEventListener('mousemove', (e) => {
     clientY = e.clientY;
 
     box.style.left = `${clientX}px`;
-    box.style.top = `${e.clientY}px`;
+    box.style.top = `${clientY}px`;
 
     if (smoothness !== -1) {
-        // 1. Get normalized mouse position from -1 (left edge) to 1 (right edge)
-        const mouseNormX = (clientX / window.innerWidth) * 2 - 1; 
-        
-        // 2. Calculate max offset scaled by scale
-        const maxXScrollOffset = Math.round(scale) * window.innerWidth; 
-        
-        // 3. Compute targetX centered symmetrically in the [-scaleX, scaleX] range
-        const targetX = mouseNormX * (-maxXScrollOffset / 2); 
-        
-        // 1. Get normalized mouse position from -1 (left edge) to 1 (right edge)
-        const mouseNormY = (e.clientY / window.innerWidth) * 2 - 0.5;
-        
-        // 2. Calculate max offset scaled by scale
-        const maxYScrollOffset = Math.round(scale) * window.innerWidth; 
-        
-        // 3. Compute targetY centered symmetrically in the [-scaleY, scaleY] range
-        const targetY = mouseNormY * (-maxYScrollOffset / 2); 
-        
-        // TODO: Checkup
+        targetPos = getTargetPos();
+        targetX = targetPos[0];
+        targetY = targetPos[1];
         document.body.style.transform = `translateX(${targetX}px) translateY(${targetY}px)`;
         // document.body.style.transform = `translateY(${targetY}px)`;
 
+        /*
         // 1. Get mouse position as a ratio from 0 to 1
         const mouseRatio = clientX / window.innerWidth;
         
@@ -156,16 +168,20 @@ window.addEventListener('mousemove', (e) => {
         const targetScrollLeft = ((scaled + 1) / 2) * maxScrollLeft;
 
         if (smoothness === 0) {
-            // window.scrollTo({
-            //     top: window.scrollY,
-            //     left: targetScrollLeft,
-            //     behavior: 'instant'
-            // });
+            window.scrollTo({
+                top: window.scrollY,
+                left: targetScrollLeft,
+                behavior: 'instant'
+            });
         }
+        */
     }
 });
 
 document.addEventListener('mouseleave', (event) => {
+    clientX = window.innerWidth * 0.5;
+    clientY = window.innerHeight * 0.5;
+    return;
     if (clientX < window.innerWidth * 0.1) {
         clientX = 0;
         // box.style.left = `${clientX}px`;
@@ -202,9 +218,13 @@ window.addEventListener('wheel', (e) => {
 
         const feedback = roundedSmoothness === -1 ? " (Off)" : roundedSmoothness === 0 ? " (Lagless)" : roundedSmoothness === 1 ? " (Default)" : roundedSmoothness === 3 ? " (Smooth)" : roundedSmoothness === 1 ? " (Default)" : roundedSmoothness === 5 ? " (Slow)" : "";
         if (roundedSmoothness !== -1) {
+            targetPos = getTargetPos();
+            targetX = targetPos[0];
+            targetY = targetPos[1];
+            document.body.style.transform = `translateX(${targetX}px) translateY(${targetY}px)`;
             document.body.style.transition = `transform ${roundedSmoothness}s cubic-bezier(0.1, 0.9, 0.2, 1)`;
         } else {
-            document.body.style.transform = 'none';
+            document.body.style.transform = 'none'; // `translateX(${window.innerWidth / 2}px) translateY(${window.innerHeight / 2}px)`;
             document.body.style.transition = "";
         }
 
@@ -216,13 +236,25 @@ window.addEventListener('wheel', (e) => {
         e.preventDefault();
         e.stopPropagation();
         e.stopImmediatePropagation();
-        if (e.deltaY < 0) scale -= e.deltaY / 100;
-        else scale = Math.max(1, scale - e.deltaY / 100);
-        const roundedScale = Math.round(scale)
+        if (e.deltaY < 0) scale -= e.deltaY / 1000;
+        else scale = Math.max(1, scale - e.deltaY / 1000);
+        const roundedScale = Math.round(scale * 10) / 10;
 
         const feedback = roundedScale === 1 ? " (Default)" : "";
-        document.documentElement.style.width = `${roundedScale * 100}vw`;
-        document.body.style.width = `${roundedScale * 100}vw`;
+        // TODO: Checkup
+        // document.documentElement.style.width = `${roundedScale * 100}vw`;
+        // document.body.style.width = `${roundedScale * 100}vw`;
+        
+        if (scale > 1) {
+            document.documentElement.style.width = `${scale * 100}vw`;
+            document.body.style.width = `${scale * 100}vw`;
+        
+            // document.documentElement.style.height = `${scale * 100}vw`;
+            // document.body.style.height = `${scale * 100}vw`;
+        } else {
+            document.documentElement.style.width = "";
+            document.body.style.width = "";
+        }
 
         clearTimeout(boxTimeout);
         box.textContent = `Scale: ${roundedScale}x${feedback}`;
