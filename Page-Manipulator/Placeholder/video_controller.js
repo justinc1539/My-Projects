@@ -1,4 +1,4 @@
-// V10.21.2026
+// V10.22.2026
 // Active websites: all
 
 /* DOWNLOAD VID VVV
@@ -68,6 +68,8 @@ let highlightOutline = true;
 let durationOutlineIndex = 2;
 let currentIndex = 0;
 let videos;
+let currentTextIndex = -1;
+let textBoxes;
 
 // Overlays
 const videoOverlay = document.createElement('div');
@@ -236,7 +238,7 @@ function highlightVideo(index) {
   if (index >= 0 && index < videos.length) {
     const targetVideo = videos[index];
     if (highlightOutline) targetVideo.parentElement.classList.add('highlighted');
-    targetVideo.focus();
+    // targetVideo.focus();
   }
 }
 
@@ -260,6 +262,7 @@ async function waitForVideos() {
 
     setInterval(() => {
         videos = document.querySelectorAll("video");
+        textBoxes = [...document.querySelectorAll("input"), ...document.querySelectorAll("textarea")];
         highlightVideos(videos);
         highlightVideo(currentIndex);
     }, 100);
@@ -294,52 +297,62 @@ async function waitForVideos() {
     
     flashIndicator("Ctrl + Shift + / for shortcuts", 3000);
     window.addEventListener("keydown", (event) => {
-  // Selecting Video feature
-  if (currentIndex !== null && event.key === "Escape") {
-      blockKeyEvents(event);
-      currentIndex = null;
-      flashIndicator(`Disabled Program (Ctrl + \` to restart)`, 3000);
-  } else if (currentIndex === null) {
-      if (event.ctrlKey && event.key === "`") {
+      // Selecting Video feature
+      if (currentIndex !== null && event.key === "Escape") {
           blockKeyEvents(event);
-          currentIndex = 0;
-          flashIndicator(`Enabled Program (Esc to end)`, 3000);
-      }
-  } else if (!['INPUT', 'TEXTAREA'].includes(event.target.tagName) && event.key === 'Tab') {
-    blockKeyEvents(event);
-
-    if (videos.length === 0 || currentIndex === null) return; // Make sure Tab/Shift + Tab only happens IF THERE IS AT LEAST 1 VIDEO
-
-    if (event.shiftKey) {
-      // Shift + Tab: Move backward
-      currentIndex = currentIndex <= 0 ? videos.length - 1 : currentIndex - 1;
-    } else {
-      // Tab: Move forward
-      currentIndex = currentIndex >= videos.length - 1 ? 0 : currentIndex + 1;
-    }
-
-    highlightVideo(currentIndex);
-    flashIndicator(`Selected Video ${currentIndex+1}`);
-  } else if (event.ctrlKey && event.altKey && ["H", "h"].includes(event.key)) {
-      blockKeyEvents(event);
-      highlightOutline = !highlightOutline;
-      flashIndicator(`Outline ${highlightOutline ? "En" : "Dis"}abled`);
-  } else if (event.ctrlKey && event.altKey && ["D", "d"].includes(event.key)) {
-      blockKeyEvents(event);
-      if (durationOutlineIndex === durationRounding.length - 1) {
-          durationOutlineIndex = -1;
-          flashIndicator("Video Duration Hidden");
-      } else {
-          durationOutlineIndex = (durationOutlineIndex + 1) % durationRounding.length;
-          if (durationRounding[durationOutlineIndex] === null) {
-              flashIndicator("Video Duration Shown");
-          } else if (durationRounding[durationOutlineIndex] === -1) {
-              flashIndicator("Video Duration Truncated to the nearest Second");
-          } else {
-              flashIndicator(`Video Duration Truncated to ${durationRounding[durationOutlineIndex]} Digits`);
+          currentIndex = null;
+          flashIndicator(`Disabled Program (Ctrl + \` to restart)`, 3000);
+      } else if (currentIndex === null) {
+          if (event.ctrlKey && event.key === "`") {
+              blockKeyEvents(event);
+              currentIndex = 0;
+              flashIndicator(`Enabled Program (Esc to end)`, 3000);
           }
+      } else if (!['INPUT', 'TEXTAREA'].includes(event.target.tagName) && event.key === 'Tab') {
+        blockKeyEvents(event);
+    
+        if (videos.length === 0 || currentIndex === null) return; // Make sure Tab/Shift + Tab only happens IF THERE IS AT LEAST 1 VIDEO
+    
+        if (event.shiftKey) {
+          // Shift + Tab: Move backward
+          currentIndex = currentIndex <= 0 ? videos.length - 1 : currentIndex - 1;
+        } else {
+          // Tab: Move forward
+          currentIndex = currentIndex >= videos.length - 1 ? 0 : currentIndex + 1;
+        }
+    
+        highlightVideo(currentIndex);
+        flashIndicator(`Selected Video ${currentIndex+1}`);
+      } else if (event.ctrlKey && event.altKey && ["H", "h"].includes(event.key)) {
+          blockKeyEvents(event);
+          highlightOutline = !highlightOutline;
+          flashIndicator(`Outline ${highlightOutline ? "En" : "Dis"}abled`);
+      } else if (event.ctrlKey && event.altKey && ["D", "d"].includes(event.key)) {
+          blockKeyEvents(event);
+          if (durationOutlineIndex === durationRounding.length - 1) {
+              durationOutlineIndex = -1;
+              flashIndicator("Video Duration Hidden");
+          } else {
+              durationOutlineIndex = (durationOutlineIndex + 1) % durationRounding.length;
+              if (durationRounding[durationOutlineIndex] === null) {
+                  flashIndicator("Video Duration Shown");
+              } else if (durationRounding[durationOutlineIndex] === -1) {
+                  flashIndicator("Video Duration Truncated to the nearest Second");
+              } else {
+                  flashIndicator(`Video Duration Truncated to ${durationRounding[durationOutlineIndex]} Digits`);
+              }
+          }
+      } else if (textBoxes.length > 0 && event.altKey && ["/", "?"].includes(event.key)) {
+        if (!textBoxes.includes(document.activeElement)) {
+            if (event.shiftKey) {
+              currentTextIndex = currentTextIndex <= 0 ? textBoxes.length - 1 : currentTextIndex - 1;
+            } else {
+              currentTextIndex = currentTextIndex >= textBoxes.length - 1 ? 0 : currentTextIndex + 1;
+            }
+        }
+        textBoxes[currentTextIndex].focus();
+        flashIndicator(`Selected Text Box ${currentTextIndex+1}`);
       }
-  }
 
       if (videos.length > 0 && currentIndex !== null) (aVideo => {
         if (!['INPUT', 'TEXTAREA'].includes(event.target.tagName)) {
