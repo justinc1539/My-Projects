@@ -1,4 +1,4 @@
-// V10.21.2026
+// V10.22.2026
 // Active Websites: All
 
 try {
@@ -699,7 +699,13 @@ Calc.observe('change', function() {
     autoSaveGraph();
 });
 } else if (url.includes("https://runestone.academy")) { // CSAWESOME
-    alert("Be sure to Ctrl + F \"Check Me\" and \"Save & Run\"!")
+    alert(`Be sure to Ctrl + F the following:
+Next >
+Check Me
+Save & Run
+Video
+Check
+Save`)
 } else if (url.startsWith("https://ps.pcti.tec.nj.us/guardian/home.html")) {
 const fail_lunch_links = [
     'scores.html?frn=0042115146&fg=R1&schoolid=50',
