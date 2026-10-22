@@ -343,7 +343,7 @@ async function waitForVideos() {
               }
           }
       } else if (textBoxes.length > 0 && event.altKey && ["/", "?"].includes(event.key)) {
-        if (!textBoxes.includes(document.activeElement)) {
+        if (textBoxes.includes(document.activeElement) || !(currentTextIndex >= 0 && currentTextIndex < textBoxes.length)) {
             if (event.shiftKey) {
               currentTextIndex = currentTextIndex <= 0 ? textBoxes.length - 1 : currentTextIndex - 1;
             } else {
