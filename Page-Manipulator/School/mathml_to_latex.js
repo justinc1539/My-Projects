@@ -1,4 +1,4 @@
-// V10.5.2026
+// V10.23.2026
 // Active Websites: All
 
 function copyText(text, display=true) {
@@ -125,7 +125,9 @@ let allMath = "";
 // }, 1000);
 
 document.addEventListener('keydown', (event) => {
-    if (event.ctrlKey && event.key === "c") {
+    if (event.ctrlKey && event.altKey && event.key === "c") {
+        event.preventDefault();
+        event.stopPropagation();
         const maths = document.querySelectorAll("math");
         if (maths.length > 0) {
             allMath = "";
