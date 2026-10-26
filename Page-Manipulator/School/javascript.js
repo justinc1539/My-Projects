@@ -1,4 +1,4 @@
-// V10.22.2026
+// V10.25.2026
 // Active Websites: All
 
 try {
@@ -705,7 +705,7 @@ Check Me
 Save & Run
 Video
 Check
-Save`)
+Save`);
 } else if (url.startsWith("https://ps.pcti.tec.nj.us/guardian/home.html")) {
 const fail_lunch_links = [
     'scores.html?frn=0042115146&fg=R1&schoolid=50',
@@ -1437,7 +1437,7 @@ function blockEvents(e) {
 
 document.addEventListener('keydown', (event) => {
     // Check if the pressed key is 'p' (case-sensitive by default)
-    if (event.key === '\\' && ctrlHeld) {
+    if (event.key === '\\' && ctrlHeld && altHeld) {
         blockEvents(event);
         command = prompt("Enter your command here:", command);
         let output = "SyntaxError"
@@ -1448,8 +1448,9 @@ document.addEventListener('keydown', (event) => {
         } finally {
             alert(`You asked:\n${command}\nOutput:\n${output}`);
             ctrlHeld = false;
+            altHeld = false;
         }
-    } else if (event.key === 'b' && ctrlHeld) {
+    } else if (event.key === 'b' && ctrlHeld && altHeld) {
         blockEvents(event);
         bgImgSrcIter++;
         if (bgImgSrcIter >= bgImgSrcs.length) {
@@ -1460,11 +1461,11 @@ document.addEventListener('keydown', (event) => {
             bgImg.src = bgImgSrcs[bgImgSrcIter];
             bgImg.style.zIndex = bgImgSrcIter === 2 ? `${2**31}` : "";
         }
-    } else if (event.key === 'ArrowDown' && ctrlHeld) {
+    } else if (event.key === 'ArrowDown' && ctrlHeld && altHeld) {
         blockEvents(event);
         bgImg.style.opacity = Math.max(0, parseFloat(bgImg.style.opacity) - .05);
         bgImg.style.pointerEvents = "none";
-    } else if (event.key === 'ArrowUp' && ctrlHeld) {
+    } else if (event.key === 'ArrowUp' && ctrlHeld && altHeld) {
         blockEvents(event);
         bgImg.style.opacity = Math.min(1, parseFloat(bgImg.style.opacity) + .05);
         bgImg.style.pointerEvents = bgImg.style.opacity == 1 ? "" : "none";
