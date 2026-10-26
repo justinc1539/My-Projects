@@ -1,4 +1,4 @@
-// V10.25.2026
+// V10.26.2026
 // Active Websites: All
 
 try {
@@ -1542,6 +1542,19 @@ if (window.location.href.includes("https://pcti.instructure.com")) {
         // box.textContent = new Date().toLocaleTimeString();
         currentTime = new Date().toLocaleTimeString("en-US", { timeZone: "America/New_York" });
         box.textContent = `${currentTime} ${getCurrentPeriod()}`;
+        
+        const displayPeriodEnd = className => {
+            for (let i = 0; i < 10; i++) {
+                alert(`${className} is ending!`);
+            }
+        }
+        if (currentTime === "8:55:20 AM") displayPeriodEnd("AP Physics C: Mechanics");
+        else if (currentTime === "9:40:20 AM") displayPeriodEnd("AP Calculus B/C");
+        else if (currentTime === "10:25:20 AM") displayPeriodEnd("Health");
+        else if (currentTime === "11:09:20 AM") displayPeriodEnd("APUSH");
+        else if (currentTime === "11:55:20 AM") displayPeriodEnd("English 4 (H)");
+        else if (currentTime === "12:38:20 AM") displayPeriodEnd("AP Statistics");
+        else if (currentTime === "2:55:20 AM") displayPeriodEnd("AP Computer Science A");
     }, 100);
 
     // Dragging logic
