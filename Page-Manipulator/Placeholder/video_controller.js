@@ -1,4 +1,4 @@
-// V10.22.2026
+// V10.27.2026
 // Active websites: all
 
 /* DOWNLOAD VID VVV
@@ -630,12 +630,12 @@ Ctrl + Shift - Finish Cut Customization/Confirm Cut Deletion`, 2**16);
             } else if (["ArrowLeft", "ArrowRight"].includes(event.key)) {
                 blockKeyEvents(event);
                 aVideo.savedTimeStamps.push([aVideo.currentTime, `Go ${event.key === "ArrowLeft" ? "back" : "forward"} by Navigation Modifier`]);
-                aVideo.currentTime += event.key === "ArrowLeft" ? -navModifiers[aVideo.navModIter] : navModifiers[aVideo.navModIter];
+                aVideo.currentTime += navModifiers[aVideo.navModIter] * (event.key === "ArrowLeft" ? -1 : 1);
                 flashIndicator(`${event.key === "ArrowLeft" ? "-" : "+"}${navModifiers[aVideo.navModIter]}s`);
             } else if (["j", "l"].includes(event.key.toLowerCase())) {
                 blockKeyEvents(event);
                 aVideo.savedTimeStamps.push([aVideo.currentTime, `Go ${event.key.toLowerCase() === "j" ? "back" : "forward"} by 2 * Navigation Modifier`]);
-                aVideo.currentTime += event.key.toLowerCase() === "j" ? -2 * navModifiers[aVideo.navModIter] : 2 * navModifiers[aVideo.navModIter];
+                aVideo.currentTime += 2 * navModifiers[aVideo.navModIter] * (event.key.toLowerCase() === "j" ? -1 : 1);
                 flashIndicator(`${event.key.toLowerCase() === "j" ? "-" : "+"}${2 * navModifiers[aVideo.navModIter]}s`);
             } else if (event.ctrlKey && ["z", "Z"].includes(event.key)) {
                 blockKeyEvents(event);
