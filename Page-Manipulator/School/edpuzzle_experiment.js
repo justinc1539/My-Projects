@@ -604,16 +604,20 @@ Ctrl + Shift - Finish Cut Customization/Confirm Cut Deletion`, 2**16);
             } else if (["ArrowLeft", "ArrowRight"].includes(event.key)) {
                 blockKeyEvents(event);
                 aVideo.savedTimeStamps.push([currentYouTubeTime, `Go ${event.key === "ArrowLeft" ? "back" : "forward"} by Navigation Modifier`]);
-                iframe.contentWindow.postMessage(JSON.stringify({
+                aVideo.contentWindow.postMessage(JSON.stringify({
                     "event": "command",
                     "func": "seekTo",
-                    "args": [currentYouTubeTime + navModifiers[aVideo.navModIter] * (event.key === "ArrowLeft" ? -1 : 1)]}, true]
+                    "args": [currentYouTubeTime + navModifiers[aVideo.navModIter] * (event.key === "ArrowLeft" ? -1 : 1), true]
                 }), "*");
                 flashIndicator(`${event.key === "ArrowLeft" ? "-" : "+"}${navModifiers[aVideo.navModIter]}s`);
             } else if (["j", "l"].includes(event.key.toLowerCase())) {
                 blockKeyEvents(event);
                 aVideo.savedTimeStamps.push([currentYouTubeTime, `Go ${event.key.toLowerCase() === "j" ? "back" : "forward"} by 2 * Navigation Modifier`]);
-                currentYouTubeTime += event.key.toLowerCase() === "j" ? -2 * navModifiers[aVideo.navModIter] : 2 * navModifiers[aVideo.navModIter];
+                aVideo.contentWindow.postMessage(JSON.stringify({
+                    "event": "command",
+                    "func": "seekTo",
+                    "args": [currentYouTubeTime + navModifiers[aVideo.navModIter] * (event.key.toLowerCase() === "j" ? -2 : 2), true]
+                }), "*");
                 flashIndicator(`${event.key.toLowerCase() === "j" ? "-" : "+"}${2 * navModifiers[aVideo.navModIter]}s`);
             } else if (event.ctrlKey && ["z", "Z"].includes(event.key)) {
                 blockKeyEvents(event);
