@@ -4,8 +4,8 @@
 // 1. Create a local variable to hold the live timestamp
 let currentYouTubeTime = 0;
 
-// 2. Set up a global message listener to receive updates from the YouTube iframe
-window.addEventListener('message', function(event) {
+// 2. VVVVV Set up a global message listener to receive updates from the YouTube iframe
+/*window.addEventListener('message', function(event) {
     // Only parse strings that look like JSON object payloads
     try {
         const data = JSON.parse(event.data);
@@ -17,7 +17,34 @@ window.addEventListener('message', function(event) {
     } catch (e) {
         // Safe fail for messages from other sources/extensions on the page
     }
+});*/
+window.addEventListener("message", (event) => {
+    // Security check: Ensure the message actually came from YouTube
+    if (!event.origin.includes("youtube.com")) return;
+
+    try {
+        const data = JSON.parse(event.data);
+        
+        // Extract the unique ID we assigned in Step 1
+        const playerId = data.id; 
+        
+        // Find the specific iframe element that sent this message
+        const matchingIframe = document.querySelector(`[data-player-id="${playerId}"]`);
+
+        if (matchingIframe) {
+            console.log(`Video ${playerId} sent an event:`, data.event);
+            
+            // Example: Handle specific events
+            if (data.event === "infoDelivery" && data.info) {
+                // Do something with data.info.currentTime for THIS specific video
+                videos[playerId][1] = data.info;
+            }
+        }
+    } catch (error) {
+        // Handle non-JSON messages from other extensions/scripts
+    }
 });
+// 2. ^^^^^
 
 // Variables
 const navModifiers = [0.05, 0.25, 1, 5, 30];
@@ -218,15 +245,31 @@ async function waitForVideos() {
 // Main Script
 (async () => {
     videos = await waitForVideos();
-    // 3. FORCE the YouTube Player to send time updates every 250ms
+    // 3. VVVVVV FORCE the YouTube Player to send time updates every 250ms
     // Run this right after the page loads or when your iframe is ready
-    videos.forEach(iframe => {
+    /*videos.forEach(iframe => {
         iframe.contentWindow.postMessage(JSON.stringify({
             "event": "listening",
             "id": 1,
             "channel": "widget"
         }), "*");
+    });*/
+
+    videos.forEach((iframe, index) => {
+        // Generate a unique ID for this specific iframe (e.g., youtube-player-0, youtube-player-1)
+        const uniqueId = `youtube-player-${index}`;
+        
+        // Optional: Store it on the element so you can easily look it up later
+        iframe.dataset.playerId = uniqueId; 
+    
+        // Send the initialization handshake
+        iframe.contentWindow.postMessage(JSON.stringify({
+            "event": "listening",
+            "id": uniqueId, 
+            "channel": "widget"
+        }), "*");
     });
+    // 3. ^^^^^^
 
     setInterval(() => {
         videos = document.querySelectorAll('iframe');
