@@ -1480,14 +1480,19 @@ document.addEventListener('keydown', (event) => {
     }
     if (url.startsWith("https://web.kamihq.com/web/viewer.html")) {
         if (event.key === "." && ctrlHeld) {
+            blockEvents(event);
             document.querySelector("button[value=super]").click();
         } else if (event.key === "," && ctrlHeld) {
+            blockEvents(event);
             document.querySelector("button[value=sub]").click();
         } else if (event.key === "b" && ctrlHeld) {
+            blockEvents(event);
             document.querySelector("button[title=bold]").click();
         } else if (event.key === "i" && ctrlHeld) {
+            blockEvents(event);
             document.querySelector("button[title=italic]").click();
         } else if (event.key === "u" && ctrlHeld) {
+            blockEvents(event);
             document.querySelector("button[title=underline]").click();
         }
     }
