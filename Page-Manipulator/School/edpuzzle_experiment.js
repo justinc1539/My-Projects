@@ -1,11 +1,11 @@
 // V10.27.2026
 // Active websites: all
 
-// 1. Create a local variable to hold the live timestamp
+/*// 1. Create a local variable to hold the live timestamp
 let currentYouTubeTime = 0;
 
 // 2. VVVVV Set up a global message listener to receive updates from the YouTube iframe
-/*window.addEventListener('message', function(event) {
+window.addEventListener('message', function(event) {
     // Only parse strings that look like JSON object payloads
     try {
         const data = JSON.parse(event.data);
@@ -20,23 +20,31 @@ let currentYouTubeTime = 0;
 });*/
 window.addEventListener("message", (event) => {
     // Security check: Ensure the message actually came from YouTube
-    if (!event.origin.includes("youtube.com")) return;
+    // if (!event.origin.includes("youtube.com")) return;
 
     try {
         const data = JSON.parse(event.data);
-        
+
         // Extract the unique ID we assigned in Step 1
-        const playerId = data.id; 
-        
+        const playerId = data.id;
+
         // Find the specific iframe element that sent this message
         const matchingIframe = document.querySelector(`[data-player-id="${playerId}"]`);
 
-        if (matchingIframe) {
+        if (true || matchingIframe) {
             console.log(`Video ${playerId} sent an event:`, data.event);
             
             // Example: Handle specific events
-            if (data.event === "infoDelivery" && data.info) {
+            if (data.event !== "onReady") alert(`data.event: ${data.event}
+data.info: ${data.info}
+data.event === "infoDelivery": ${data.event === "infoDelivery"}`)
+            if (data.event === "infoDelivery") {
+                alert('as it should')
                 // Do something with data.info.currentTime for THIS specific video
+                alert(`videos: ${videos}
+playerId: ${playerId}
+data.info: ${data.info}
+videos[playerId][1]: ${videos[playerId][1]}`);
                 videos[playerId][1] = data.info;
             }
         }
@@ -214,15 +222,15 @@ function highlightVideos(theVids) {
   });
 }
 
-function highlightVideo(index) {
-  videos.forEach(video => {
+function highlightVideo(theVids, index) {
+  theVids.forEach(video => {
     video.parentElement.classList.remove('highlighted');
   });
 
   if (index === null) return;
   
-  if (index >= 0 && index < videos.length) {
-    const targetVideo = videos[index];
+  if (index >= 0 && index < theVids.length) {
+    const targetVideo = theVids[index];
     if (highlightOutline) targetVideo.parentElement.classList.add('highlighted');
     // targetVideo.focus();
   }
@@ -238,8 +246,9 @@ async function waitForVideos() {
     while (document.querySelectorAll("iframe").length === 0) {
         await new Promise(resolve => setTimeout(resolve, 100));
     }
-
-    return document.querySelectorAll("video");
+    
+    return Array.from(document.querySelectorAll("iframe"), x => [x, null]);
+    // return Array.from(document.querySelectorAll("iframe")).map(x => [x, null]);
 }
 
 // Main Script
@@ -260,10 +269,10 @@ async function waitForVideos() {
         const uniqueId = `youtube-player-${index}`;
         
         // Optional: Store it on the element so you can easily look it up later
-        iframe.dataset.playerId = uniqueId; 
+        iframe[0].dataset.playerId = uniqueId; 
     
         // Send the initialization handshake
-        iframe.contentWindow.postMessage(JSON.stringify({
+        iframe[0].contentWindow.postMessage(JSON.stringify({
             "event": "listening",
             "id": uniqueId, 
             "channel": "widget"
@@ -272,33 +281,31 @@ async function waitForVideos() {
     // 3. ^^^^^^
 
     setInterval(() => {
-        videos = document.querySelectorAll('iframe');
+        // Optional TODO: Auto Update for iFrames
+        // videos = document.querySelectorAll('iframe').map(x => [x, null]);
         textBoxes = [...document.querySelectorAll("input"), ...document.querySelectorAll("textarea")];
-        highlightVideos(videos);
-        highlightVideo(currentIndex);
+        highlightVideos(videos.map(x => x[0]));
+        highlightVideo(videos.map(x => x[0]), currentIndex);
     }, 100);
-
-    videos.forEach(video => {
-        video.volume = 1;
-    });
 
     setInterval(() => {
         if (currentIndex !== null) {
             videos.forEach(v => {
                 if (durationOutlineIndex !== -1 && v === videos[currentIndex]) {
                     // TODO: Get video duration
-                    flashIndicator(`${formatTime(currentYouTubeTime, durationRounding[durationOutlineIndex])} / ${formatTime(v.duration, durationRounding[durationOutlineIndex])}`, 1, durationOverlay);
+                    // TODO: Have it work for multiple iframes
+                    flashIndicator(`${formatTime(v.currentTime, durationRounding[durationOutlineIndex])} / ${formatTime(v.duration, durationRounding[durationOutlineIndex])}`, 1, durationOverlay);
                 }
                 if (v.replay) {
-                    if (currentYouTubeTime < v.replayStart || currentYouTubeTime > v.replayEnd) {
-                            currentYouTubeTime = v.replayStart;
+                    if (v.currentTime < v.replayStart || v.currentTime > v.replayEnd) {
+                            v.currentTime = v.replayStart;
                         }
                 }
                 if (v.allowCuts) {
                     for (let i = 0; i < v.cuts.length; i++) {
                         if (v.cuts[i]) {
-                            if (v.cuts[i][0] < currentYouTubeTime && currentYouTubeTime < v.cuts[i][1]) {
-                                currentYouTubeTime = v.cuts[i][1];
+                            if (v.cuts[i][0] < v.currentTime && v.currentTime < v.cuts[i][1]) {
+                                v.currentTime = v.cuts[i][1];
                             }
                         }
                     }
@@ -306,9 +313,11 @@ async function waitForVideos() {
             });
         }
     }, 1);
-    
+
     flashIndicator("Ctrl + Shift + / (Ctrl + ?) for shortcuts", 3000);
     window.addEventListener("keydown", (event) => {
+        try{
+      alert(videos[currentIndex])
       // Selecting Video feature
       if (currentIndex !== null && event.key === "Escape") {
           blockKeyEvents(event);
@@ -338,7 +347,7 @@ async function waitForVideos() {
           currentIndex = currentIndex >= videos.length - 1 ? 0 : currentIndex + 1;
         }
     
-        highlightVideo(currentIndex);
+        highlightVideo(videos.map(x => x[0]), currentIndex);
         flashIndicator(`Selected Video ${currentIndex+1}`);
       } else if (event.ctrlKey && event.altKey && ["H", "h"].includes(event.key)) {
           blockKeyEvents(event);
@@ -374,23 +383,23 @@ async function waitForVideos() {
       if (videos.length > 0 && currentIndex !== null) (aVideo => {
         if (!['INPUT', 'TEXTAREA'].includes(event.target.tagName)) {
             // Defining attributes
-            if (!("replayStart" in aVideo)) aVideo.replayStart = 0;
-            if (!("replayEnd" in aVideo)) aVideo.replayEnd = aVideo.duration;
-            if (!("cuts" in aVideo)) aVideo.cuts = [];
-            if (!("navModIter" in aVideo)) aVideo.navModIter = 3;
-            if (!("speedModIter" in aVideo)) aVideo.speedModIter = 4;
-            if (!("replay" in aVideo)) aVideo.replay = false;
-            if (!("allowCuts" in aVideo)) aVideo.allowCuts = false;
-            if (!("cutIter" in aVideo)) aVideo.cutIter = "";
-            if (!("deleteCutIter" in aVideo)) aVideo.deleteCutIter = "";
-            if (!("volMod" in aVideo)) aVideo.volMod = 0.1;
-            if (!("savedTimeStamps" in aVideo)) aVideo.savedTimeStamps = [];
-            if (!("savedUndos" in aVideo)) aVideo.savedUndos = [];
-            if (!("paused" in aVideo)) aVideo.paused = true;
-            if (!("playbackRate" in aVideo)) aVideo.playbackRate = 1;
-            if (!("playbackRateIter" in aVideo)) aVideo.playbackRateIter = 3;
+            if (!("replayStart" in aVideo[1])) aVideo[1].replayStart = 0;
+            if (!("replayEnd" in aVideo[1])) aVideo[1].replayEnd = aVideo[1].duration;
+            if (!("cuts" in aVideo[1])) aVideo[1].cuts = [];
+            if (!("navModIter" in aVideo[1])) aVideo[1].navModIter = 3;
+            if (!("speedModIter" in aVideo[1])) aVideo[1].speedModIter = 4;
+            if (!("replay" in aVideo[1])) aVideo[1].replay = false;
+            if (!("allowCuts" in aVideo[1])) aVideo[1].allowCuts = false;
+            if (!("cutIter" in aVideo[1])) aVideo[1].cutIter = "";
+            if (!("deleteCutIter" in aVideo[1])) aVideo[1].deleteCutIter = "";
+            if (!("volMod" in aVideo[1])) aVideo[1].volMod = 0.1;
+            if (!("savedTimeStamps" in aVideo[1])) aVideo[1].savedTimeStamps = [];
+            if (!("savedUndos" in aVideo[1])) aVideo[1].savedUndos = [];
+            // if (!("paused" in aVideo[1])) aVideo[1].paused = true;
+            if (!("playbackRate" in aVideo[1])) aVideo[1].playbackRate = 1;
+            if (!("playbackRateIter" in aVideo[1])) aVideo[1].playbackRateIter = 3;
         
-            const quality = aVideo.getVideoPlaybackQuality?.();
+            const quality = aVideo[1].getVideoPlaybackQuality?.();
             const fps = (quality && quality.totalVideoFrames && quality.totalFrameDelay)
                 ? quality.totalVideoFrames / quality.totalFrameDelay
                 : 100;
@@ -468,132 +477,136 @@ Ctrl + Shift - Finish Cut Customization/Confirm Cut Deletion`, 2**16);
             // Playback Rate/Speed feature
             else if (event.shiftKey && event.key === " ") {
                 blockKeyEvents(event);
-                aVideo.speedModIter = 4;
-                aVideo.playbackRate = 1;
-                flashIndicator(`${aVideo.playbackRate}x ± ${speedModifiers[aVideo.speedModIter]}x`);
+                aVideo[1].speedModIter = 4;
+                aVideo[1].playbackRate = 1;
+                flashIndicator(`${aVideo[1].playbackRate}x ± ${speedModifiers[aVideo[1].speedModIter]}x`);
             } else if (event.ctrlKey && ["<", ">"].includes(event.key)) {
               if (event.key === ">") {
-                aVideo.speedModIter = Math.min(aVideo.speedModIter + 1, speedModifiers.length - 1);
+                aVideo[1].speedModIter = Math.min(aVideo[1].speedModIter + 1, speedModifiers.length - 1);
               } else {
-                aVideo.speedModIter = Math.max(aVideo.speedModIter - 1, 0);
+                aVideo[1].speedModIter = Math.max(aVideo[1].speedModIter - 1, 0);
               }
-              flashIndicator(`±${speedModifiers[aVideo.speedModIter].toFixed(getDecimalCount(speedModifiers[aVideo.speedModIter]))}x`);
+              flashIndicator(`±${speedModifiers[aVideo[1].speedModIter].toFixed(getDecimalCount(speedModifiers[aVideo[1].speedModIter]))}x`);
             } else if (["<", ">"].includes(event.key)) {
-              Math.min(aVideo.playbackRate + aVideo.speedModIter, 2);
+              alert(1)
+              Math.min(aVideo[1].playbackRate + aVideo[1].speedModIter, 2);
+              alert(2)
               if (event.key === ">") {
-                  aVideo.playbackRateIter = Math.min(aVideo.playbackRateIter + 1, 7);
+                  aVideo[1].playbackRateIter = Math.min(aVideo[1].playbackRateIter + 1, 7);
               } else {
-                  aVideo.playbackRateIter = Math.max(aVideo.playbackRateIter - 1, 0);
+                  aVideo[1].playbackRateIter = Math.max(aVideo[1].playbackRateIter - 1, 0);
               }
-              aVideo.playbackRate = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2][aVideo.playbackRateIter];
-              aVideo.contentWindow.postMessage(JSON.stringify({
+              alert(3)
+              aVideo[1].playbackRate = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2][aVideo[1].playbackRateIter];
+              alert(4)
+              aVideo[0].contentWindow.postMessage(JSON.stringify({
                   "event": "command",
                   "func": "setPlaybackRate",
-                  "args": [aVideo.playbackRate]
+                  "args": [aVideo[1].playbackRate]
               }), "*");
-              flashIndicator(`${aVideo.playbackRate.toFixed(getDecimalCount(speedModifiers[aVideo.speedModIter]))}x`);
+              alert(5)
+              flashIndicator(`${aVideo[1].playbackRate.toFixed(getDecimalCount(speedModifiers[aVideo[1].speedModIter]))}x`);
             }
             // Replay + Cut feature
             else if (event.shiftKey && event.key === "ArrowUp") {
                 blockKeyEvents(event);
-                if (aVideo.replay && aVideo.allowCuts) {
-                    aVideo.allowCuts = false;
+                if (aVideo[1].replay && aVideo[1].allowCuts) {
+                    aVideo[1].allowCuts = false;
                 }
-                else if (aVideo.replay && !aVideo.allowCuts) {
-                    aVideo.replay = false;
-                    aVideo.allowCuts = true;
+                else if (aVideo[1].replay && !aVideo[1].allowCuts) {
+                    aVideo[1].replay = false;
+                    aVideo[1].allowCuts = true;
                 }
                 else {
-                    aVideo.replay = true;
-                    aVideo.allowCuts = true;
+                    aVideo[1].replay = true;
+                    aVideo[1].allowCuts = true;
                 }
-                flashIndicator(`${aVideo.replay ? `Replay (${formatTime(aVideo.replayStart)} to ${formatTime(aVideo.replayEnd)}) ` : ""}${aVideo.replay && aVideo.allowCuts ? "+ " : ""}${aVideo.allowCuts ? `Cuts ${Object.keys(aVideo.cuts).map(Number)} ` : ""}On`);
+                flashIndicator(`${aVideo[1].replay ? `Replay (${formatTime(aVideo[1].replayStart)} to ${formatTime(aVideo[1].replayEnd)}) ` : ""}${aVideo[1].replay && aVideo[1].allowCuts ? "+ " : ""}${aVideo[1].allowCuts ? `Cuts ${Object.keys(aVideo[1].cuts).map(Number)} ` : ""}On`);
             } else if (event.shiftKey && event.key === "ArrowDown") {
                 blockKeyEvents(event);
-                aVideo.replay = false;
-                aVideo.allowCuts = false;
-                flashIndicator(`Replay (${formatTime(aVideo.replayStart)} to ${formatTime(aVideo.replayEnd)}) + Cuts ${Object.keys(aVideo.cuts).map(Number)} Off`);
+                aVideo[1].replay = false;
+                aVideo[1].allowCuts = false;
+                flashIndicator(`Replay (${formatTime(aVideo[1].replayStart)} to ${formatTime(aVideo[1].replayEnd)}) + Cuts ${Object.keys(aVideo[1].cuts).map(Number)} Off`);
             } else if (event.shiftKey && event.key === "ArrowLeft") {
                 blockKeyEvents(event);
-                if (aVideo.cutIter) {
-                    if (!aVideo.cuts[aVideo.cutIter]) aVideo.cuts[aVideo.cutIter] = [];
-                    aVideo.cuts[aVideo.cutIter][0] = currentYouTubeTime;
-                    flashIndicator(`Cut ${aVideo.cutIter}: ${formatTime(aVideo.cuts[aVideo.cutIter][0])} to ${formatTime(aVideo.cuts[aVideo.cutIter][1])} (Ctrl + Shift to finish)`);
+                if (aVideo[1].cutIter) {
+                    if (!aVideo[1].cuts[aVideo[1].cutIter]) aVideo[1].cuts[aVideo[1].cutIter] = [];
+                    aVideo[1].cuts[aVideo[1].cutIter][0] = aVideo[1].currentTime;
+                    flashIndicator(`Cut ${aVideo[1].cutIter}: ${formatTime(aVideo[1].cuts[aVideo[1].cutIter][0])} to ${formatTime(aVideo[1].cuts[aVideo[1].cutIter][1])} (Ctrl + Shift to finish)`);
                 } else {
-                    aVideo.replayStart = currentYouTubeTime;
-                    flashIndicator(`Replay: ${formatTime(aVideo.replayStart)} to ${formatTime(aVideo.replayEnd)}`);
+                    aVideo[1].replayStart = aVideo[1].currentTime;
+                    flashIndicator(`Replay: ${formatTime(aVideo[1].replayStart)} to ${formatTime(aVideo[1].replayEnd)}`);
                 }
             } else if (event.shiftKey && event.key === "ArrowRight") {
                 blockKeyEvents(event);
-                if (aVideo.cutIter) {
-                    if (!aVideo.cuts[aVideo.cutIter]) aVideo.cuts[aVideo.cutIter] = [];
-                    aVideo.cuts[aVideo.cutIter][1] = currentYouTubeTime;
-                    flashIndicator(`Cut ${aVideo.cutIter}: ${formatTime(aVideo.cuts[aVideo.cutIter][0])} to ${formatTime(aVideo.cuts[aVideo.cutIter][1])} (Ctrl + Shift to finish)`);
+                if (aVideo[1].cutIter) {
+                    if (!aVideo[1].cuts[aVideo[1].cutIter]) aVideo[1].cuts[aVideo[1].cutIter] = [];
+                    aVideo[1].cuts[aVideo[1].cutIter][1] = aVideo[1].currentTime;
+                    flashIndicator(`Cut ${aVideo[1].cutIter}: ${formatTime(aVideo[1].cuts[aVideo[1].cutIter][0])} to ${formatTime(aVideo[1].cuts[aVideo[1].cutIter][1])} (Ctrl + Shift to finish)`);
                 } else {
-                    aVideo.replayEnd = currentYouTubeTime;
-                    flashIndicator(`Replay: ${formatTime(aVideo.replayStart)} to ${formatTime(aVideo.replayEnd)}`);
+                    aVideo[1].replayEnd = aVideo[1].currentTime;
+                    flashIndicator(`Replay: ${formatTime(aVideo[1].replayStart)} to ${formatTime(aVideo[1].replayEnd)}`);
                 }
             }
             // Cut feature
             else if (event.shiftKey && event.ctrlKey && /^Digit[0-9]$/.test(event.code)) {
                 blockKeyEvents(event);
-                if (event.code === "Digit0" && aVideo.deleteCutIter === "") {
+                if (event.code === "Digit0" && aVideo[1].deleteCutIter === "") {
                     flashIndicator(`Cannot start cut number with 0`);
                 } else {
-                    aVideo.deleteCutIter += event.code.replace("Digit", "");
+                    aVideo[1].deleteCutIter += event.code.replace("Digit", "");
                     let timeframe = "";
-                    if (aVideo.cuts[aVideo.deleteCutIter]) {
-                        timeframe = ` (${formatTime(aVideo.cuts[aVideo.deleteCutIter][0])} to ${formatTime(aVideo.cuts[aVideo.deleteCutIter][1])})`
+                    if (aVideo[1].cuts[aVideo[1].deleteCutIter]) {
+                        timeframe = ` (${formatTime(aVideo[1].cuts[aVideo[1].deleteCutIter][0])} to ${formatTime(aVideo[1].cuts[aVideo[1].deleteCutIter][1])})`
                     }
-                    flashIndicator(`Deleting Cut ${aVideo.deleteCutIter}${timeframe} (Ctrl + Shift to delete)`);
+                    flashIndicator(`Deleting Cut ${aVideo[1].deleteCutIter}${timeframe} (Ctrl + Shift to delete)`);
                 }
             } else if (event.shiftKey && /^Digit[0-9]$/.test(event.code)) {
                 blockKeyEvents(event);
-                if (event.code === "Digit0" && aVideo.cutIter === "") {
+                if (event.code === "Digit0" && aVideo[1].cutIter === "") {
                     flashIndicator(`Cannot start cut number with 0`);
                 } else {
-                    aVideo.cutIter += event.code.replace("Digit", "");
+                    aVideo[1].cutIter += event.code.replace("Digit", "");
                     let timeframe = "";
-                    if (aVideo.cuts[aVideo.cutIter]) {
-                        timeframe = ` (${formatTime(aVideo.cuts[aVideo.cutIter][0])} to ${formatTime(aVideo.cuts[aVideo.cutIter][1])})`
+                    if (aVideo[1].cuts[aVideo[1].cutIter]) {
+                        timeframe = ` (${formatTime(aVideo[1].cuts[aVideo[1].cutIter][0])} to ${formatTime(aVideo[1].cuts[aVideo[1].cutIter][1])})`
                     }
-                    flashIndicator(`Customizing Cut ${aVideo.cutIter}${timeframe} (Ctrl + Shift to finish)`);
+                    flashIndicator(`Customizing Cut ${aVideo[1].cutIter}${timeframe} (Ctrl + Shift to finish)`);
                 }
             } else if (event.shiftKey && event.ctrlKey) {
-                if (aVideo.deleteCutIter) {
-                    if (aVideo.cuts[aVideo.deleteCutIter]) {
-                        delete aVideo.cuts[aVideo.deleteCutIter];
-                        flashIndicator(`Deleted Cut ${aVideo.deleteCutIter}`);
-                        aVideo.cuts.length = Object.keys(aVideo.cuts).length ? +Object.keys(aVideo.cuts).at(-1) + 1 : 0;
+                if (aVideo[1].deleteCutIter) {
+                    if (aVideo[1].cuts[aVideo[1].deleteCutIter]) {
+                        delete aVideo[1].cuts[aVideo[1].deleteCutIter];
+                        flashIndicator(`Deleted Cut ${aVideo[1].deleteCutIter}`);
+                        aVideo[1].cuts.length = Object.keys(aVideo[1].cuts).length ? +Object.keys(aVideo[1].cuts).at(-1) + 1 : 0;
                     } else {
-                        flashIndicator(`Cut ${aVideo.deleteCutIter} does not exist`);
+                        flashIndicator(`Cut ${aVideo[1].deleteCutIter} does not exist`);
                     }
-                    aVideo.deleteCutIter = "";
-                } else if (aVideo.cutIter) {
-                    flashIndicator(`Finished Customizing Cut ${aVideo.cutIter}`);
-                    aVideo.cutIter = "";
+                    aVideo[1].deleteCutIter = "";
+                } else if (aVideo[1].cutIter) {
+                    flashIndicator(`Finished Customizing Cut ${aVideo[1].cutIter}`);
+                    aVideo[1].cutIter = "";
                 }
             }
             // Play/Pause feature
             else if ([" ", "K", "k", "Enter"].includes(event.key)) {
                 blockKeyEvents(event);
-                aVideo.contentWindow.postMessage(JSON.stringify({
+                aVideo[0].contentWindow.postMessage(JSON.stringify({
                     "event": "command",
-                    "func": `${aVideo.paused ? "play" : "pause"}Video`,
+                    "func": `${aVideo[1].paused ? "play" : "pause"}Video`,
                     "args": []
                 }), "*");
-                aVideo.paused = !aVideo.paused;
-                flashIndicator(`Video ${aVideo.paused ? "Paused" : "Playing"}`);
+                flashIndicator(`Video ${!aVideo[1].paused ? "Paused" : "Playing"}`);
             }
             // Controls feature
             else if (["F", "f"].includes(event.key)) {
                 blockKeyEvents(event);
                 if (!document.fullscreenElement) {
-                    if (aVideo.requestFullscreen) {
-                        aVideo.requestFullscreen();
+                    if (aVideo[1].requestFullscreen) {
+                        aVideo[1].requestFullscreen();
                         flashIndicator("Entered Fullscreen");
-                    } else if (aVideo.webkitRequestFullscreen) {
-                        aVideo.webkitRequestFullscreen();
+                    } else if (aVideo[1].webkitRequestFullscreen) {
+                        aVideo[1].webkitRequestFullscreen();
                         flashIndicator("Entered Fullscreen");
                     } else {
                         flashIndicator("Fullscreen not available");
@@ -604,24 +617,24 @@ Ctrl + Shift - Finish Cut Customization/Confirm Cut Deletion`, 2**16);
                 }
             } else if (event.ctrlKey && event.altKey && ["C", "c"].includes(event.key)) {
                 blockKeyEvents(event);
-                aVideo.controls = !aVideo.controls;
-                flashIndicator(`Controls ${aVideo.controls ? "En" : "Dis"}abled`);
+                aVideo[1].controls = !aVideo[1].controls;
+                flashIndicator(`Controls ${aVideo[1].controls ? "En" : "Dis"}abled`);
             } else if (event.ctrlKey && event.altKey && ["L", "l"].includes(event.key)) {
                 blockKeyEvents(event);
-                aVideo.loop = !aVideo.loop;
-                flashIndicator(`Loop ${aVideo.loop ? "En" : "Dis"}abled`);
+                aVideo[1].loop = !aVideo[1].loop;
+                flashIndicator(`Loop ${aVideo[1].loop ? "En" : "Dis"}abled`);
             } else if (event.ctrlKey && event.altKey && ["P", "p"].includes(event.key)) {
                 blockKeyEvents(event);
-                if (aVideo.hasAttribute('__pip__')) {
+                if (aVideo[1].hasAttribute('__pip__')) {
                     document.exitPictureInPicture();
                     flashIndicator("Ended Picture-in-Picture");
                 } else {
                     if (document.pictureInPictureElement) document.exitPictureInPicture();
-                    aVideo.removeAttribute("disablePictureInPicture");
-                    aVideo.requestPictureInPicture();
-                    aVideo.setAttribute('__pip__', true);
-                    aVideo.addEventListener('leavepictureinpicture', event => {
-                        aVideo.removeAttribute('__pip__');
+                    aVideo[1].removeAttribute("disablePictureInPicture");
+                    aVideo[1].requestPictureInPicture();
+                    aVideo[1].setAttribute('__pip__', true);
+                    aVideo[1].addEventListener('leavepictureinpicture', event => {
+                        aVideo[1].removeAttribute('__pip__');
                     }, { once: true });
                     flashIndicator(`Started Picure-in-Picture for Video ${currentIndex+1}`);
                 }
@@ -629,55 +642,55 @@ Ctrl + Shift - Finish Cut Customization/Confirm Cut Deletion`, 2**16);
             // Navigation feature
             else if ([",", "."].includes(event.key)) {
                 blockKeyEvents(event);
-                currentYouTubeTime += event.key === "," ? -1/fps : 1/fps;
+                aVideo[1].currentTime += event.key === "," ? -1/fps : 1/fps;
                 flashIndicator(`${event.key === "," ? "-" : "+"}1 frame`);
             } else if (event.ctrlKey && ["ArrowLeft", "ArrowRight"].includes(event.key)) {
               blockKeyEvents(event);
               if (event.key === "ArrowLeft") {
-                aVideo.navModIter = Math.max(aVideo.navModIter - 1, 0);
+                aVideo[1].navModIter = Math.max(aVideo[1].navModIter - 1, 0);
               } else {
-                aVideo.navModIter = Math.min(aVideo.navModIter + 1, navModifiers.length - 1);
+                aVideo[1].navModIter = Math.min(aVideo[1].navModIter + 1, navModifiers.length - 1);
               }
-              flashIndicator(`±${navModifiers[aVideo.navModIter]}s`);
+              flashIndicator(`±${navModifiers[aVideo[1].navModIter]}s`);
             } else if (/^Digit[0-9]$/.test(event.code)) {
                 blockKeyEvents(event);
-                aVideo.savedTimeStamps.push([currentYouTubeTime, "Go to percentage of video length"]);
-                currentYouTubeTime = aVideo.duration * JSON.parse(event.code.replace("Digit", "")) / 10;
+                aVideo[1].savedTimeStamps.push([aVideo[1].currentTime, "Go to percentage of video length"]);
+                aVideo[1].currentTime = aVideo[1].duration * JSON.parse(event.code.replace("Digit", "")) / 10;
                 flashIndicator(`${JSON.parse(event.code.replace("Digit", "")) * 10}% of Video Duration`);
             } else if (["ArrowLeft", "ArrowRight"].includes(event.key)) {
                 blockKeyEvents(event);
-                aVideo.savedTimeStamps.push([currentYouTubeTime, `Go ${event.key === "ArrowLeft" ? "back" : "forward"} by Navigation Modifier`]);
-                aVideo.contentWindow.postMessage(JSON.stringify({
+                aVideo[1].savedTimeStamps.push([aVideo[1].currentTime, `Go ${event.key === "ArrowLeft" ? "back" : "forward"} by Navigation Modifier`]);
+                aVideo[0].contentWindow.postMessage(JSON.stringify({
                     "event": "command",
                     "func": "seekTo",
-                    "args": [currentYouTubeTime + navModifiers[aVideo.navModIter] * (event.key === "ArrowLeft" ? -1 : 1), true]
+                    "args": [aVideo[1].currentTime + navModifiers[aVideo[1].navModIter] * (event.key === "ArrowLeft" ? -1 : 1), true]
                 }), "*");
-                flashIndicator(`${event.key === "ArrowLeft" ? "-" : "+"}${navModifiers[aVideo.navModIter]}s`);
+                flashIndicator(`${event.key === "ArrowLeft" ? "-" : "+"}${navModifiers[aVideo[1].navModIter]}s`);
             } else if (["j", "l"].includes(event.key.toLowerCase())) {
                 blockKeyEvents(event);
-                aVideo.savedTimeStamps.push([currentYouTubeTime, `Go ${event.key.toLowerCase() === "j" ? "back" : "forward"} by 2 * Navigation Modifier`]);
-                aVideo.contentWindow.postMessage(JSON.stringify({
+                aVideo[1].savedTimeStamps.push([aVideo[1].currentTime, `Go ${event.key.toLowerCase() === "j" ? "back" : "forward"} by 2 * Navigation Modifier`]);
+                aVideo[0].contentWindow.postMessage(JSON.stringify({
                     "event": "command",
                     "func": "seekTo",
-                    "args": [currentYouTubeTime + navModifiers[aVideo.navModIter] * (event.key.toLowerCase() === "j" ? -2 : 2), true]
+                    "args": [aVideo[1].currentTime + navModifiers[aVideo[1].navModIter] * (event.key.toLowerCase() === "j" ? -2 : 2), true]
                 }), "*");
-                flashIndicator(`${event.key.toLowerCase() === "j" ? "-" : "+"}${2 * navModifiers[aVideo.navModIter]}s`);
+                flashIndicator(`${event.key.toLowerCase() === "j" ? "-" : "+"}${2 * navModifiers[aVideo[1].navModIter]}s`);
             } else if (event.ctrlKey && ["z", "Z"].includes(event.key)) {
                 blockKeyEvents(event);
-                const timeStamp = aVideo.savedTimeStamps.pop();
+                const timeStamp = aVideo[1].savedTimeStamps.pop();
                 if (timeStamp) {
-                    aVideo.savedUndos.push([timeStamp, currentYouTubeTime]);
-                    currentYouTubeTime = timeStamp[0];
+                    aVideo[1].savedUndos.push([timeStamp, aVideo[1].currentTime]);
+                    aVideo[1].currentTime = timeStamp[0];
                     flashIndicator(`Undo to ${formatTime(timeStamp[0])} (Rolled back from "${timeStamp[1]}")`);
                 } else {
                     flashIndicator("No Recent Navigation");
                 }
             } else if (event.ctrlKey && ["y", "Y"].includes(event.key)) {
                 blockKeyEvents(event);
-                const recentUndo = aVideo.savedUndos.pop();
+                const recentUndo = aVideo[1].savedUndos.pop();
                 if (recentUndo) {
-                    aVideo.savedTimeStamps.push(recentUndo[0]);
-                    currentYouTubeTime = recentUndo[1];
+                    aVideo[1].savedTimeStamps.push(recentUndo[0]);
+                    aVideo[1].currentTime = recentUndo[1];
                     flashIndicator(`Redo to ${formatTime(recentUndo[1])} (Rolled from "${recentUndo[0][1]}")`);
                 } else {
                     flashIndicator("No Recent Undos");
@@ -689,25 +702,29 @@ Ctrl + Shift - Finish Cut Customization/Confirm Cut Deletion`, 2**16);
                 else if (event.ctrlKey && ["ArrowDown", "ArrowUp"].includes(event.key)) {
                     blockKeyEvents(event);
                     if (event.key === "ArrowUp") {
-                        aVideo.volMod = Math.round(100 * Math.min(1, aVideo.volMod + 0.01)) / 100;
+                        aVideo[1].volMod = Math.round(100 * Math.min(1, aVideo[1].volMod + 0.01)) / 100;
                     } else {
-                        aVideo.volMod = Math.round(100 * Math.max(0, aVideo.volMod - 0.01)) / 100;
+                        aVideo[1].volMod = Math.round(100 * Math.max(0, aVideo[1].volMod - 0.01)) / 100;
                     }
-                    flashIndicator(`±${Math.round(100 * aVideo.volMod)}%`);
+                    flashIndicator(`±${Math.round(100 * aVideo[1].volMod)}%`);
                 } else if (["ArrowDown", "ArrowUp"].includes(event.key)) {
                     blockKeyEvents(event);
                     if (event.key === "ArrowUp") {
-                        aVideo.volume = Math.round(100 * Math.min(1, aVideo.volume + aVideo.volMod)) / 100;
+                        aVideo[1].volume = Math.round(100 * Math.min(1, aVideo[1].volume + aVideo[1].volMod)) / 100;
                     } else {
-                        aVideo.volume = Math.round(100 * Math.max(0, aVideo.volume - aVideo.volMod)) / 100;
+                        aVideo[1].volume = Math.round(100 * Math.max(0, aVideo[1].volume - aVideo[1].volMod)) / 100;
                     }
-                    flashIndicator(`Volume: ${Math.round(100 * aVideo.volume)}%${aVideo.muted ? " (Muted)" : ""}`)
+                    flashIndicator(`Volume: ${Math.round(100 * aVideo[1].volume)}%${aVideo[1].muted ? " (Muted)" : ""}`)
                 } else if (["M", "m"].includes(event.key)) {
-                    aVideo.muted = !aVideo.muted;
-                    flashIndicator(`${aVideo.muted ? "M" : "Unm"}uted`);
+                    aVideo[1].muted = !aVideo[1].muted;
+                    flashIndicator(`${aVideo[1].muted ? "M" : "Unm"}uted`);
                 }
             }
         }
       })(videos[currentIndex]);
+      alert(videos[currentIndex])
+        }catch(error){
+            alert(error.stack)
+        }
     }, true);
 })();
