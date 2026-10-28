@@ -1509,36 +1509,27 @@ function formatTime(minutes, includeEnd=0) {
     const hour = Math.floor(minutes / 60);
     const mins = minutes % 60;
     const meridiem = hour > 12 ? "PM" : "AM";
-    let timeString = `${hour % 12}:${String(mins).padStart(2, "0")} ${meridiem}`;
+    let timeString = `${hour % 12 === 0 ? "12" : hour % 12}:${String(mins).padStart(2, "0")} ${meridiem}`;
     if (includeEnd) timeString += `-${formatTime(minutes + includeEnd)}`
     return timeString;
 }
 
-function getCurrentPeriodStr(mins, times, timeEnd) {
+function getCurrentPeriodStr(dayType, mins, times, periodLength, firstPeriodExtra, breakTime) {
+    // Period 1 Extra: {normal: +6; delayed: +12; half: +4}
+    // Break: {normal: +5; delayed: +4; half: +5}
+    // Tell me why Delayed Opening gives 1st period a whole 12 EXTRA MINUTES and only gives us 4 minutes of break instead of 5
     for (let i = 0; i < times.length; i++) {
         if (mins < times[i]) {
-            if (i === 0) return `Before School (<${formatTime(mins)})`;
-            // TTTODO: Add additional minutes for Period 1
-            else return `Period ${i} (${formatTime(mins, timeEnd)})`;
+            if (i === 0) return `Before School (<${formatTime(times[0])})`;
+            if (i === 1) return `Period 1 (${formatTime(times[0], periodLength + firstPeriodExtra)})`;
+            return `Period ${i} (${formatTime(times[i-1] + breakTime, periodLength)})`;
         }
     }
-    
-    /*if (mins < 490) period = "Before School (<8:10 AM)";
-    else if (mins < 536) period = "Period 1 (8:10 AM-8:56 AM)";
-    else if (mins < 581) period = "Period 2 (9:01 AM-9:41 AM)";
-    // else if (mins < 626) period = "Period 3 (9:46 AM-10:26 AM)";
-    else if (mins < 626) period = period = `Period 3 (${formatTime(626, 40)})`;
-    else if (mins < 671) period = "Period 4 (10:31 AM-11:11 AM)";
-    else if (mins < 716) period = "Period 5 (11:16 AM-11:56 AM)";
-    else if (mins < 761) period = "Period 6 (12:01 PM-12:41 PM)";
-    else if (mins < 806) period = "Period 7 (12:46 PM-1:26 PM)";
-    else if (mins < 851) period = "Period 8 (1:31 PM-2:11 PM)";
-    else if (mins < 896) period = "Period 9 (2:16 PM-2:56 PM)";
-    else period = "After School (>2:56 PM)";*/
+    return `After School (>${formatTime(times[times.length - 1])})`;
 }
 
-function getCurrentPeriod(dayType="normal") {
-    try{
+function getCurrentPeriod(dayType) {
+    try{ // TTTODO: delete when done
 
     const mins = getMinutes();
 
@@ -1552,12 +1543,12 @@ function getCurrentPeriod(dayType="normal") {
     }
 
     let period = "";
-    if (dayType === "normal") period = getCurrentPeriodStr(mins, [490, 536, 581, 626, 671, 716, 761, 806, 851, 896], 40);
-    else if (dayType === "half") null; // TTTODO: Make half day schedule
-    else if (dayType === "delayed") null; // TTTODO: Make delyaed opening schedule
+    if (dayType === "normal") period = getCurrentPeriodStr(dayType, mins, [490, 536, 581, 626, 671, 716, 761, 806, 851, 896], 40, 6, 5);
+    else if (dayType === "half") period = getCurrentPeriodStr(dayType, mins, [490, 522, 555, 588, 621, 654, 687, 720, 753, 786], 28, 4, 5);
+    else if (dayType === "delayed") period = getCurrentPeriodStr(dayType, mins, [600, 640, 672, 704, 736, 768, 800, 832, 864, 896], 28, 12, 4); // TTTODO: Make delyaed opening schedule
+    else period = 'Invalid day type (must be "normal", "half", or "delayed")';
 
-    // alert(period);
-    return period
+    return period;
     } catch(error) {alert(error.stack)}
 }
 
@@ -1583,9 +1574,10 @@ function getCurrentPeriod(dayType="normal") {
 
     // Update time every second
     setInterval(() => {
+        const dayType = "normal"; // Time Tracker: Not a Normal School Day? Not a Full Day? Change This!
         // box.textContent = new Date().toLocaleTimeString();
         currentTime = new Date().toLocaleTimeString("en-US", { timeZone: "America/New_York" });
-        box.textContent = `${currentTime} ${getCurrentPeriod()}`; // Not a Normal School Day? Not a Full School Day? Change This!
+        box.textContent = `${currentTime} ${getCurrentPeriod(dayType)}`;
         
         const displayPeriodEnd = className => {
             for (let i = 0; i < 10; i++) {
@@ -1593,13 +1585,31 @@ function getCurrentPeriod(dayType="normal") {
             }
         }
         // TTTODO: Also include for half day and delayed opening
-        if (currentTime === "8:55:20 AM") displayPeriodEnd("AP Physics C: Mechanics");
-        else if (currentTime === "9:40:20 AM") displayPeriodEnd("AP Calculus B/C");
-        else if (currentTime === "10:25:20 AM") displayPeriodEnd("Health");
-        else if (currentTime === "11:09:20 AM") displayPeriodEnd("APUSH");
-        else if (currentTime === "11:55:20 AM") displayPeriodEnd("English 4 (H)");
-        else if (currentTime === "12:38:20 AM") displayPeriodEnd("AP Statistics");
-        else if (currentTime === "2:55:20 AM") displayPeriodEnd("AP Computer Science A");
+        if (dayType === "normal") {
+            if (currentTime === "8:55:20 AM") displayPeriodEnd("AP Physics C: Mechanics");
+            else if (currentTime === "9:40:20 AM") displayPeriodEnd("AP Calculus B/C");
+            else if (currentTime === "10:25:20 AM") displayPeriodEnd("Health");
+            else if (currentTime === "11:09:20 AM") displayPeriodEnd("APUSH");
+            else if (currentTime === "11:55:20 AM") displayPeriodEnd("English 4 (H)");
+            else if (currentTime === "12:38:20 AM") displayPeriodEnd("AP Statistics");
+            else if (currentTime === "2:55:20 AM") displayPeriodEnd("AP Computer Science A");
+        } else if (dayType === "half") {
+            if (currentTime === "8:55:20 AM") displayPeriodEnd("AP Physics C: Mechanics");
+            else if (currentTime === "9:40:20 AM") displayPeriodEnd("AP Calculus B/C");
+            else if (currentTime === "10:25:20 AM") displayPeriodEnd("Health");
+            else if (currentTime === "11:09:20 AM") displayPeriodEnd("APUSH");
+            else if (currentTime === "11:55:20 AM") displayPeriodEnd("English 4 (H)");
+            else if (currentTime === "12:38:20 AM") displayPeriodEnd("AP Statistics");
+            else if (currentTime === "2:55:20 AM") displayPeriodEnd("AP Computer Science A");
+        } else if (dayType === "delayed") {
+            if (currentTime === "8:55:20 AM") displayPeriodEnd("AP Physics C: Mechanics");
+            else if (currentTime === "9:40:20 AM") displayPeriodEnd("AP Calculus B/C");
+            else if (currentTime === "10:25:20 AM") displayPeriodEnd("Health");
+            else if (currentTime === "11:09:20 AM") displayPeriodEnd("APUSH");
+            else if (currentTime === "11:55:20 AM") displayPeriodEnd("English 4 (H)");
+            else if (currentTime === "12:38:20 AM") displayPeriodEnd("AP Statistics");
+            else if (currentTime === "2:55:20 AM") displayPeriodEnd("AP Computer Science A");
+        }
     }, 100);
 
     // Dragging logic
