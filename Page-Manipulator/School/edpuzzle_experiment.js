@@ -1,6 +1,46 @@
 // V10.27.2026
 // Active websites: all
 
+const pausedAtts = `{
+  "currentTime": 573.32,
+  "videoBytesLoaded": 0.5165084327035647,
+  "videoLoadedFraction": 0.5165084327035647,
+  "currentTimeLastUpdated_": 1793150607.027,
+  "playbackRate": 1,
+  "mediaReferenceTime": 573.32,
+  "progressState": {
+    "airingStart": 0,
+    "airingEnd": 0,
+    "allowSeeking": true,
+    "clipEnd": null,
+    "clipStart": 573,
+    "current": 573.32,
+    "displayedStart": -1,
+    "duration": 1148,
+    "ingestionTime": null,
+    "isAtLiveHead": false,
+    "loaded": 592.508,
+    "seekableStart": 0,
+    "seekableEnd": 1147.104,
+    "offset": 0,
+    "viewerLivestreamJoinMediaTime": 0
+  }
+}`;
+const playingAtts = `{
+  "muted": false,
+  "volume": 100
+}`;
+
+function copyText(text, display=true) {
+    navigator.clipboard.writeText(text)
+      .then(() => {
+        if (display) alert("Text copied to clipboard!");
+      })
+      .catch(err => {
+        if (display) alert("Failed to copy:", err);
+      });
+}
+
 /*// 1. Create a local variable to hold the live timestamp
 let currentYouTubeTime = 0;
 
@@ -35,17 +75,12 @@ window.addEventListener("message", (event) => {
             console.log(`Video ${playerId} sent an event:`, data.event);
             
             // Example: Handle specific events
-            if (data.event !== "onReady") alert(`data.event: ${data.event}
-data.info: ${data.info}
-data.event === "infoDelivery": ${data.event === "infoDelivery"}`)
             if (data.event === "infoDelivery") {
-                alert('as it should')
                 // Do something with data.info.currentTime for THIS specific video
-                alert(`videos: ${videos}
-playerId: ${playerId}
-data.info: ${data.info}
-videos[playerId][1]: ${videos[playerId][1]}`);
-                videos[playerId][1] = data.info;
+                videos[playerId - 1][1] = data.info;
+                if (data.info.playerState) {
+                    videos[playerId - 1][0].playerState = data.info.playerState;
+                }
             }
         }
     } catch (error) {
@@ -172,27 +207,6 @@ function flashIndicator(text, showTime=1000, overlay=videoOverlay) {
   }, showTime);
 }
 
-/* // TODO: Why does the other highlightVideos() work?
-function highlightVideos(theVids) {
-    theVids.forEach(video => {
-        // Prevent wrapping a video twice if the script runs again
-        if (video.parentElement.classList.contains('video-highlight-container')) return;
-    
-        // Create the container element
-        const container = document.createElement('div');
-        container.className = 'video-highlight-container';
-    
-        // Insert the container right before the video in the DOM
-        video.parentNode.insertBefore(container, video);
-    
-        // Move the video inside the container
-        container.appendChild(video);
-    
-        // Make the video programmatically focusable
-        video.setAttribute('tabindex', '0');
-    })
-}
-*/
 function highlightVideos(theVids) {
   theVids.forEach(video => {
     // Check if we've already highlighted this video
@@ -316,8 +330,6 @@ async function waitForVideos() {
 
     flashIndicator("Ctrl + Shift + / (Ctrl + ?) for shortcuts", 3000);
     window.addEventListener("keydown", (event) => {
-        try{
-      alert(videos[currentIndex])
       // Selecting Video feature
       if (currentIndex !== null && event.key === "Escape") {
           blockKeyEvents(event);
@@ -382,7 +394,7 @@ async function waitForVideos() {
 
       if (videos.length > 0 && currentIndex !== null) (aVideo => {
         if (!['INPUT', 'TEXTAREA'].includes(event.target.tagName)) {
-            // Defining attributes
+            /*// Defining attributes
             if (!("replayStart" in aVideo[1])) aVideo[1].replayStart = 0;
             if (!("replayEnd" in aVideo[1])) aVideo[1].replayEnd = aVideo[1].duration;
             if (!("cuts" in aVideo[1])) aVideo[1].cuts = [];
@@ -396,8 +408,7 @@ async function waitForVideos() {
             if (!("savedTimeStamps" in aVideo[1])) aVideo[1].savedTimeStamps = [];
             if (!("savedUndos" in aVideo[1])) aVideo[1].savedUndos = [];
             // if (!("paused" in aVideo[1])) aVideo[1].paused = true;
-            if (!("playbackRate" in aVideo[1])) aVideo[1].playbackRate = 1;
-            if (!("playbackRateIter" in aVideo[1])) aVideo[1].playbackRateIter = 3;
+            // if (!("playbackRate" in aVideo[1])) aVideo[1].playbackRate = 1;*/
         
             const quality = aVideo[1].getVideoPlaybackQuality?.();
             const fps = (quality && quality.totalVideoFrames && quality.totalFrameDelay)
@@ -482,30 +493,19 @@ Ctrl + Shift - Finish Cut Customization/Confirm Cut Deletion`, 2**16);
                 flashIndicator(`${aVideo[1].playbackRate}x ± ${speedModifiers[aVideo[1].speedModIter]}x`);
             } else if (event.ctrlKey && ["<", ">"].includes(event.key)) {
               if (event.key === ">") {
+                return;
                 aVideo[1].speedModIter = Math.min(aVideo[1].speedModIter + 1, speedModifiers.length - 1);
               } else {
                 aVideo[1].speedModIter = Math.max(aVideo[1].speedModIter - 1, 0);
               }
               flashIndicator(`±${speedModifiers[aVideo[1].speedModIter].toFixed(getDecimalCount(speedModifiers[aVideo[1].speedModIter]))}x`);
             } else if (["<", ">"].includes(event.key)) {
-              alert(1)
-              Math.min(aVideo[1].playbackRate + aVideo[1].speedModIter, 2);
-              alert(2)
-              if (event.key === ">") {
-                  aVideo[1].playbackRateIter = Math.min(aVideo[1].playbackRateIter + 1, 7);
-              } else {
-                  aVideo[1].playbackRateIter = Math.max(aVideo[1].playbackRateIter - 1, 0);
-              }
-              alert(3)
-              aVideo[1].playbackRate = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2][aVideo[1].playbackRateIter];
-              alert(4)
               aVideo[0].contentWindow.postMessage(JSON.stringify({
                   "event": "command",
                   "func": "setPlaybackRate",
-                  "args": [aVideo[1].playbackRate]
+                  "args": [aVideo[1].playbackRate + (event.key === "<" ? -0.25 : 0.25)]
               }), "*");
-              alert(5)
-              flashIndicator(`${aVideo[1].playbackRate.toFixed(getDecimalCount(speedModifiers[aVideo[1].speedModIter]))}x`);
+              flashIndicator(`${aVideo[1].playbackRate.toFixed(2)}x`);
             }
             // Replay + Cut feature
             else if (event.shiftKey && event.key === "ArrowUp") {
@@ -593,10 +593,10 @@ Ctrl + Shift - Finish Cut Customization/Confirm Cut Deletion`, 2**16);
                 blockKeyEvents(event);
                 aVideo[0].contentWindow.postMessage(JSON.stringify({
                     "event": "command",
-                    "func": `${aVideo[1].paused ? "play" : "pause"}Video`,
+                    "func": `${aVideo[0].playerState === 1 ? "pause" : "play"}Video`,
                     "args": []
                 }), "*");
-                flashIndicator(`Video ${!aVideo[1].paused ? "Paused" : "Playing"}`);
+                flashIndicator(`Video ${aVideo[0].playerState === 1 ? "Paused" : "Playing"}`);
             }
             // Controls feature
             else if (["F", "f"].includes(event.key)) {
@@ -645,6 +645,7 @@ Ctrl + Shift - Finish Cut Customization/Confirm Cut Deletion`, 2**16);
                 aVideo[1].currentTime += event.key === "," ? -1/fps : 1/fps;
                 flashIndicator(`${event.key === "," ? "-" : "+"}1 frame`);
             } else if (event.ctrlKey && ["ArrowLeft", "ArrowRight"].includes(event.key)) {
+              return;
               blockKeyEvents(event);
               if (event.key === "ArrowLeft") {
                 aVideo[1].navModIter = Math.max(aVideo[1].navModIter - 1, 0);
@@ -659,22 +660,24 @@ Ctrl + Shift - Finish Cut Customization/Confirm Cut Deletion`, 2**16);
                 flashIndicator(`${JSON.parse(event.code.replace("Digit", "")) * 10}% of Video Duration`);
             } else if (["ArrowLeft", "ArrowRight"].includes(event.key)) {
                 blockKeyEvents(event);
-                aVideo[1].savedTimeStamps.push([aVideo[1].currentTime, `Go ${event.key === "ArrowLeft" ? "back" : "forward"} by Navigation Modifier`]);
+                // aVideo[1].savedTimeStamps.push([aVideo[1].currentTime, `Go ${event.key === "ArrowLeft" ? "back" : "forward"} by Navigation Modifier`]);
+                const incrementVid = 5; // navModifiers[aVideo[1].navModIter];
                 aVideo[0].contentWindow.postMessage(JSON.stringify({
                     "event": "command",
                     "func": "seekTo",
-                    "args": [aVideo[1].currentTime + navModifiers[aVideo[1].navModIter] * (event.key === "ArrowLeft" ? -1 : 1), true]
+                    "args": [aVideo[1].currentTime + incrementVid * (event.key === "ArrowLeft" ? -1 : 1), true]
                 }), "*");
-                flashIndicator(`${event.key === "ArrowLeft" ? "-" : "+"}${navModifiers[aVideo[1].navModIter]}s`);
+                flashIndicator(`${event.key === "ArrowLeft" ? "-" : "+"}${incrementVid}s`);
             } else if (["j", "l"].includes(event.key.toLowerCase())) {
                 blockKeyEvents(event);
-                aVideo[1].savedTimeStamps.push([aVideo[1].currentTime, `Go ${event.key.toLowerCase() === "j" ? "back" : "forward"} by 2 * Navigation Modifier`]);
+                // aVideo[1].savedTimeStamps.push([aVideo[1].currentTime, `Go ${event.key.toLowerCase() === "j" ? "back" : "forward"} by 2 * Navigation Modifier`]);
+                const incrementVid = 5; // navModifiers[aVideo[1].navModIter];
                 aVideo[0].contentWindow.postMessage(JSON.stringify({
                     "event": "command",
                     "func": "seekTo",
-                    "args": [aVideo[1].currentTime + navModifiers[aVideo[1].navModIter] * (event.key.toLowerCase() === "j" ? -2 : 2), true]
+                    "args": [aVideo[1].currentTime + incrementVid * (event.key.toLowerCase() === "j" ? -2 : 2), true]
                 }), "*");
-                flashIndicator(`${event.key.toLowerCase() === "j" ? "-" : "+"}${2 * navModifiers[aVideo[1].navModIter]}s`);
+                flashIndicator(`${event.key.toLowerCase() === "j" ? "-" : "+"}${2 * incrementVid}s`);
             } else if (event.ctrlKey && ["z", "Z"].includes(event.key)) {
                 blockKeyEvents(event);
                 const timeStamp = aVideo[1].savedTimeStamps.pop();
@@ -722,9 +725,5 @@ Ctrl + Shift - Finish Cut Customization/Confirm Cut Deletion`, 2**16);
             }
         }
       })(videos[currentIndex]);
-      alert(videos[currentIndex])
-        }catch(error){
-            alert(error.stack)
-        }
     }, true);
 })();
