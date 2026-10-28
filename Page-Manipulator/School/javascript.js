@@ -1497,14 +1497,14 @@ document.addEventListener('keydown', (event) => {
         }
     }
 }, true);  // Run this listener during the capture phase instead of the default bubble phase.
-// Determine Current Period (time-period-tracker.js) VVVVV
+// Inspired by the login_success=1 URL parameter every time I get auto-logged out and have to log back in
 if (window.location.href === "https://pcti.instructure.com/?login_success=0") {
     while (document.body.firstChild) {
         document.body.removeChild(document.body.firstChild);
     }
     document.body.textContent = "login failed fahhh";
 }
-// Time Tracker program
+// Determine Current Period VVVVV - Time Tracker program - (time-period-tracker.js)
 function formatTime(minutes, includeEnd=0) {
     const hour = Math.floor(minutes / 60);
     const mins = minutes % 60;
@@ -1529,8 +1529,6 @@ function getCurrentPeriodStr(dayType, mins, times, periodLength, firstPeriodExtr
 }
 
 function getCurrentPeriod(dayType) {
-    try{ // TTTODO: delete when done
-
     const mins = getMinutes();
 
     function getMinutes() {
@@ -1545,11 +1543,10 @@ function getCurrentPeriod(dayType) {
     let period = "";
     if (dayType === "normal") period = getCurrentPeriodStr(dayType, mins, [490, 536, 581, 626, 671, 716, 761, 806, 851, 896], 40, 6, 5);
     else if (dayType === "half") period = getCurrentPeriodStr(dayType, mins, [490, 522, 555, 588, 621, 654, 687, 720, 753, 786], 28, 4, 5);
-    else if (dayType === "delayed") period = getCurrentPeriodStr(dayType, mins, [600, 640, 672, 704, 736, 768, 800, 832, 864, 896], 28, 12, 4); // TTTODO: Make delyaed opening schedule
+    else if (dayType === "delayed") period = getCurrentPeriodStr(dayType, mins, [600, 640, 672, 704, 736, 768, 800, 832, 864, 896], 28, 12, 4);
     else period = 'Invalid day type (must be "normal", "half", or "delayed")';
 
     return period;
-    } catch(error) {alert(error.stack)}
 }
 
 // Black Box Window
@@ -1584,7 +1581,7 @@ function getCurrentPeriod(dayType) {
                 alert(`${className} is ending!`);
             }
         }
-        // TTTODO: Also include for delayed opening
+
         // Optional TTTODO: Make function with array courses, arrray times (either values or a list including value and value to subtract from first value)
         if (dayType === "normal") {
             if (currentTime === "8:55:20 AM") displayPeriodEnd("AP Physics C: Mechanics");
