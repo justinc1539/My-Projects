@@ -1496,6 +1496,10 @@ function formatTime(minutes, includeEnd=0) {
     return timeString;
 }
 
+function getCurrentPeriodStr(anArray) {
+    return; // TODO: Make function
+}
+
 function getCurrentPeriod(dayType="normal") {
     try{
 
