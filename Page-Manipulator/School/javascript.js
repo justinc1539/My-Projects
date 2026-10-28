@@ -1478,6 +1478,19 @@ document.addEventListener('keydown', (event) => {
     } else if (event.key === "Alt") {
         altHeld = true;
     }
+    if (url.startsWith("https://web.kamihq.com/web/viewer.html")) {
+        if (event.key === "." && ctrlHeld) {
+            document.querySelector("button[value=super]").click();
+        } else if (event.key === "," && ctrlHeld) {
+            document.querySelector("button[value=sub]").click();
+        } else if (event.key === "b" && ctrlHeld) {
+            document.querySelector("button[title=bold]").click();
+        } else if (event.key === "i" && ctrlHeld) {
+            document.querySelector("button[title=italic]").click();
+        } else if (event.key === "u" && ctrlHeld) {
+            document.querySelector("button[title=underline]").click();
+        }
+    }
 }, true);  // Run this listener during the capture phase instead of the default bubble phase.
 // Determine Current Period (time-period-tracker.js) VVVVV
 if (window.location.href === "https://pcti.instructure.com/?login_success=0") {
