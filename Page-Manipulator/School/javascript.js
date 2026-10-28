@@ -1575,6 +1575,7 @@ if (window.location.href.includes("https://pcti.instructure.com")) {
                 alert(`${className} is ending!`);
             }
         }
+        // TODO: Also include for half day and delayed opening
         if (currentTime === "8:55:20 AM") displayPeriodEnd("AP Physics C: Mechanics");
         else if (currentTime === "9:40:20 AM") displayPeriodEnd("AP Calculus B/C");
         else if (currentTime === "10:25:20 AM") displayPeriodEnd("Health");
