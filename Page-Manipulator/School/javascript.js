@@ -1514,15 +1514,16 @@ function formatTime(minutes, includeEnd=0) {
     return timeString;
 }
 
-function getCurrentPeriodStr(mins, times) {
+function getCurrentPeriodStr(mins, times, timeEnd) {
     for (let i = 0; i < times.length; i++) {
         if (mins < times[i]) {
-            // time tracker TODO: Make it work for before school
-            if (i === 0) {}
-            // TODO: Make it work for all school periods
+            if (i === 0) return `Before School (<${formatTime(mins)})`;
+            // time tracker TODO: Add additional minutes for Period 1
+            else return `Period ${i} (${formatTime(626, timeEnd)})`;
         }
     }
-    if (mins < 490) period = "Before School (<8:10 AM)";
+    period = getCurrentPeriodStr(mins, [490, 536, 581, 626, 671, 716, 761, 806, 851, 896], {"normal": 40, "half": 28, "delayed": 28}[dayType]);
+    /*if (mins < 490) period = "Before School (<8:10 AM)";
     else if (mins < 536) period = "Period 1 (8:10 AM-8:56 AM)";
     else if (mins < 581) period = "Period 2 (9:01 AM-9:41 AM)";
     // else if (mins < 626) period = "Period 3 (9:46 AM-10:26 AM)";
@@ -1533,7 +1534,7 @@ function getCurrentPeriodStr(mins, times) {
     else if (mins < 806) period = "Period 7 (12:46 PM-1:26 PM)";
     else if (mins < 851) period = "Period 8 (1:31 PM-2:11 PM)";
     else if (mins < 896) period = "Period 9 (2:16 PM-2:56 PM)";
-    else period = "After School (>2:56 PM)";
+    else period = "After School (>2:56 PM)";*/
 }
 
 function getCurrentPeriod(dayType="normal") {
