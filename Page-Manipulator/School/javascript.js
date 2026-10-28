@@ -1518,11 +1518,11 @@ function getCurrentPeriodStr(mins, times, timeEnd) {
     for (let i = 0; i < times.length; i++) {
         if (mins < times[i]) {
             if (i === 0) return `Before School (<${formatTime(mins)})`;
-            // time tracker TODO: Add additional minutes for Period 1
-            else return `Period ${i} (${formatTime(626, timeEnd)})`;
+            // TTTODO: Add additional minutes for Period 1
+            else return `Period ${i} (${formatTime(mins, timeEnd)})`;
         }
     }
-    period = getCurrentPeriodStr(mins, [490, 536, 581, 626, 671, 716, 761, 806, 851, 896], {"normal": 40, "half": 28, "delayed": 28}[dayType]);
+    
     /*if (mins < 490) period = "Before School (<8:10 AM)";
     else if (mins < 536) period = "Period 1 (8:10 AM-8:56 AM)";
     else if (mins < 581) period = "Period 2 (9:01 AM-9:41 AM)";
@@ -1552,37 +1552,13 @@ function getCurrentPeriod(dayType="normal") {
     }
 
     let period = "";
-
-    if (dayType === "normal") {
-        // TODO: Modify full day schedule
-        const periodLength = 40;
-        if (mins < 490) period = "Before School (<8:10 AM)";
-        else if (mins < 536) period = "Period 1 (8:10 AM-8:56 AM)";
-        else if (mins < 581) period = "Period 2 (9:01 AM-9:41 AM)";
-        // else if (mins < 626) period = "Period 3 (9:46 AM-10:26 AM)";
-        else if (mins < 626) period = period = `Period 3 (${formatTime(626, 40)})`;
-        else if (mins < 671) period = "Period 4 (10:31 AM-11:11 AM)";
-        else if (mins < 716) period = "Period 5 (11:16 AM-11:56 AM)";
-        else if (mins < 761) period = "Period 6 (12:01 PM-12:41 PM)";
-        else if (mins < 806) period = "Period 7 (12:46 PM-1:26 PM)";
-        else if (mins < 851) period = "Period 8 (1:31 PM-2:11 PM)";
-        else if (mins < 896) period = "Period 9 (2:16 PM-2:56 PM)";
-        else period = "After School (>2:56 PM)";
-    } else if (dayType === "half") {
-        // TODO: Make half day schedule
-        const periodLength = 40;
-    } else if (dayType === "delayed") {
-        // TODO: Make delyaed opening schedule
-        const periodLength = 40;
-    }
+    if (dayType === "normal") period = getCurrentPeriodStr(mins, [490, 536, 581, 626, 671, 716, 761, 806, 851, 896], 40);
+    else if (dayType === "half") null; // TTTODO: Make half day schedule
+    else if (dayType === "delayed") null; // TTTODO: Make delyaed opening schedule
 
     // alert(period);
     return period
     } catch(error) {alert(error.stack)}
-}
-
-if (window.location.href.includes("https://pcti.instructure.com")) {
-    // alert(getCurrentPeriod());
 }
 
 // Black Box Window
@@ -1609,14 +1585,14 @@ if (window.location.href.includes("https://pcti.instructure.com")) {
     setInterval(() => {
         // box.textContent = new Date().toLocaleTimeString();
         currentTime = new Date().toLocaleTimeString("en-US", { timeZone: "America/New_York" });
-        box.textContent = `${currentTime} ${getCurrentPeriod()}`;
+        box.textContent = `${currentTime} ${getCurrentPeriod()}`; // Not a Normal School Day? Not a Full School Day? Change This!
         
         const displayPeriodEnd = className => {
             for (let i = 0; i < 10; i++) {
                 alert(`${className} is ending!`);
             }
         }
-        // TODO: Also include for half day and delayed opening
+        // TTTODO: Also include for half day and delayed opening
         if (currentTime === "8:55:20 AM") displayPeriodEnd("AP Physics C: Mechanics");
         else if (currentTime === "9:40:20 AM") displayPeriodEnd("AP Calculus B/C");
         else if (currentTime === "10:25:20 AM") displayPeriodEnd("Health");
