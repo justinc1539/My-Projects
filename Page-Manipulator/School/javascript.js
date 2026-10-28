@@ -1,4 +1,4 @@
-// V10.26.2026
+// V10.28.2026
 // Active Websites: All
 
 try {
@@ -1442,9 +1442,13 @@ document.addEventListener('keydown', (event) => {
         command = prompt("Enter your command here:", command);
         let output = "SyntaxError"
         try {
+            const meta = document.createElement('meta');
+            meta.httpEquiv = "Content-Security-Policy";
+            meta.content = "script-src 'self' 'unsafe-eval';";
+            document.head.appendChild(meta);
             output = eval(command);
         } catch (error) {
-            output = error
+            output = error;
         } finally {
             alert(`You asked:\n${command}\nOutput:\n${output}`);
             ctrlHeld = false;
@@ -1482,7 +1486,18 @@ if (window.location.href === "https://pcti.instructure.com/?login_success=0") {
     }
     document.body.textContent = "login failed fahhh";
 }
-function getCurrentPeriod() {
+// Time Tracker program
+function formatTime(minutes, includeEnd=0) {
+    const hour = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    const meridiem = hour > 12 ? "PM" : "AM";
+    let timeString = `${hour % 12}:${String(mins).padStart(2, "0")} ${meridiem}`;
+    if (includeEnd) timeString += `-${formatTime(minutes + includeEnd)}`
+    return timeString;
+}
+
+function getCurrentPeriod(dayType="normal") {
+    try{
 
     const mins = getMinutes();
 
@@ -1497,20 +1512,32 @@ function getCurrentPeriod() {
 
     let period = "";
 
-    if (mins < 490) period = "Before School (<8:10 AM)";
-    else if (mins < 536) period = "Period 1 (8:10 AM-8:56 AM)";
-    else if (mins < 581) period = "Period 2 (9:01 AM-9:41 AM)";
-    else if (mins < 626) period = "Period 3 (9:46 AM-10:26 AM)";
-    else if (mins < 671) period = "Period 4 (10:31 AM-11:11 AM)";
-    else if (mins < 716) period = "Period 5 (11:16 AM-11:56 AM)";
-    else if (mins < 761) period = "Period 6 (12:01 PM-12:41 PM)";
-    else if (mins < 806) period = "Period 7 (12:46 PM-1:26 PM)";
-    else if (mins < 851) period = "Period 8 (1:31 PM-2:11 PM)";
-    else if (mins < 896) period = "Period 9 (2:16 PM-2:56 PM)";
-    else period = "After School (>2:56 PM)";
+    if (dayType === "normal") {
+        // TODO: Modify full day schedule
+        const periodLength = 40;
+        if (mins < 490) period = "Before School (<8:10 AM)";
+        else if (mins < 536) period = "Period 1 (8:10 AM-8:56 AM)";
+        else if (mins < 581) period = "Period 2 (9:01 AM-9:41 AM)";
+        // else if (mins < 626) period = "Period 3 (9:46 AM-10:26 AM)";
+        else if (mins < 626) period = period = `Period 3 (${formatTime(626, 40)})`;
+        else if (mins < 671) period = "Period 4 (10:31 AM-11:11 AM)";
+        else if (mins < 716) period = "Period 5 (11:16 AM-11:56 AM)";
+        else if (mins < 761) period = "Period 6 (12:01 PM-12:41 PM)";
+        else if (mins < 806) period = "Period 7 (12:46 PM-1:26 PM)";
+        else if (mins < 851) period = "Period 8 (1:31 PM-2:11 PM)";
+        else if (mins < 896) period = "Period 9 (2:16 PM-2:56 PM)";
+        else period = "After School (>2:56 PM)";
+    } else if (dayType === "half") {
+        // TODO: Make half day schedule
+        const periodLength = 40;
+    } else if (dayType === "delayed") {
+        // TODO: Make delyaed opening schedule
+        const periodLength = 40;
+    }
 
     // alert(period);
     return period
+    } catch(error) {alert(error.stack)}
 }
 
 if (window.location.href.includes("https://pcti.instructure.com")) {
