@@ -1416,6 +1416,8 @@ document.addEventListener("click", e => {
 
 let ctrlHeld = false
 let altHeld = false
+let soundboardActive = false;
+const audios = [];
 let command = ""
 let bgImgSrcIter = 1;
 
@@ -1497,6 +1499,57 @@ document.addEventListener('keydown', (event) => {
         } else if (event.key === "%" && altHeld) {
             blockEvents(event);
             document.querySelector("button[title='strike through']").click();
+        }
+    }
+    if (ctrlHeld && event.key === "S") {
+        soundboardActive = !soundboardActive;
+        if (soundboardActive) alert(`V - Vine Boom
+B - Bruh
+G - Get Out
+O - Oh My`);
+        else {
+            audios.forEach(audioObject => {
+                audioObject.pause();
+                audioObject.src = ""; // Clears the source string
+                audioObject.load();   // Forces the element to update and release resources
+            });
+            audios.length = 0;
+            alert("Soundboard Off");
+        }
+    }
+    if (soundboardActive) {
+        if (event.key === "v") {
+            const vineBoom = new Audio('https://www.myinstants.com/media/sounds/vine-boom-hq-longer.mp3');
+            vineBoom.currentTime = 0; // Rewind to start if pressed rapidly
+            audios.push(vineBoom);
+            vineBoom.play().catch(error => {
+              alert(error);
+              console.warn('Audio playback requires prior user interaction with the page:', error);
+            });
+        } else if (event.key === "b") {
+            const bruh = new Audio('https://www.myinstants.com/media/sounds/bruh-sound-effect_WstdzdM.mp3');
+            bruh.currentTime = 0; // Rewind to start if pressed rapidly
+            audios.push(bruh);
+            bruh.play().catch(error => {
+              alert(error);
+              console.warn('Audio playback requires prior user interaction with the page:', error);
+            });
+        } else if (event.key === "g") {
+            const getOut = new Audio('https://www.myinstants.com/media/sounds/tuco-get-out.mp3');
+            getOut.currentTime = 0; // Rewind to start if pressed rapidly
+            audios.push(getOut);
+            getOut.play().catch(error => {
+              alert(error);
+              console.warn('Audio playback requires prior user interaction with the page:', error);
+            });
+        } else if (event.key === "o") {
+            const ohMy = new Audio('https://www.myinstants.com/media/sounds/oh-my-god-bro-oh-hell-nah-man.mp3');
+            ohMy.currentTime = 0; // Rewind to start if pressed rapidly
+            audios.push(ohMy);
+            ohMy.play().catch(error => {
+              alert(error);
+              console.warn('Audio playback requires prior user interaction with the page:', error);
+            });
         }
     }
 }, true);  // Run this listener during the capture phase instead of the default bubble phase.
