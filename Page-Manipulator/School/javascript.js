@@ -1,4 +1,4 @@
-// V10.28.2026
+// V10.29.2026
 // Active Websites: All
 
 try {
@@ -1494,6 +1494,9 @@ document.addEventListener('keydown', (event) => {
         } else if (event.key === "u" && ctrlHeld) {
             blockEvents(event);
             document.querySelector("button[title=underline]").click();
+        } else if (event.key === "%" && altHeld) {
+            blockEvents(event);
+            document.querySelector("button[title='strike through']").click();
         }
     }
 }, true);  // Run this listener during the capture phase instead of the default bubble phase.
