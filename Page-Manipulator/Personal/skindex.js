@@ -41,10 +41,19 @@ if (window.location.href.includes("minecraftskins.com/skin-editor")) {
     document.querySelector('#zoom-out i').insertAdjacentHTML('beforeend', '<span style="display: block;">[w] - Zoom Out</span>');
     document.querySelector('#mirrorTool i').insertAdjacentHTML('beforeend', '<span style="display: block;">[m] - Mirror</span>');
     
+    document.querySelector('#showObject').textContent = `[i] - ${document.querySelector('#showObject').textContent}`;
+    document.querySelector('#showOverlay').textContent = `[p] - ${document.querySelector('#showOverlay').textContent}`;
+    
+    document.querySelector('div.head.ed_head a').insertAdjacentHTML('beforeend', '<span style="display: block;">[o]</span>');
+    
     window.addEventListener("keydown", event => {
-        if (event.key === "p") {
-            document.querySelector("#colorholder_chose").click();
-        }
+        if (event.key === "i") document.querySelector('#showObject').click()
+        if (event.key === "p") document.querySelector('#showOverlay').click()
+        
+        if (event.key === "o") document.querySelector("div.head.ed_head").click();
+        if (event.key === "k") document.querySelector("div.armR.ed_leftarm").click();
+        if (event.key === "l") document.querySelector("div.body.ed_body").click();
+        if (event.key === ";") document.querySelector("div.armL.ed_leftarm").click();
     }, true);
     
     document.querySelector(".editor-heading").textContent += " (Active)"
