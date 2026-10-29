@@ -36,31 +36,38 @@ if (window.location.href.includes("minecraftskins.com/skin-editor")) {
     document.querySelector('#undo i').insertAdjacentHTML('afterbegin', '<span style="display: block;">[u] - Undo</span>');
     document.querySelector('#redo i').insertAdjacentHTML('afterbegin', '<span style="display: block;">[r] - Redo</span>');
     document.querySelector('#darker i').insertAdjacentHTML('afterbegin', '<span style="display: block;">[z] - Darken Color</span>');
-    document.querySelector('#lighter i').insertAdjacentHTML('afterbegin', '<span style="display: block;">[z] - Lighten Color</span>');
+    document.querySelector('#lighter i').insertAdjacentHTML('afterbegin', '<span style="display: block;">[x] - Lighten Color</span>');
     document.querySelector('#zoom-in i').insertAdjacentHTML('afterbegin', '<span style="display: block;">[q] - Zoom In</span>');
     document.querySelector('#zoom-out i').insertAdjacentHTML('afterbegin', '<span style="display: block;">[w] - Zoom Out</span>');
     document.querySelector('#mirrorTool i').insertAdjacentHTML('afterbegin', '<span style="display: block;">[m] - Mirror</span>');
     
-    document.querySelector('#showObject').textContent = `[i] - ${document.querySelector('#showObject').textContent}`;
-    document.querySelector('#showOverlay').textContent = `[p] - ${document.querySelector('#showOverlay').textContent}`;
-    
-    document.querySelector('div.head.ed_head a').insertAdjacentHTML('afterbegin', '<span style="display: block;">[o]</span>');
-    document.querySelector("div.armR.ed_leftarm").insertAdjacentHTML('afterbegin', '<span style="display: block;">[k]</span>');
-    document.querySelector("div.body.ed_body").insertAdjacentHTML('afterbegin', '<span style="display: block;">[l]</span>');
-    document.querySelector("div.armL.ed_leftarm").insertAdjacentHTML('afterbegin', '<span style="display: block;">[;]</span>');
-    document.querySelector("div.legL.ed_leg_left").insertAdjacentHTML('afterbegin', '<span style="display: block;">[,]</span>');
-    document.querySelector("div.legR.ed_leg_right").insertAdjacentHTML('afterbegin', '<span style="display: block;">[.]</span>');
+    document.querySelector('#showObject').textContent = `[6] - ${document.querySelector('#showObject').textContent}`;
+    document.querySelector('#showOverlay').textContent = `[8] - ${document.querySelector('#showOverlay').textContent}`;
+
+    document.querySelector('div.head.ed_head a').insertAdjacentHTML('afterbegin', '<span style="display: block;">[7]</span>');
+    document.querySelector("div.armR.ed_leftarm").insertAdjacentHTML('afterbegin', '<span style="display: block;">[y]</span>');
+    document.querySelector("div.body.ed_body").insertAdjacentHTML('afterbegin', '<span style="display: block;">[j]</span>');
+    document.querySelector("div.armL.ed_leftarm").insertAdjacentHTML('afterbegin', '<span style="display: block;">[i]</span>');
+    document.querySelector("div.legL.ed_leg_left").insertAdjacentHTML('afterbegin', '<span style="display: block;">[h]</span>');
+    document.querySelector("div.legR.ed_leg_right").insertAdjacentHTML('afterbegin', '<span style="display: block;">[k]</span>');
     
     window.addEventListener("keydown", event => {
-        if (event.key === "i") document.querySelector('#showObject').click()
-        if (event.key === "p") document.querySelector('#showOverlay').click()
+        if (event.key === "6") document.querySelector('#showObject').click()
+        if (event.key === "8") document.querySelector('#showOverlay').click()
         
-        if (event.key === "o") document.querySelector("div.head.ed_head").click();
-        if (event.key === "k") document.querySelector("div.armR.ed_leftarm").click();
-        if (event.key === "l") document.querySelector("div.body.ed_body").click();
-        if (event.key === ";") document.querySelector("div.armL.ed_leftarm").click();
-        if (event.key === ",") document.querySelector("div.legL.ed_leg_left").click();
-        if (event.key === ".") document.querySelector("div.legR.ed_leg_right").click();
+        if (event.key === "7") document.querySelector("div.head.ed_head").click();
+        if (event.key === "y") document.querySelector("div.armR.ed_leftarm").click();
+        if (event.key === "j") document.querySelector("div.body.ed_body").click();
+        if (event.key === "i") document.querySelector("div.armL.ed_leftarm").click();
+        if (event.key === "h") document.querySelector("div.legL.ed_leg_left").click();
+        if (event.key === "k") document.querySelector("div.legR.ed_leg_right").click();
+        
+        document.querySelector('#undo').className += " active";
+        document.querySelector('#redo').className += " active";
+        document.querySelector('#darker').className += " active";
+        document.querySelector('#lighter').className += " active";
+        document.querySelector('#zoom-in').className += " active";
+        document.querySelector('#zoom-out').className += " active";
     }, true);
     
     document.querySelector(".editor-heading").textContent += " (Active)"
