@@ -1586,6 +1586,7 @@ function getCurrentPeriod(dayType) {
         }
 
         // Optional TTTODO: Make function with array courses, arrray times (either values or a list including value and value to subtract from first value)
+        // TTTODO: add lunch time ends!
         if (dayType === "normal") {
             if (currentTime === "8:55:20 AM") displayPeriodEnd("AP Physics C: Mechanics");
             else if (currentTime === "9:40:20 AM") displayPeriodEnd("AP Calculus B/C");
@@ -1593,6 +1594,7 @@ function getCurrentPeriod(dayType) {
             else if (currentTime === "11:09:20 AM") displayPeriodEnd("APUSH");
             else if (currentTime === "11:55:20 AM") displayPeriodEnd("English 4 (H)");
             else if (currentTime === "12:38:20 PM") displayPeriodEnd("AP Statistics");
+            else if (currentTime === "1:02:20 PM") displayPeriodEnd("Lunch");
             else if (currentTime === "2:55:20 PM") displayPeriodEnd("AP Computer Science A");
         } else if (dayType === "half") {
             if (currentTime === "8:41:20 AM") displayPeriodEnd("AP Physics C: Mechanics");
@@ -1601,6 +1603,7 @@ function getCurrentPeriod(dayType) {
             else if (currentTime === "10:19:20 AM") displayPeriodEnd("APUSH");
             else if (currentTime === "10:53:20 AM") displayPeriodEnd("English 4 (H)");
             else if (currentTime === "11:24:20 AM") displayPeriodEnd("AP Statistics");
+            else if (currentTime === "11:42:20 PM") displayPeriodEnd("Lunch");
             else if (currentTime === "1:05:20 PM") displayPeriodEnd("AP Computer Science A");
         } else if (dayType === "delayed") {
             if (currentTime === "10:39:20 AM") displayPeriodEnd("AP Physics C: Mechanics");
@@ -1609,6 +1612,7 @@ function getCurrentPeriod(dayType) {
             else if (currentTime === "12:14:20 PM") displayPeriodEnd("APUSH");
             else if (currentTime === "12:47:20 PM") displayPeriodEnd("English 4 (H)");
             else if (currentTime === "1:18:20 PM") displayPeriodEnd("AP Statistics");
+            else if (currentTime === "1:34:20 PM") displayPeriodEnd("Lunch");
             else if (currentTime === "2:55:20 PM") displayPeriodEnd("AP Computer Science A");
         }
     }, 100);
