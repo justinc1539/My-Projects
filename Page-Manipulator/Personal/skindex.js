@@ -54,11 +54,11 @@ if (window.location.href.includes("minecraftskins.com/skin-editor")) {
 
             <div class="model-body">
                 <div data-parts="headOverlay,head" class="head ed_head"><a class=""><span style="display: block;">[7]</span>&nbsp;</a></div>
-                <div data-parts="armROverlay,armR" class="armR ed_leftarm disabled"><span style="display: block;">[y]</span><a class="check_a">&nbsp;</a></div>
+                <div data-parts="armROverlay,armR" class="armR ed_leftarm"><span style="display: block;">[y]</span><a class="check_a">&nbsp;</a></div>
                 <div data-parts="bodyOverlay,body" class="body ed_body"><span style="display: block;">[j]</span><a class="">&nbsp;</a></div>
                 <div data-parts="armLOverlay,armL" class="armL ed_leftarm"><span style="display: block;">[i]</span><a class="">&nbsp;</a></div>
                 <div data-parts="legROverlay,legR" class="legL ed_leg_left"><span style="display: block;">[h]</span><a class="">&nbsp;</a></div>
-                <div data-parts="legLOverlay,legL" class="legR ed_leg_right disabled"><span style="display: block;">[k]</span><a class="check_a">&nbsp;</a></div>
+                <div data-parts="legLOverlay,legL" class="legR ed_leg_right"><span style="display: block;">[k]</span><a class="check_a">&nbsp;</a></div>
             </div>
 
         </div>`
