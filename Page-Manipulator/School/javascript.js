@@ -706,7 +706,235 @@ Save & Run
 Video
 Check
 Save`);
-    // runestone TODO: .focus() on next element, similar to text editor Ctrl + f
+
+    const activities = document.querySelectorAll(".btn.btn-success");
+    if (!['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
+        null;
+    }
+
+    (function() {
+      // 1. Clean up old instances
+      const existingBox = document.getElementById('customAceSearchBox');
+      if (existingBox) existingBox.remove();
+      const existingStyle = document.getElementById('aceSearchBoxStyles');
+      if (existingStyle) existingStyle.remove();
+    
+      // 2. Add Styles (includes .minimized state)
+      const style = document.createElement('style');
+      style.id = 'aceSearchBoxStyles';
+      style.textContent = `
+        .ace-dark-search-box {
+          position: fixed;
+          top: 10px;
+          right: 10px;
+          z-index: 999999;
+          background-color: #2d2d2d;
+          border: 1.5px solid #4a8bf5;
+          border-radius: 6px;
+          padding: 6px 8px;
+          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+          font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+          font-size: 12px;
+          color: #cccccc;
+          user-select: none;
+          width: 320px;
+          box-sizing: border-box;
+          transition: width 0.15s ease, padding 0.15s ease;
+        }
+    
+        .ace-dark-search-box.minimized {
+          width: auto;
+          padding: 4px;
+        }
+    
+        .ace-dark-search-box.minimized .ace-search-body {
+          display: none !important;
+        }
+    
+        .ace-search-body {
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
+          flex: 1;
+        }
+    
+        .ace-search-row {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+        }
+    
+        .ace-search-input {
+          background-color: #1e1e1e;
+          border: 1px solid #444444;
+          color: #d4d4d4;
+          padding: 4px 8px;
+          border-radius: 3px;
+          font-family: inherit;
+          font-size: 12px;
+          flex: 1;
+          outline: none;
+          min-width: 0;
+        }
+    
+        .ace-search-input:focus {
+          border-color: #4a8bf5;
+        }
+    
+        .ace-btn {
+          background-color: #363636;
+          border: 1px solid #444444;
+          color: #b0b0b0;
+          padding: 2px 6px;
+          border-radius: 3px;
+          cursor: pointer;
+          font-size: 11px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          height: 22px;
+          min-width: 22px;
+          box-sizing: border-box;
+        }
+    
+        .ace-btn:hover {
+          background-color: #4a4a4a;
+          color: #ffffff;
+        }
+    
+        .ace-btn-close {
+          border: none;
+          background: transparent;
+          font-size: 14px;
+          padding: 0 4px;
+          color: #888888;
+          cursor: pointer;
+        }
+    
+        .ace-btn-close:hover {
+          color: #ffffff;
+        }
+    
+        .ace-counter {
+          color: #888888;
+          font-size: 11px;
+          flex: 1;
+          padding-left: 4px;
+        }
+      `;
+      document.head.appendChild(style);
+    
+      // 3. Inject Search Box DOM
+      const searchBox = document.createElement('div');
+      searchBox.id = 'customAceSearchBox';
+      searchBox.className = 'ace-dark-search-box';
+      searchBox.innerHTML = `
+        <div style="display: flex; align-items: flex-start;">
+          <div class="ace-search-body">
+            <div class="ace-search-row">
+              <input type="text" id="aceSearchInput" class="ace-search-input" value=".btn.btn-success" placeholder="Search selector..." spellcheck="false" />
+              <button id="aceSearchPrev" class="ace-btn" title="Find Previous">&lt;</button>
+              <button id="aceSearchNext" class="ace-btn" title="Find Next">&gt;</button>
+              <button class="ace-btn" title="Find All">All</button>
+            </div>
+            <div class="ace-search-row">
+              <button class="ace-btn" title="Toggle Replace">+</button>
+              <span id="aceSearchCounter" class="ace-counter">0 of 0</span>
+              <button class="ace-btn" title="RegExp Search">.*</button>
+              <button class="ace-btn" title="Case Sensitive Search">Aa</button>
+              <button class="ace-btn" title="Whole Word Search">\\b</button>
+              <button class="ace-btn" title="Search In Selection">S</button>
+            </div>
+          </div>
+          <button id="aceSearchClose" class="ace-btn ace-btn-close" title="Minimize / Expand" style="margin-left: 4px;">&times;</button>
+        </div>
+      `;
+    
+      document.body.appendChild(searchBox);
+    
+      // 4. State Management
+      let matches = [];
+      let currentIndex = -1;
+    
+      const input = document.getElementById('aceSearchInput');
+      const prevBtn = document.getElementById('aceSearchPrev');
+      const nextBtn = document.getElementById('aceSearchNext');
+      const counter = document.getElementById('aceSearchCounter');
+      const closeBtn = document.getElementById('aceSearchClose');
+    
+      // 5. Query & Scroll Handler
+      function highlightCurrent() {
+        if (currentIndex >= 0 && currentIndex < matches.length) {
+          matches[currentIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }
+    
+      function runSearch() {
+        const query = input.value.trim();
+        if (!query) {
+          matches = [];
+          currentIndex = -1;
+          counter.textContent = '0 of 0';
+          return;
+        }
+    
+        try {
+          matches = Array.from(document.querySelectorAll(query));
+          if (matches.length > 0) {
+            currentIndex = 0;
+            counter.textContent = `1 of ${matches.length}`;
+            highlightCurrent();
+          } else {
+            currentIndex = -1;
+            counter.textContent = '0 of 0';
+          }
+        } catch (e) {
+          matches = [];
+          currentIndex = -1;
+          counter.textContent = '0 of 0';
+        }
+      }
+    
+      // 6. Navigation Logic
+      prevBtn.addEventListener('click', () => {
+        if (matches.length === 0) return;
+        currentIndex = (currentIndex - 1 + matches.length) % matches.length;
+        counter.textContent = `${currentIndex + 1} of ${matches.length}`;
+        highlightCurrent();
+      });
+    
+      nextBtn.addEventListener('click', () => {
+        if (matches.length === 0) return;
+        currentIndex = (currentIndex + 1) % matches.length;
+        counter.textContent = `${currentIndex + 1} of ${matches.length}`;
+        highlightCurrent();
+        if (event.isTrusted && matches && matches[currentIndex]) matches[currentIndex].focus();
+      });
+    
+      // Re-run search whenever typing in input
+      input.addEventListener('input', runSearch);
+    
+      // Enter / Shift+Enter key navigation
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          if (e.shiftKey) {
+            prevBtn.click();
+          } else {
+            nextBtn.click();
+          }
+        } else if (e.key === 'Escape' && matches && matches[currentIndex]) {
+          matches[currentIndex].focus();
+        }
+      });
+    
+      // Minimize / Expand Toggle
+      closeBtn.addEventListener('click', () => {
+        searchBox.classList.toggle('minimized');
+      });
+    
+      // Initial Run
+      runSearch();
+    })();
 } else if (url.startsWith("https://ps.pcti.tec.nj.us/guardian/home.html")) {
 const fail_lunch_links = [
     'scores.html?frn=0042115146&fg=R1&schoolid=50',
