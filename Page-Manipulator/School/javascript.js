@@ -1418,6 +1418,7 @@ let ctrlHeld = false
 let altHeld = false
 let soundboardActive = false;
 let currentMeme = [];
+let permaMemeTimeout;
 const audios = [];
 // To include an unblocked meme, upload to GitHub, and copy image address
 const memePopupTime = .5;
@@ -1581,16 +1582,19 @@ O - Oh My`);
             if (memeIter === -1) memeIter = Math.floor(memes.length * Math.random());
             if (memeIter < memes.length) {
                 if (event.shiftKey) {
-                    // MEME TODO: make permanent meme
-                    alert(`currentMeme[0]: ${currentMeme[0]}
-currentMeme[1]: ${currentMeme[1]}`)
                     
+                    // MEME TODO: see what's wrong
                     if (currentMeme[0]) {
                         // 4. Remove the clone temporarily after a set time (e.g., 3 seconds)
                         currentMeme[0].style.opacity = 0;
-                        setTimeout(() => {
-                            currentMeme[0].remove(); // or originalImg.parentNode.removeChild(currentMeme[0])
-                        }, 1000*memePopupTime);
+                        clearTimeout(permaMemeTimeout)
+                        if (currentMeme[1] === memeIter) {
+                            permaMemeTimeout = setTimeout(() => {
+                                currentMeme[0].remove(); // or originalImg.parentNode.removeChild(currentMeme[0])
+                            }, 1000*memePopupTime);
+                        } else {
+                            currentMeme[0].remove();
+                        }
                         currentMeme[0] = null;
                     }
 
@@ -1626,6 +1630,7 @@ currentMeme[1]: ${currentMeme[1]}`)
                         currentMeme[0] = clonedImg;
                         currentMeme[1] = memeIter;
                     } else {
+                        clearTimeout(permaMemeTimeout)
                         currentMeme[1] = null;
                     }
                 } else {
