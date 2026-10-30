@@ -1522,6 +1522,10 @@ document.addEventListener('keydown', (event) => {
         } else if (event.key === "f" && altHeld) {
             blockEvents(event);
             document.querySelector("button[title='formula']").click();
+        } else if (event.key === "c" && altHeld) {
+            // KAMI TODO: select colors
+            blockEvents(event);
+            document.querySelector("span[aria-controls='ql-picker-options-7']").click();
         }
     }
     if (ctrlHeld && event.key === "S") {
@@ -1580,10 +1584,20 @@ H - Oh Hell No`);
         } else if (event.key === "w") {
             blockEvents(event);
             return; // MEME TODO: What they hellllll ohhh my gawww ain't no wayyyyyyyy meme
+            // MEME TODO: not rlly lol but runestone TODO: .focus() on next element, similar to text editor Ctrl + f
             const wTH = new Audio('https://www.myinstants.com/media/sounds/tuco-get-out.mp3');
             wTH.currentTime = 0; // Rewind to start if pressed rapidly
             audios.push(wTH);
             wTH.play().catch(error => {
+              console.warn('Audio playback requires prior user interaction with the page:', error);
+            });
+        } else if (event.key === "a") {
+            blockEvents(event);
+            return; // MEME TODO: What they air horn meme
+            const airHorn = new Audio('https://www.myinstants.com/media/sounds/tuco-get-out.mp3');
+            airHorn.currentTime = 0; // Rewind to start if pressed rapidly
+            audios.push(airHorn);
+            airHorn.play().catch(error => {
               console.warn('Audio playback requires prior user interaction with the page:', error);
             });
         } else if (event.key === "o") {
