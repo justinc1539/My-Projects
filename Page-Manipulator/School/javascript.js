@@ -1418,6 +1418,11 @@ let ctrlHeld = false
 let altHeld = false
 let soundboardActive = false;
 const audios = [];
+// MEME TODO: Populate with memes
+// Memes: https://justinc1539.imgbb.com
+const memes = [
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBSWYR-VQcx1KhAoOh4T5U74hmNauGSVgmmgBnHeECk7U3Z3NbRRrnmBoP:https://i.scdn.co/image/ab67616d00001e02eaf1fcbc9f49682325efe9db&s=10",
+];
 let command = ""
 let bgImgSrcIter = 1;
 
@@ -1550,6 +1555,31 @@ O - Oh My`);
               alert(error);
               console.warn('Audio playback requires prior user interaction with the page:', error);
             });
+        }
+        
+        // MEME TODO: Make vine boom memes
+        if (/^Digit[0-9]$/.test(event.code)) {
+            memeIter = event.code.replace("Digit", "");
+            memeIter--;
+            if (memeIter === -1) memeIter = Math.floor(memes.length * Math.random());
+            if (memeIter < memes.length) {
+                // 2. Clone the image (false means shallow copy, which is enough for an <img>)
+                const clonedImg = bgImg.cloneNode(false);
+                
+                // Optional: Change an attribute like id or class to prevent duplicate IDs
+                clonedImg.id = 'tempImageClone';
+                clonedImg.src = memes[memeIter];
+                clonedImg.style.opacity = 1;
+                
+                // 3. Temporarily append the clone to the DOM (e.g., inside the body or a container)
+                document.body.appendChild(clonedImg);
+                
+                // 4. Remove the clone temporarily after a set time (e.g., 3 seconds)
+                // MEME TODO: Give meme fading
+                setTimeout(() => {
+                  clonedImg.remove(); // or originalImg.parentNode.removeChild(clonedImg)
+                }, 1000);
+            }
         }
     }
 }, true);  // Run this listener during the capture phase instead of the default bubble phase.
