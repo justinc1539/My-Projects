@@ -1,737 +1,1837 @@
 // V10.29.2026
-// Active websites: all
+// Active Websites: All
 
+try {
+// SET ACTIVE WEBSITES TO ALL
+// https://copilot.microsoft.com/chats/WtPeNsm5rvHac4qFa4hKX
+// Search + Shift + P to toggle the touchpad and Search + Shift + T to toggle the touchscreen
 if (document.title.toLowerCase().includes("edpuzzle")) {
-    const pausedAtts = `{
-      "currentTime": 573.32,
-      "videoBytesLoaded": 0.5165084327035647,
-      "videoLoadedFraction": 0.5165084327035647,
-      "currentTimeLastUpdated_": 1793150607.027,
-      "playbackRate": 1,
-      "mediaReferenceTime": 573.32,
-      "progressState": {
-        "airingStart": 0,
-        "airingEnd": 0,
-        "allowSeeking": true,
-        "clipEnd": null,
-        "clipStart": 573,
-        "current": 573.32,
-        "displayedStart": -1,
-        "duration": 1148,
-        "ingestionTime": null,
-        "isAtLiveHead": false,
-        "loaded": 592.508,
-        "seekableStart": 0,
-        "seekableEnd": 1147.104,
-        "offset": 0,
-        "viewerLivestreamJoinMediaTime": 0
-      }
-    }`;
-    const playingAtts = `{
-      "muted": false,
-      "volume": 100
-    }`;
-    
-    /*// 1. Create a local variable to hold the live timestamp
-    let currentYouTubeTime = 0;
-    
-    // 2. VVVVV Set up a global message listener to receive updates from the YouTube iframe
-    window.addEventListener('message', function(event) {
-        // Only parse strings that look like JSON object payloads
-        try {
-            const data = JSON.parse(event.data);
-            
-            // Check if the message is a delivery of the video's current time
-            if (data.event === 'infoDelivery' && data.info && typeof data.info.currentTime !== 'undefined') {
-                currentYouTubeTime = data.info.currentTime;
-            }
-        } catch (e) {
-            // Safe fail for messages from other sources/extensions on the page
+    alert("You can watch the EdPuzzle video in the background using split screen!");
+}
+const url = window.location.href;
+
+function copyText(text, display=true) {
+    navigator.clipboard.writeText(text)
+      .then(() => {
+        if (display) alert("Text copied to clipboard!");
+      })
+      .catch(err => {
+        if (display) alert("Failed to copy:", err);
+      });
+}
+
+function displayDict(dict, delimiter=": ", sep="\n") {
+    let output = '';
+    for (const [key, value] of Object.entries(dict)) {
+      output += `${key}${delimiter}${value}${sep}`;
+    }
+    alert(output);
+}
+
+function showPopup(message) {
+    // Create popup element
+    const popup = document.createElement("div");
+    popup.textContent = message;
+
+    // Style it
+    Object.assign(popup.style, {
+        position: "fixed",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        background: "rgba(0,0,0,0.8)",
+        color: "white",
+        padding: "20px 30px",
+        borderRadius: "10px",
+        fontSize: "18px",
+        zIndex: 2147483646,
+        opacity: 0,
+        transition: "opacity 0.3s ease"
+    });
+
+    // Add to page
+    document.body.appendChild(popup);
+
+    // Fade in
+    requestAnimationFrame(() => {
+        popup.style.opacity = 1;
+    });
+
+    // Remove after 3 seconds
+    setTimeout(() => {
+        popup.style.opacity = 0;
+        setTimeout(() => popup.remove(), 300); // wait for fade-out
+    }, 3000);
+}
+
+function main() {
+try {
+// Fill in empty Canvas Refined Custom Tasks
+// <span style="color:#cccccc;font-size:12px;margin-top:-2px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;box-sizing:border-box;padding-right:22px;">
+setInterval(() => {
+    document.querySelectorAll('span[style="color:#cccccc;font-size:12px;margin-top:-2px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;box-sizing:border-box;padding-right:22px;"]').forEach(ele => {
+        ele.innerHTML = "<span style='color:black'>Custom Task</span>";
+    });
+}, 1);
+// URL LOGIC VVV
+if (url.match(/^https:\/\/example\.com\/?(?:\?.*)?$/)) {
+    document.documentElement.innerHTML = "";
+} else if (url.includes("knowt.com/study/flashcards/64c815cf-e945-4c2e-89a0-69c5347fcbc5/learn")) {
+const text = document.querySelector(".ProseMirror").innerText;
+const box = document.querySelector('.new_bodyS.MuiBox-root.knowt-qr172j');
+
+// Fill out answer
+Object.getOwnPropertyDescriptor(
+    window.HTMLTextAreaElement.prototype,
+    "value"
+).set.call(box, text);
+box.dispatchEvent(new Event("input", { bubbles: true }));
+
+// Click buttons
+[...document.querySelectorAll("button")].find(
+    btn => btn.innerText.trim() === "Answer"
+)?.click();
+[...document.querySelectorAll("button")].find(
+    btn => btn.innerText.trim().startsWith("Next")
+)?.click();
+} else if (url.startsWith("https://codehs.com/student") && url.includes("/assignment/")) {
+    // localStorage.setItem("SnVzdGluJ3MgS2V5", ""); // Reset code
+    const codeHSAPI = "TWFkZSBieSBKdXN0aW4gQ2h1YQ==";
+    const fakeOne = "bG9s";
+    const fakeTwo = "dHMgc28gZmFrZSBsb2w=";
+    if (localStorage.getItem("SnVzdGluJ3MgS2V5") === codeHSAPI) {
+        const solution = window.pageSpecific.solution;
+        
+        function decodeEscapedString(str) {
+            // Step 1: convert \uXXXX → actual characters
+            const unicodeDecoded = str.replace(/\\u([\dA-F]{4})/gi, (_, code) =>
+                String.fromCharCode(parseInt(code, 16))
+            );
+        
+            // Step 2: decode HTML entities (&quot;, &lt;, &gt;, etc.)
+            const textarea = document.createElement("textarea");
+            textarea.innerHTML = unicodeDecoded;
+            return textarea.value;
         }
-    });*/
-    window.addEventListener("message", (event) => {
-        // Security check: Ensure the message actually came from YouTube
-        // if (!event.origin.includes("youtube.com")) return;
+        
+        readableCode = decodeEscapedString(solution);
+        
+        const editor = ace.edit(document.querySelector(".ace_editor"));
+        const existingReadable = editor.getValue();
+        const session = editor.getSession();
+        function checkAviary(codeHSAPI) {
+            successBtn.style.display = "";
+            failureBtn.style.display = "";
+            // 1. Create the button
+            successBtn.textContent = "Add solution to the end of editor";
+            failureBtn.textContent = "Replace entire code in editor with solution";
+            
+            // 3. Add a click listener
+            successBtn.addEventListener("click", () => {
+                setTimeout(() => {successBtn.style.display = "none";}, 5000);
+                successBtn.innerHTML = "If you don't see the code, please save and refresh, or press enter at the bottom of the code a few times.";
+                btn.style.display = "none";
+                failureBtn.style.display = "none";
+                cancelBtn.style.display = "none";
+                // Append text using Ace API
+                session.insert({
+                    row: session.getLength(),
+                    column: 0
+                }, "\n" + readableCode);
+            });
+            failureBtn.addEventListener("click", () => {
+                btn.style.display = "none";
+                successBtn.style.display = "none";
+                failureBtn.style.display = "none";
+                cancelBtn.style.display = "none";
+                // Replace the whole editor
+                // editor.setValue(existingReadable + "\n" + readableCode, -1);
+                editor.setValue(readableCode, -1);
+            });
+        }
     
-        try {
-            const data = JSON.parse(event.data);
+        // 1. Create the button
+        const btn = document.createElement("button");
+        const successBtn = document.createElement("button");
+        const failureBtn = document.createElement("button");
+        const cancelBtn = document.createElement("button");
+        btn.textContent = "Show Solution";
+        cancelBtn.textContent = "Cancel & Remove Buttons";
     
-            // Extract the unique ID we assigned in Step 1
-            const playerId = data.id;
+        // 2. Style it so it appears at the top
+        btn.style.whiteSpace = "break-spaces";
+        // btn.style.position = "fixed";
+        btn.style.top = "10px";
+        btn.style.left = "10px";
+        btn.style.zIndex = "2147483646";   // make sure it's above everything
+        btn.style.padding = "10px 15px";
+        btn.style.fontSize = "16px";
+        successBtn.style.display = "none";
+        // successBtn.style.position = "fixed";
+    successBtn.style.top = "10px";
+    successBtn.style.left = "10px";
+    successBtn.style.zIndex = "2147483646";   // make sure it's above everything
+    successBtn.style.padding = "10px 15px";
+    successBtn.style.fontSize = "16px";
+    failureBtn.style.display = "none";
+    // failureBtn.style.position = "fixed";
+    failureBtn.style.top = "60px";
+    failureBtn.style.left = "10px";
+    failureBtn.style.zIndex = "2147483646";   // make sure it's above everything
+    failureBtn.style.padding = "10px 15px";
+    failureBtn.style.fontSize = "16px";
+    // cancelBtn.style.position = "fixed";
+    cancelBtn.style.top = "110px";
+    cancelBtn.style.left = "10px";
+    cancelBtn.style.zIndex = "2147483646";   // make sure it's above everything
+    cancelBtn.style.padding = "10px 15px";
+    cancelBtn.style.fontSize = "16px";
     
-            // Find the specific iframe element that sent this message
-            const matchingIframe = document.querySelector(`[data-player-id="${playerId}"]`);
+    // 3. Add a click listener
+    btn.addEventListener("click", () => {
+        btn.innerHTML = readableCode.replace(/\n/g, "<br>");
+        btn.style.fontSize = "12px";
+        btn.style.textAlign = "left";
+        btn.style.fontFamily = "monospace"; // optional but looks way better
+        checkAviary(codeHSAPI);
+    });
+    cancelBtn.addEventListener("click", () => {
+        btn.style.display = "none";
+        successBtn.style.display = "none";
+        failureBtn.style.display = "none";
+        cancelBtn.style.display = "none";
+    });
     
-            if (true || matchingIframe) {
-                console.log(`Video ${playerId} sent an event:`, data.event);
-                
-                // Example: Handle specific events
-                if (data.event === "infoDelivery") {
-                    // Do something with data.info.currentTime for THIS specific video
-                    videos[playerId - 1][1] = data.info;
-                    // Note: Any non-permanent attributes can be added here for permanent useage
-                    if (data.info.playerState) {
-                        videos[playerId - 1][0].playerState = data.info.playerState;
-                    }
-                    if (data.info.seekableEnd) {
-                        videos[playerId - 1][0].duration = data.info.seekableEnd;
-                    } else if (data.info.duration) {
-                        videos[playerId - 1][0].duration = data.info.duration;
-                    }
+    // 4. Add it to the page
+    const container = document.createElement("div");
+    container.style.position = "fixed";
+    container.style.top = "10px";
+    container.style.left = "10px";
+    container.style.zIndex = "2147483646";
+    container.style.display = "flex";
+    container.style.flexDirection = "column";
+    
+    container.appendChild(btn);
+    container.appendChild(successBtn);
+    container.appendChild(failureBtn);
+    container.appendChild(cancelBtn);
+    
+    document.body.appendChild(container);
+    } else {
+        localStorage.setItem("SnVzdGluJ3MgS2V5", prompt(globalThis.atob("Rm9yIEp1c3Rpbg==")));
+    }
+} else if (url.includes("thephysicsaviary.com/Physics/APPrograms") && !url.includes("find.php")) {
+    const name = "Justin Chua";
+    document.getElementById("StudentName").value = name ? name : prompt("Enter your name");
+
+    const dataAPI = "TWFkZSBieSBKdXN0aW4gQ2h1YQ==";
+    function checkAviary(dataAPI) {
+        // 1. Create the button
+        const successBtn = document.createElement("button");
+        const failureBtn = document.createElement("button");
+        successBtn.textContent = "It worked!";
+        failureBtn.textContent = "It failed.";
+        
+        // 2. Style it so it appears at the top
+        successBtn.style.position = "fixed";
+        successBtn.style.top = "10px";
+        successBtn.style.left = "10px";
+        successBtn.style.zIndex = "2147483646";   // make sure it's above everything
+        successBtn.style.padding = "10px 15px";
+        successBtn.style.fontSize = "16px";
+        failureBtn.style.position = "fixed";
+        failureBtn.style.top = "60px";
+        failureBtn.style.left = "10px";
+        failureBtn.style.zIndex = "2147483646";   // make sure it's above everything
+        failureBtn.style.padding = "10px 15px";
+        failureBtn.style.fontSize = "16px";
+        
+        // 3. Add a click listener
+        successBtn.addEventListener("click", () => {
+            successBtn.style.display = "none";
+            failureBtn.style.display = "none";
+        });
+        failureBtn.addEventListener("click", () => {
+            successBtn.click();
+            answerIter = 1;
+            try {
+                while (globalThis[`Response${answerIter}`]) {
+                    let trueVal = prompt(`Enter value #${answerIter} (or press enter if done)`);
+                    try{$(`#A${answerIter}`).val(trueVal);}catch(_){try{document.getElementById(`A${answerIter}`).value = trueVal;}catch(_){}}
+                    try{globalThis[`Response${answerIter}`] = trueVal;}catch(_){}
+                    answerIter++;
                 }
+            } catch(_) {} finally {
+                SubmitForm();
+                checkAviary(dataAPI);
             }
-        } catch (error) {
-            // Handle non-JSON messages from other extensions/scripts
+        });
+        
+        // 4. Add it to the page
+        document.body.appendChild(successBtn);
+        document.body.appendChild(failureBtn);
+    }
+
+    // 1. Create the button
+    const btn = document.createElement("button");
+    const skipBtn = document.createElement("button");
+    const cancelBtn = document.createElement("button");
+    btn.textContent = "Click Me after you click the check button and the results screen show up! :D";
+    skipBtn.textContent = "Optional: Click Me if there is a cutscene after checking answers! (Warning: Not garunteed; refresh if the page breaks.)";
+    cancelBtn.textContent = "Cancel & Remove Buttons";
+
+    // 2. Style it so it appears at the top
+    btn.style.position = "fixed";
+    btn.style.top = "10px";
+    btn.style.left = "10px";
+    btn.style.zIndex = "2147483646";   // make sure it's above everything
+    btn.style.padding = "10px 15px";
+    btn.style.fontSize = "16px";
+    skipBtn.style.position = "fixed";
+    skipBtn.style.top = "60px";
+    skipBtn.style.left = "10px";
+    skipBtn.style.zIndex = "2147483646";   // make sure it's above everything
+    skipBtn.style.padding = "10px 15px";
+    skipBtn.style.fontSize = "16px";
+    cancelBtn.style.position = "fixed";
+    cancelBtn.style.top = "110px";
+    cancelBtn.style.left = "10px";
+    cancelBtn.style.zIndex = "2147483646";   // make sure it's above everything
+    cancelBtn.style.padding = "10px 15px";
+    cancelBtn.style.fontSize = "16px";
+    
+    // 3. Add a click listener
+    btn.addEventListener("click", () => {
+        btn.style.display = "none";
+        skipBtn.style.display = "none";
+        cancelBtn.style.display = "none";
+        setInterval(() => {
+            try {
+                document.getElementById("A1").value = FinalLocation;
+            } catch(_) {}
+        }, 1000);
+        let answerIter = 1;
+        while (globalThis[`Answer${answerIter}`] !== undefined) {
+            try{$(`#A${answerIter}`).val(globalThis[`Answer${answerIter}`]);}catch(_){try{document.getElementById(`A${answerIter}`).value = globalThis[`Answer${answerIter}`];}catch(_){}}
+            globalThis[`Response${answerIter}`] = globalThis[`Answer${answerIter}`];
+            answerIter++;
+        }
+        SubmitForm();
+        checkAviary(dataAPI);
+    });
+    skipBtn.addEventListener("click", () => {
+        skipBtn.style.display = "none";
+        cancelBtn.style.display = "none";
+        for (i = 0; i < 10; i++) {
+            SubmitForm();
         }
     });
-    // 2. ^^^^^
-    
-    // Variables
-    const navModifiers = [0.05, 0.25, 1, 5, 30];
-    const speedModifiers = [0.0001, 0.001, 0.01, 0.1, 0.25, 0.5, 1, 5, 10];
-    const durationRounding = [null, -1, 2];
-    let highlightOutline = true;
-    let durationOutlineIndex = 2;
-    let currentIndex = 0;
-    let videos;
-    let currentTextIndex = -1;
-    let textBoxes;
-    let cheezeIt = false;
-    
-    // Overlays
-    const videoOverlay = document.createElement('div');
-    videoOverlay.id = 'custom-video-overlay';
-    videoOverlay.overlayTimeout = null;
-    videoOverlay.clearTextTimeout = null;
-    videoOverlay.addEventListener('click', () => {
-        clearTimeout(videoOverlay.overlayTimeout);
-        clearTimeout(videoOverlay.clearTextTimeout);
-        videoOverlay.clearTextTimeout = setTimeout(() => {videoOverlay.innerText = "";}, 200);
-        videoOverlay.classList.remove('show');
+    cancelBtn.addEventListener("click", () => {
+        btn.style.display = "none";
+        skipBtn.style.display = "none";
+        cancelBtn.style.display = "none";
     });
-    document.body.appendChild(videoOverlay);
     
-    const durationOverlay = document.createElement('div');
-    durationOverlay.id = 'custom-video-overlay';
-    durationOverlay.overlayTimeout = null;
-    durationOverlay.clearTextTimeout = null;
-    durationOverlay.addEventListener('click', () => {
-        clearTimeout(durationOverlay.overlayTimeout);
-        clearTimeout(durationOverlay.clearTextTimeout);
-        durationOverlay.clearTextTimeout = setTimeout(() => {durationOverlay.innerText = "";}, 200);
-        durationOverlay.classList.remove('show');
-    });
-    durationOverlay.style.top = "90%";
-    document.body.appendChild(durationOverlay);
-    
-    const styles = document.createElement('style');
-    styles.textContent = `
-      #custom-video-overlay {
-        position: fixed;
-        top: 10%;
-        left: 50%;
-        transform: translateX(-50%);
-        background: rgba(0, 0, 0, 0.6);
-        color: white;
-        padding: 8px 16px;
-        border-radius: 4px;
-        font-family: Arial, sans-serif;
-        font-size: 18px;
-        font-weight: bold;
-        z-index: 999999; /* Ensures it sits on top of the video player */
-        /*pointer-events: none;*/ /* Clicking through it still works but cannot disappear via clicking */
-        opacity: 0;
-        transition: opacity 0.2s ease-in-out;
-    
-        max-height: 200px;         /* Caps the height so it doesn't overflow the screen */
-        max-width: 80vw;           /* Caps the width to 80% of the viewport width */
-        overflow-y: auto;          /* Enables vertical scrolling only when text overflows */
-        overflow-x: auto;          /* Enables horizontal scrolling if text is a massive single line */
-        white-space: pre-wrap;     /* Optional: Forces long text blocks to break lines cleanly */
-      }
-      #custom-video-overlay.show {
-        opacity: 1;
-      }
-    
-    
-      .highlighted {
-        position: relative !important;
-        outline: 4px solid #3b82f6 !important;
-        outline-offset: 4px;
-        box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
-        transition: outline 0.2s ease-in-out;
-      }
-    `;
-    document.head.appendChild(styles);
-    
-    // Functions
-    function getDecimalCount(num) {
-      if (Number.isInteger(num)) return 0;
-    
-      const cleanStr = (+num.toFixed(4)).toString(); // Capped at 4 decimals because 2**-4 is minimum value
-      return cleanStr.split('.')[1].length;
+    // 4. Add it to the page
+    document.body.appendChild(btn);
+    document.body.appendChild(skipBtn);
+    document.body.appendChild(cancelBtn);
+
+    // document.getElementById("BeginButton").click();
+    // // TODO: Make it work!!!
+    // try{
+    //     SubmitForm();
+    // } catch (_) {
+    //     try {
+    //         document.getElementById("SubmitButton").click();
+    //     } catch (_) {
+    //         try {
+    //             for (i = 0; i < 5; i++) {
+    //                 document.querySelectorAll(".Button").forEach(el => {
+    //                     if (window.getComputedStyle(el).display !== "none") {
+    //                         el.click();
+    //                     }
+    //                 });
+    //             }
+    //         } catch(e) {
+    //             alert(`Oh no! There's been an error! Show this to Justin: ${e}\n${e.stack}`);
+    //         }
+    //     }
+    // }
+
+    // requestAnimationFrame(() => {
+    //     aviaryVars = SubmitForm.toString().split("\n\tError")[0].split("\n\t").slice(1);
+    //     // alert(`2121 ${aviaryVars}`)
+    //     // if (!aviaryVars.includes("Answer")) alert(aviaryVars);
+    //     aviaryVars.forEach(line => {
+    //         try{eval(line)}catch(e){if(true){alert(`${line}\n${e}\n${e.stack}`)}}
+    //         if (line.match(/^[\s]*Answer\d+/)) try{alert(eval(line.split("=")[0]));}catch(e){if(true){alert(`${line}\n${e}\n${e.stack}`)}}
+    //     });
+    //     document.querySelectorAll("input[class=FormInputs]").forEach(response => {
+    //         response.value = 1;
+    //     });
+    // });
+// Double Canvas Grade (1/4)
+} else if (false && url.match(/^https:\/\/pcti\.instructure\.com\/?(?:\?.*)?$/) || url.match(/^https:\/\/pcti\.instructure\.com\/courses\/\d+(?:\?.*)?$/)) {
+  document.querySelectorAll('div.event-details p').forEach(p => {
+    const html = p.innerHTML.trim();
+
+    // Case 1: Match "<strong>[earned] out of [possible]</strong>"
+    const scoreMatch = html.match(
+      /^<strong>(\d+(?:\.\d+)?) out of (\d+(?:\.\d+)?)<\/strong>$/
+    );
+
+    if (scoreMatch) {
+      const possible = parseFloat(scoreMatch[2]);
+      const doubled = (2 * possible).toFixed(2).replace(/\.00$/, ''); // Clean trailing .00
+      p.innerHTML = `<strong>${doubled} out of ${possible}</strong>`;
+      return;
     }
-    
-    function formatVidTime(seconds, truncation=null) {
-        if (isNaN(seconds)) return seconds;
-        let wholeSeconds = Math.floor(seconds);
-        let fraction = String(seconds).split('.')[1];
-        if (fraction) {
-            fraction = "." + fraction;
-            if (truncation !== null) fraction = fraction.slice(0, truncation + 1);
-        } else if (truncation !== null && truncation > 0) fraction = "." + "0".repeat(truncation);
-        else fraction = "";
-    
-        let hours = Math.floor(wholeSeconds / 3600);
-        let minutes = Math.floor((wholeSeconds % 3600) / 60);
-        if (minutes > 0 || hours > 0) minutes = String(minutes).padStart(2, "0") + ":";
-        else minutes = "";
-        if (hours > 0) hours = String(hours).padStart(2, "0") + ":";
-        else hours = "";
-        let secs = String(wholeSeconds % 60).padStart(2, "0");
-    
-        return `${hours}${minutes}${secs}${fraction}`;
+
+    // Case 2: Match '"[any string]"'
+    const quoteMatch = html.match(/^"[^"]*"$/);
+    if (quoteMatch) {
+      const praiseOptions = ["Great job", "Outstanding", "Amazing", "Incredible work"];
+      const randomPraise = praiseOptions[Math.floor(Math.random() * praiseOptions.length)];
+      p.textContent = `"${randomPraise}, Justin!"`;
     }
-    
-    function flashIndicator(text, showTime=1000, overlay=videoOverlay) {
-      overlay.innerText = text;
-      overlay.classList.add('show');
-      
-      clearTimeout(overlay.overlayTimeout); // Reset the hide timer if the user keeps pressing keys
-      clearTimeout(overlay.clearTextTimeout);
-      overlay.overlayTimeout = setTimeout(() => {
-        overlay.clearTextTimeout = setTimeout(() => {overlay.innerText = "";}, 200);
-        overlay.classList.remove('show');
-      }, showTime);
-    }
-    
-    function highlightVideos(theVids) {
-      theVids.forEach(video => {
-        // Check if we've already highlighted this video
-        if (video.dataset.highlighted === 'true') return;
-        video.dataset.highlighted = 'true';
-    
-        // Ensure video is focusable without changing DOM structure
-        video.setAttribute('tabindex', '0');
-    
-        // Create a visual overlay matching the video's bounding rect
-        const rect = video.getBoundingClientRect();
-        const highlightBox = document.createElement('div');
-        highlightBox.className = 'video-highlight-overlay';
-        
-        // Style as an overlay without moving the video element
-        Object.assign(highlightBox.style, {
-          position: 'absolute',
-          top: `${rect.top + window.scrollY}px`,
-          left: `${rect.left + window.scrollX}px`,
-          width: `${rect.width}px`,
-          height: `${rect.height}px`,
-          pointerEvents: 'none', // Prevents blocking player UI clicks
-          zIndex: '9999'
-        });
-    
-        document.body.appendChild(highlightBox);
+  });
+
+setInterval(() => {
+document.querySelectorAll("div.sc-cxFLnm.gouYvy").forEach(div => {
+  const text = div.textContent.trim();
+
+  // Match "Graded:  0/30 points | 30 mins ago"
+  const match = text.match(/^Graded:\s+(\d+)\s*\/\s*(\d+)\s*points\s*\|\s*(.+)$/);
+
+  if (match) {
+    const denominator = parseInt(match[2], 10);
+    const rest = match[3];
+
+    // Double the denominator value
+    const newNumerator = denominator * 2;
+
+    div.textContent = `Graded:  ${newNumerator}/${denominator} points | ${rest}`;
+  }
+  // If not "Graded:", leave textContent unchanged
+});
+}, 1)
+
+  // ONLY FOR BETTERCAMPUS EXTENSION
+  setInterval(() => {
+      document.querySelectorAll('a.bettercanvas-card-grade').forEach(a => {
+          a.textContent = "200%";
       });
-    }
+  }, 1);
+}
+// Check Class Rank (class-rank.js)
+else if (url.includes("https://ps.pcti.tec.nj.us/guardian/r") && url.includes("_reportcard.html")) {
     
-    function highlightVideo(theVids, index) {
-      theVids.forEach(video => {
-        video.parentElement.classList.remove('highlighted');
-      });
-    
-      if (index === null) return;
-      
-      if (index >= 0 && index < theVids.length) {
-        const targetVideo = theVids[index];
-        if (highlightOutline) targetVideo.parentElement.classList.add('highlighted');
-        // targetVideo.focus();
-      }
-    }
-    
-    function blockKeyEvents(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        e.stopImmediatePropagation();
-    }
-    
-    async function waitForVideos() {
-        while (document.querySelectorAll("iframe").length === 0) {
-            await new Promise(resolve => setTimeout(resolve, 1000)); // todo: change back to 100
-        }
-        
-        return Array.from(document.querySelectorAll("iframe"), x => [x, null]);
-        // return Array.from(document.querySelectorAll("iframe")).map(x => [x, null]);
-    }
-    
-    // Main Script
-    (async () => {
-        videos = await waitForVideos();
-        // 3. VVVVVV FORCE the YouTube Player to send time updates every 250ms
-        // Run this right after the page loads or when your iframe is ready
-        /*videos.forEach(iframe => {
-            iframe.contentWindow.postMessage(JSON.stringify({
-                "event": "listening",
-                "id": 1,
-                "channel": "widget"
-            }), "*");
-        });*/
-    
-        videos.forEach((iframe, index) => {
-            // Generate a unique ID for this specific iframe (e.g., youtube-player-0, youtube-player-1)
-            const uniqueId = `youtube-player-${index}`;
-            
-            // Optional: Store it on the element so you can easily look it up later
-            iframe[0].dataset.playerId = uniqueId; 
-        
-            // Send the initialization handshake
-            iframe[0].contentWindow.postMessage(JSON.stringify({
-                "event": "listening",
-                "id": uniqueId, 
-                "channel": "widget"
-            }), "*");
-        });
-        // 3. ^^^^^^
-    
-        setInterval(() => {
-            // Optional TODO: Auto Update for iFrames
-            // videos = document.querySelectorAll('iframe').map(x => [x, null]);
-            textBoxes = [...document.querySelectorAll("input"), ...document.querySelectorAll("textarea")];
-            highlightVideos(videos.map(x => x[0]));
-            highlightVideo(videos.map(x => x[0]), currentIndex);
-        }, 100);
-    
-        setInterval(() => {
-            if (currentIndex !== null) {
-                videos.forEach(v => {
-                    if (durationOutlineIndex !== -1 && v === videos[currentIndex]) {
-                        // TODO: Get video duration
-                        // TODO: Have it work for multiple iframes
-                        flashIndicator(`${formatVidTime(v[1].currentTime, durationRounding[durationOutlineIndex])} / ${formatVidTime(v[0].duration, durationRounding[durationOutlineIndex])}`, 1, durationOverlay);
-                    }
-                    /*if (v.replay) {
-                        if (v.currentTime < v.replayStart || v.currentTime > v.replayEnd) {
-                                v.currentTime = v.replayStart;
-                            }
-                    }
-                    if (v.allowCuts) {
-                        for (let i = 0; i < v.cuts.length; i++) {
-                            if (v.cuts[i]) {
-                                if (v.cuts[i][0] < v.currentTime && v.currentTime < v.cuts[i][1]) {
-                                    v.currentTime = v.cuts[i][1];
-                                }
-                            }
-                        }
-                    }*/
-                });
-            }
-        }, 1);
-    
-        flashIndicator("Ctrl + Shift + / (Ctrl + ?) for shortcuts", 3000);
-        window.addEventListener("keydown", (event) => {
-          // Selecting Video feature
-          if (currentIndex !== null && event.key === "Escape") {
-              blockKeyEvents(event);
-              if (textBoxes.includes(document.activeElement)) {
-                  videos[currentIndex].focus();
-                  flashIndicator("Exited Text Box");
-              } else {
-                  currentIndex = null;
-                  flashIndicator("Disabled Program (Ctrl + \` to restart)", 3000);
-              }
-          } else if (currentIndex === null) {
-              if (event.ctrlKey && event.key === "`") {
-                  blockKeyEvents(event);
-                  currentIndex = 0;
-                  flashIndicator(`Enabled Program (Esc to end)`, 3000);
-              }
-          } else if (!['INPUT', 'TEXTAREA'].includes(event.target.tagName) && event.key === 'Tab') {
-            blockKeyEvents(event);
-        
-            if (videos.length === 0 || currentIndex === null) return; // Make sure Tab/Shift + Tab only happens IF THERE IS AT LEAST 1 VIDEO
-        
-            if (event.shiftKey) {
-              // Shift + Tab: Move backward
-              currentIndex = currentIndex <= 0 ? videos.length - 1 : currentIndex - 1;
+    fetch(url)
+        .then(res => res.text())
+        .then(html => {
+            // Split into lines
+            const lines = html.split("\n");
+            // alert(lines)
+
+            // Find first line containing "Class Rank:"
+            const match = lines.find(line => line.includes("Class Rank:"));
+
+            if (match) {
+                alert("Found: " + match.trim());
             } else {
-              // Tab: Move forward
-              currentIndex = currentIndex >= videos.length - 1 ? 0 : currentIndex + 1;
+                alert("No Class Rank found");
             }
+        })
+        .catch(err => {
+            alert("Fetch blocked by CORS or network error");
+            console.error(err);
+        });
+// CollegeBoard Score Faker (hide_collegeboard.js)
+} else if (false && url.includes("https://apclassroom.collegeboard.org/")) {
+    setInterval(() => {
+        // Deselect current answer
+        document.querySelectorAll(".letter.--chosen").forEach(letter => {letter.className = "letter"});
         
-            highlightVideo(videos.map(x => x[0]), currentIndex);
-            flashIndicator(`Selected Video ${currentIndex+1}`);
-          } else if (event.ctrlKey && event.altKey && ["H", "h"].includes(event.key)) {
-              blockKeyEvents(event);
-              highlightOutline = !highlightOutline;
-              flashIndicator(`Outline ${highlightOutline ? "En" : "Dis"}abled`);
-          } else if (event.ctrlKey && event.altKey && ["D", "d"].includes(event.key)) {
-              blockKeyEvents(event);
-              if (durationOutlineIndex === durationRounding.length - 1) {
-                  durationOutlineIndex = -1;
-                  flashIndicator("Video Duration Hidden");
-              } else {
-                  durationOutlineIndex = (durationOutlineIndex + 1) % durationRounding.length;
-                  if (durationRounding[durationOutlineIndex] === null) {
-                      flashIndicator("Video Duration Shown");
-                  } else if (durationRounding[durationOutlineIndex] === -1) {
-                      flashIndicator("Video Duration Truncated to the nearest Second");
-                  } else {
-                      flashIndicator(`Video Duration Truncated to ${durationRounding[durationOutlineIndex]} Digits`);
-                  }
+        // Auto select correct answer
+        document.querySelectorAll(".AccessibilityWrapper.mcq-option").forEach(option => {if (!option.className.includes("--correct") && option.querySelector(".response-analysis-wrapper").querySelector(".icon.--correct")) option.click();});
+        document.querySelectorAll(".AccessibilityWrapper.mcq-option.--correct").forEach(letter => {letter.querySelector(".letter").className = "letter --chosen"});
+        
+        // Move percentage line to the very right
+        document.querySelector(".percentage-line.percentage-line__right").style.marginRight = "0%"
+        
+        // Set score to max
+        document.querySelectorAll(".flex.items-center.h-8.dark.performance-score").forEach(score => score.textContent = `${score.textContent.split("/")[1]}/${score.textContent.split("/")[1]}`)
+        
+        // Change all responses to correct
+        document.querySelectorAll(".font-normal.text-default.text-red-500").forEach(s => {s.textContent = "1/1";s.className = ".font-normal text-default text-green-500"})
+        document.querySelectorAll(".x-mark-big").forEach(mark => mark.className = "v-mark-big");
+        document.querySelector('span[data-test-performance-icon-score="true"]').textContent = "1/1";
+    }, 1);
+// Double PowerSchool Grade Modifier
+} else if (false && url.startsWith("https://ps.pcti.tec.nj.us/guardian/scores.html")) {
+setInterval(() => {
+if (url.startsWith("https://ps.pcti.tec.nj.us/guardian/scores.html?frn=0042115146")) {
+  // Update flags table data to completed
+  document.querySelectorAll('td.codeCol').forEach(td => {
+      flagType = td.querySelector('span.screen_readers_only.ng-binding').textContent.trim();
+      if (flagType === 'collected') {
+          td.innerHTML = `                            <span class="screen_readers_only ng-binding">collected</span>
+                            <!-- ngIf: studentAssignment._assignmentsections[0]._assignmentscores[0].isincomplete --><div data-ng-if="studentAssignment._assignmentsections[0]._assignmentscores[0].isincomplete" class="tt-incomplete ps-icon ps-incomplete-inverse-green ng-scope" role="presentation"></div><!-- end ngIf: studentAssignment._assignmentsections[0]._assignmentscores[0].isincomplete -->`;
+      } else if (flagType === 'late') {
+          td.innerHTML = `                            <span class="screen_readers_only ng-binding">late</span>
+                            <!-- ngIf: studentAssignment._assignmentsections[0]._assignmentscores[0].isincomplete --><div data-ng-if="studentAssignment._assignmentsections[0]._assignmentscores[0].isincomplete" class="tt-incomplete ps-icon ps-incomplete-inverse-green ng-scope" role="presentation"></div><!-- end ngIf: studentAssignment._assignmentsections[0]._assignmentscores[0].isincomplete -->`;
+      } else if (flagType === 'missing') {
+          td.innerHTML = `                            <span class="screen_readers_only ng-binding">missing</span>
+                            <!-- ngIf: studentAssignment._assignmentsections[0]._assignmentscores[0].ismissing --><div data-ng-if="studentAssignment._assignmentsections[0]._assignmentscores[0].ismissing" class="tt-missing ps-icon ps-missing-inverse-green ng-scope" role="presentation"></div><!-- end ngIf: studentAssignment._assignmentsections[0]._assignmentscores[0].ismissing -->`;
+      } else if (flagType === 'exempt from final grade') {
+          td.innerHTML = `                            <span class="screen_readers_only ng-binding">exempt</span>
+                            <!-- ngIf: studentAssignment._assignmentsections[0]._assignmentscores[0].ismissing --><div data-ng-if="studentAssignment._assignmentsections[0]._assignmentscores[0].ismissing" class="tt-missing ps-icon ps-missing-inverse-green ng-scope" role="presentation"></div><!-- end ngIf: studentAssignment._assignmentsections[0]._assignmentscores[0].ismissing -->`;
+      } else if (flagType === 'absent') {
+          td.innerHTML = `                            <span class="screen_readers_only ng-binding">absent</span>
+                            <!-- ngIf: studentAssignment._assignmentsections[0]._assignmentscores[0].isabsent --><div data-ng-if="studentAssignment._assignmentsections[0]._assignmentscores[0].isabsent" class="tt-absent ps-icon ps-absent-inverse-green ng-scope" role="presentation"></div><!-- end ngIf: studentAssignment._assignmentsections[0]._assignmentscores[0].isabsent -->`;
+      } else if (flagType === 'incomplete') {
+          td.innerHTML = `                            <span class="screen_readers_only ng-binding">incomplete</span>
+                            <!-- ngIf: studentAssignment._assignmentsections[0]._assignmentscores[0].isabsent --><div data-ng-if="studentAssignment._assignmentsections[0]._assignmentscores[0].isabsent" class="tt-absent ps-icon ps-absent-inverse-green ng-scope" role="presentation"></div><!-- end ngIf: studentAssignment._assignmentsections[0]._assignmentscores[0].isabsent -->`;
+      } else if (flagType === 'excluded from final grade') {
+          td.innerHTML = `                            <span class="screen_readers_only ng-binding">excluded</span>
+                            <!-- ngIf: studentAssignment._assignmentsections[0]._assignmentscores[0].isabsent --><div data-ng-if="studentAssignment._assignmentsections[0]._assignmentscores[0].isabsent" class="tt-absent ps-icon ps-absent-inverse-green ng-scope" role="presentation"></div><!-- end ngIf: studentAssignment._assignmentsections[0]._assignmentscores[0].isabsent -->`;
+      }
+  });
+} else {
+  // Update flags table data to completed
+  document.querySelectorAll('td.codeCol').forEach(td => {
+      flagType = td.querySelector('span.screen_readers_only.ng-binding').textContent.trim();
+      if (flagType === 'collected') {
+          td.innerHTML = `                            <span class="screen_readers_only ng-binding">collected</span>
+                            <!-- ngIf: studentAssignment._assignmentsections[0]._assignmentscores[0].iscollected --><div data-ng-if="studentAssignment._assignmentsections[0]._assignmentscores[0].iscollected" class="tt-collected ps-icon ps-collected-inverse-green ng-scope" role="presentation"></div><!-- end ngIf: studentAssignment._assignmentsections[0]._assignmentscores[0].iscollected -->`;
+      } else if (flagType === 'late') {
+          td.innerHTML = `                            <span class="screen_readers_only ng-binding">late</span>
+                            <!-- ngIf: studentAssignment._assignmentsections[0]._assignmentscores[0].iscollected --><div data-ng-if="studentAssignment._assignmentsections[0]._assignmentscores[0].iscollected" class="tt-collected ps-icon ps-collected-inverse-green ng-scope" role="presentation"></div><!-- end ngIf: studentAssignment._assignmentsections[0]._assignmentscores[0].iscollected -->`;
+      } else if (flagType === 'missing') {
+          td.innerHTML = `                            <span class="screen_readers_only ng-binding">missing</span>
+                            <!-- ngIf: studentAssignment._assignmentsections[0]._assignmentscores[0].iscollected --><div data-ng-if="studentAssignment._assignmentsections[0]._assignmentscores[0].iscollected" class="tt-collected ps-icon ps-collected-inverse-green ng-scope" role="presentation"></div><!-- end ngIf: studentAssignment._assignmentsections[0]._assignmentscores[0].iscollected -->`;
+      } else if (flagType === 'exempt from final grade') {
+          td.innerHTML = `                            <span class="screen_readers_only ng-binding">exempt</span>
+                            <!-- ngIf: studentAssignment._assignmentsections[0]._assignmentscores[0].iscollected --><div data-ng-if="studentAssignment._assignmentsections[0]._assignmentscores[0].iscollected" class="tt-collected ps-icon ps-collected-inverse-green ng-scope" role="presentation"></div><!-- end ngIf: studentAssignment._assignmentsections[0]._assignmentscores[0].iscollected -->`;
+      } else if (flagType === 'absent') {
+          td.innerHTML = `                            <span class="screen_readers_only ng-binding">absent</span>
+                            <!-- ngIf: studentAssignment._assignmentsections[0]._assignmentscores[0].iscollected --><div data-ng-if="studentAssignment._assignmentsections[0]._assignmentscores[0].iscollected" class="tt-collected ps-icon ps-collected-inverse-green ng-scope" role="presentation"></div><!-- end ngIf: studentAssignment._assignmentsections[0]._assignmentscores[0].iscollected -->`;
+      } else if (flagType === 'incomplete') {
+          td.innerHTML = `                            <span class="screen_readers_only ng-binding">incomplete</span>
+                            <!-- ngIf: studentAssignment._assignmentsections[0]._assignmentscores[0].iscollected --><div data-ng-if="studentAssignment._assignmentsections[0]._assignmentscores[0].iscollected" class="tt-collected ps-icon ps-collected-inverse-green ng-scope" role="presentation"></div><!-- end ngIf: studentAssignment._assignmentsections[0]._assignmentscores[0].iscollected -->`;
+      } else if (flagType === 'excluded from final grade') {
+          td.innerHTML = `                            <span class="screen_readers_only ng-binding">excluded</span>
+                            <!-- ngIf: studentAssignment._assignmentsections[0]._assignmentscores[0].iscollected --><div data-ng-if="studentAssignment._assignmentsections[0]._assignmentscores[0].iscollected" class="tt-collected ps-icon ps-collected-inverse-green ng-scope" role="presentation"></div><!-- end ngIf: studentAssignment._assignmentsections[0]._assignmentscores[0].iscollected -->`;
+      }
+  });
+  
+  const pre = document.querySelector('.comment pre');
+  if (pre) {
+    //   [
+    //       "https://ps.pcti.tec.nj.us/guardian/scores.html?frn=0318578127&fg=R1&schoolid=50",
+    //       "https://ps.pcti.tec.nj.us/guardian/scores.html?frn=0042071084&begdate=12/04/2025&enddate=03/17/2026&fg=R2&schoolid=50",
+    //       "https://ps.pcti.tec.nj.us/guardian/scores.html?frn=0042071084&begdate=03/18/2026&enddate=06/21/2026&fg=R3&schoolid=50",
+    //   ].forEach(ela_link => {
+    //     if (url === ela_link) pre.textContent = "Tries his \"best\", I suppose.\nNothing he does is good enough.";
+    //   })
+  }
+
+  // Update score spans like "96/100" to "200/100"
+  document.querySelectorAll('td.score, span.ng-binding').forEach(span => {
+    const match = span.textContent.trim().match(/^(\d+(?:\.\d+)?)\/(\d+(?:\.\d+)?)$/);
+    if (match) {
+      const max = match[2];
+      span.textContent = `${2*max}/${max}`;
+    //   [
+    //       "https://ps.pcti.tec.nj.us/guardian/scores.html?frn=0318578127&fg=R1&schoolid=50",
+    //       "https://ps.pcti.tec.nj.us/guardian/scores.html?frn=0042071084&begdate=12/04/2025&enddate=03/17/2026&fg=R2&schoolid=50",
+    //       "https://ps.pcti.tec.nj.us/guardian/scores.html?frn=0042071084&begdate=03/18/2026&enddate=06/21/2026&fg=R3&schoolid=50",
+    //   ].forEach(ela_link => {
+    //     if (url === ela_link) span.textContent = `${.6*max}/${max}`;
+    //   })
+    }
+  });
+
+  // Update percent column to 200
+  document.querySelectorAll('td[data-ng-if*="showPercent"] span.ng-binding, td[data-ng-if*="showPercent"].ng-binding').forEach(span => {
+    const thing = /^\d+(\.\d+)?$/
+    if (span.textContent.trim().match(thing)) {
+      span.textContent = '200';
+    //   [
+    //       "https://ps.pcti.tec.nj.us/guardian/scores.html?frn=0318578127&fg=R1&schoolid=50",
+    //       "https://ps.pcti.tec.nj.us/guardian/scores.html?frn=0042071084&begdate=12/04/2025&enddate=03/17/2026&fg=R2&schoolid=50",
+    //       "https://ps.pcti.tec.nj.us/guardian/scores.html?frn=0042071084&begdate=03/18/2026&enddate=06/21/2026&fg=R3&schoolid=50",
+    //   ].forEach(ela_link => {
+    //     if (url === ela_link) span.textContent = '60';
+    //   })
+    }
+  });
+
+  // Update grade column to "S"
+  document.querySelectorAll('td[data-ng-if*="showGrade"].ng-binding').forEach(span => {
+    const grade = span.textContent.trim();
+    if (grade.match(/^(A[\+\-]?|B[\+\-]?|C[\+\-]?|D[\+\-]?|F)$/)) {
+      span.textContent = 'S';
+    //   [
+    //       "https://ps.pcti.tec.nj.us/guardian/scores.html?frn=0318578127&fg=R1&schoolid=50",
+    //       "https://ps.pcti.tec.nj.us/guardian/scores.html?frn=0042071084&begdate=12/04/2025&enddate=03/17/2026&fg=R2&schoolid=50",
+    //       "https://ps.pcti.tec.nj.us/guardian/scores.html?frn=0042071084&begdate=03/18/2026&enddate=06/21/2026&fg=R3&schoolid=50",
+    //   ].forEach(ela_link => {
+    //     if (url === ela_link) span.textContent = 'F';
+    //   })
+    }
+  });
+  
+  // Find the final grade cell by matching its content
+  document.querySelectorAll('table.linkDescList td').forEach(td => {
+    if (td.textContent.trim().endsWith('%')) {
+        td.innerHTML = 'S &nbsp; 200%';
+    //   [
+    //       "https://ps.pcti.tec.nj.us/guardian/scores.html?frn=0318578127&fg=R1&schoolid=50",
+    //       "https://ps.pcti.tec.nj.us/guardian/scores.html?frn=0042071084&begdate=12/04/2025&enddate=03/17/2026&fg=R2&schoolid=50",
+    //       "https://ps.pcti.tec.nj.us/guardian/scores.html?frn=0042071084&begdate=03/18/2026&enddate=06/21/2026&fg=R3&schoolid=50",
+    //   ].forEach(ela_link => {
+    //     if (url === ela_link) td.innerHTML = 'F &nbsp; 60%';
+    //   })
+    }
+  });
+  
+  
+  const rows = document.querySelectorAll('#sps-assignment-categories tbody tr');
+
+  rows.forEach(row => {
+    const cells = row.querySelectorAll('td');
+
+    // Points Possible is at index 3, Points Earned at index 4
+    const pointsPossible = cells[3].textContent.trim();
+    if (pointsPossible && cells[4]) {
+      cells[4].textContent = 2*pointsPossible;
+    //   [
+    //       "https://ps.pcti.tec.nj.us/guardian/scores.html?frn=0318578127&fg=R1&schoolid=50",
+    //       "https://ps.pcti.tec.nj.us/guardian/scores.html?frn=0042071084&begdate=12/04/2025&enddate=03/17/2026&fg=R2&schoolid=50",
+    //       "https://ps.pcti.tec.nj.us/guardian/scores.html?frn=0042071084&begdate=03/18/2026&enddate=06/21/2026&fg=R3&schoolid=50",
+    //   ].forEach(ela_link => {
+    //     if (url === ela_link) cells[4].textContent = Math.round(.6*pointsPossible, 2);
+    //   })
+    }
+
+    // Grade is at index 5
+    if (cells[5]) {
+      cells[5].textContent = 'S';
+    //   [
+    //       "https://ps.pcti.tec.nj.us/guardian/scores.html?frn=0318578127&fg=R1&schoolid=50",
+    //       "https://ps.pcti.tec.nj.us/guardian/scores.html?frn=0042071084&begdate=12/04/2025&enddate=03/17/2026&fg=R2&schoolid=50",
+    //       "https://ps.pcti.tec.nj.us/guardian/scores.html?frn=0042071084&begdate=03/18/2026&enddate=06/21/2026&fg=R3&schoolid=50",
+    //   ].forEach(ela_link => {
+    //     if (url === ela_link) cells[5].textContent = 'F';
+    //   })
+    }
+
+    // Grade Percentage is at index 6
+    if (cells[6]) {
+      cells[6].textContent = '200%';
+    //   [
+    //       "https://ps.pcti.tec.nj.us/guardian/scores.html?frn=0318578127&fg=R1&schoolid=50",
+    //       "https://ps.pcti.tec.nj.us/guardian/scores.html?frn=0042071084&begdate=12/04/2025&enddate=03/17/2026&fg=R2&schoolid=50",
+    //       "https://ps.pcti.tec.nj.us/guardian/scores.html?frn=0042071084&begdate=03/18/2026&enddate=06/21/2026&fg=R3&schoolid=50",
+    //   ].forEach(ela_link => {
+    //     if (url === ela_link) cells[6].textContent = '60%';
+    //   })
+    }
+  });
+}
+}, 1);
+} else if (url.startsWith("https://drive.google.com") || url.startsWith("https://docs.google.com")) {
+// nvm it only affects google drive
+} else if (false && url === "https://www.desmos.com/calculator") { // TODO: Auto save feature?
+    // try {
+    // setInterval(()=>{ 
+    //   let time = new Date();
+    //   let state = Calc.getState();
+    //   state.expressions.list[3].latex="t_I_R_L="+time.getHours()%12*3600+time.getMinutes()*60+time.getSeconds();
+    //   Calc.setState(state);
+    // }, 100);
+    // } catch(error) {alert(error.stack)}
+
+// Auto Save
+    // setInterval(() => {
+        // try{
+        // const saveButton = Array.from(document.querySelectorAll('button'))
+        //   .find(el => el.innerHTML.trim() === 'Save');
+        
+        // if (saveButton) {
+        //   saveButton.click();
+        //   saveButton.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+        //   alert("clicked!")
+        // }
+        // } catch (e) {alert(e.stack)}
+let saveTimeout;
+
+function autoSaveGraph() {
+    // Debounce to prevent saving on every single keystroke/movement
+    clearTimeout(saveTimeout);
+    saveTimeout = setTimeout(() => {
+        let state = calculator.getState();
+
+        // Option A: Save locally in the browser
+        localStorage.setItem('desmos_saved_state', JSON.stringify(state));
+        console.log('Graph auto-saved locally at', new Date().toLocaleTimeString());
+
+        // Option B: Send via fetch to your server API
+        /*
+        fetch('/api/save-graph', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(state)
+        });
+        */
+    }, 1000); // Wait 1 second after last change before saving
+}
+
+// let elt = document.getElementById('calculator');
+// alert(Calc)
+// let calculator = Desmos.GraphingCalculator(elt);
+
+// Listen for any changes in the expressions or settings
+Calc.observe('change', function() {
+    alert(21);
+    autoSaveGraph();
+});
+} else if (url.includes("https://runestone.academy")) { // CSAWESOME
+    alert(`Be sure to Ctrl + F the following:
+Next >
+Check Me
+Save & Run
+Video
+Check
+Save`);
+} else if (url.startsWith("https://ps.pcti.tec.nj.us/guardian/home.html")) {
+const fail_lunch_links = [
+    'scores.html?frn=0042115146&fg=R1&schoolid=50',
+    'scores.html?frn=0042115146&fg=R2&schoolid=50',
+];
+for (let i = 0; i < fail_lunch_links.length; i++) {
+    let fail_lunch_link = document.querySelector(`a[href="${fail_lunch_links[i]}"]`);
+    if (fail_lunch_link) {
+        fail_lunch_link.innerHTML = '<b>F<br>60</b>';
+    }
+}
+// ela_links = [
+//   "scores.html?frn=0318578127&fg=R1&schoolid=50",
+//   "scores.html?frn=0042071084&begdate=12/04/2025&enddate=03/17/2026&fg=R2&schoolid=50",
+//   "scores.html?frn=0042071084&begdate=03/18/2026&enddate=06/21/2026&fg=R3&schoolid=50",
+// ];
+// for (let i = 0; i < ela_links.length; i++) {
+//     let ela_link = document.querySelector(`a[href="${ela_links[i]}"]`);
+//     if (ela_link) {
+//         ela_link.innerHTML = '<b>F<br>60</b>';
+//     }
+// }
+
+// Find all <td> elements aligned left
+const tdElements = document.querySelectorAll('td[align="left"]');
+
+tdElements.forEach(td => {
+  // Look for a text node that contains "LUNCH 6B"
+  for (let node of td.childNodes) {
+    if (node.nodeType === Node.TEXT_NODE && node.textContent.includes("LUNCH 6B")) {
+      node.textContent = node.textContent.replace("AP LUNCH", "LUNCH").replace("LUNCH", "AP LUNCH");
+      break;
+    }
+  }
+});
+
+// Make everything else S
+const s_grade_links = [
+    'scores.html?frn=0042080392&begdate=09/03/2025&enddate=12/03/2025&fg=R1&schoolid=50',
+    'scores.html?frn=0042085977&begdate=09/03/2025&enddate=12/03/2025&fg=R1&schoolid=50',
+    'scores.html?frn=0042071084&begdate=09/03/2025&enddate=12/03/2025&fg=R1&schoolid=50',
+    'scores.html?frn=0042072891&begdate=09/03/2025&enddate=12/03/2025&fg=R1&schoolid=50',
+    'scores.html?frn=0042066939&begdate=09/03/2025&enddate=12/03/2025&fg=R1&schoolid=50',
+    'scores.html?frn=0042082439&begdate=09/03/2025&enddate=12/03/2025&fg=R1&schoolid=50',
+    'scores.html?frn=0042067814&begdate=09/03/2025&enddate=12/03/2025&fg=R1&schoolid=50',
+    'scores.html?frn=0042066939&begdate=12/04/2025&enddate=03/17/2026&fg=R2&schoolid=50',
+    'scores.html?frn=0042072891&begdate=12/04/2025&enddate=03/17/2026&fg=R2&schoolid=50',
+    'scores.html?frn=0042085977&begdate=12/04/2025&enddate=03/17/2026&fg=R2&schoolid=50',
+    'scores.html?frn=0042080392&begdate=12/04/2025&enddate=03/17/2026&fg=R2&schoolid=50',
+    'scores.html?frn=0042067814&begdate=12/04/2025&enddate=03/17/2026&fg=R2&schoolid=50',
+    'scores.html?frn=0042082439&begdate=12/04/2025&enddate=03/17/2026&fg=R2&schoolid=50',
+    'scores.html?frn=0318579567&fg=R1&schoolid=50',
+    'scores.html?frn=0318577055&fg=R1&schoolid=50',
+    'scores.html?frn=0318582087&fg=R1&schoolid=50',
+    'scores.html?frn=0318588137&fg=R1&schoolid=50',
+    'scores.html?frn=0318567288&fg=R1&schoolid=50',
+    'scores.html?frn=0318565690&fg=R1&schoolid=50',
+    'scores.html?frn=0318578127&fg=R1&schoolid=50',
+    'scores.html?frn=0042071084&begdate=12/04/2025&enddate=03/17/2026&fg=R2&schoolid=50',
+];
+for (let i = 0; i < s_grade_links.length; i++) {
+    let s_grade_link = document.querySelector(`a[href="${s_grade_links[i]}"]`);
+    if (s_grade_link) {
+        s_grade_link.innerHTML = '<b>S<br>200</b>';
+    }
+}
+
+
+// Find the table cell containing the GPA label
+const gpaCells = document.querySelectorAll('table td');
+for (let cell of gpaCells) {
+  if (cell.textContent.trim().startsWith('Current Cum PCTI Weighted')) {
+      const newGPA = "5.2"
+    if (!cell.textContent.includes(newGPA)) {cell.textContent += '5.2'};
+    break;
+  }
+// Double Canvas Grade (2/4)
+}} else if (false && /^https:\/\/pcti\.instructure\.com\/courses\/\d+\/assignments(?:\/\d+)?(?:\/submissions\/\d+)?\/?(?:\?.*)?$/.test(url)) {
+setInterval(() => {
+    // Find all grade elements that match the pattern
+    const el = document.querySelector('.module > div')
+    if (el) {
+    const match = el.innerHTML.match(/Grade:\s*(\d+)\s*<span[^>]*>\((\d+)\s*pts possible\)<\/span>/);
+  if (match) {
+    const actualGrade = match[2];
+    el.innerHTML = `Grade: ${2*actualGrade} <span style="font-size: 0.8em;">(${actualGrade} pts possible)</span>`;
+  }}
+
+document.querySelectorAll('.points-value, .css-7cbhck-text, .css-r9cwls-screenReaderContent').forEach(span => {
+  let match = span.textContent.trim().match(/^(\d+(?:\.\d+)?)\s*\/\s*(\d+)\s*Points$/);
+  if (match) {
+    const maxPoints = match[2];
+    span.innerHTML = `<strong>${2*maxPoints}/${maxPoints} Points</strong>`;
+  }
+  match = span.textContent.trim().match(/^(\d+(?:\.\d+)?)\s*\/\s*(\d+)$/);
+  if (match) {
+    const maxPoints = match[2];
+    span.textContent = `${2*maxPoints}/${maxPoints}`;
+  }
+});
+
+document.querySelectorAll('span.entered_grade, span.grade').forEach(span => {
+  const td = span.closest('td');
+  if (!td) return;
+
+  // Extract denominator from the text after the span
+  const match = td.textContent.match(/\/\s*(\d+(?:\.\d+)?)/);
+  if (!match) return;
+
+  const denominator = parseFloat(match[1]);
+  const doubled = (2 * denominator).toFixed(2).replace(/\.00$/, '');
+
+  span.textContent = doubled;
+});
+
+document.querySelectorAll('span.score-display').forEach(span => {
+  const text = span.textContent.trim();
+  const match = text.match(/([^\/]+)\/\s*(\d+(?:\.\d+)?)\s*pts/i);
+
+  if (match) {
+    const numerator = match[1].trim();
+    const denominator = parseFloat(match[2]);
+
+    if (numerator === '-') return; // skip if no submission
+
+    const doubled = (2 * denominator).toFixed(2).replace(/\.00$/, '');
+
+    const bold = span.querySelector('b');
+    if (bold) {
+      bold.textContent = doubled;
+    } else {
+      span.textContent = `${doubled}/${denominator} pts`;
+    }
+  }
+});
+}, 1);
+// Double Canvas Grade (3/4)
+} else if (false && /^https:\/\/pcti\.instructure\.com\/courses\/\d+\/grades(?:\?.*)?$/.test(url)) {
+    if (!url.endsWith("?grading_period_id=0")) {
+const match = url.match(/^https:\/\/pcti\.instructure\.com\/courses\/(\d+)\/grades(?:\?.*)?$/);
+if (match) {
+  const courseId = match[1];
+  window.location.href = `https://pcti.instructure.com/courses/${courseId}/grades?grading_period_id=0`;
+}
+    }
+    document.querySelectorAll('span.grade').forEach(span => {
+    const match = span.textContent.trim().match(/^\d{1,3}(?:\.\d{1,2})?%$/);
+    if (match) {
+      span.textContent = "200%";
+    }
+    });
+document.querySelectorAll('span.tooltip').forEach(tooltip => {
+  let spanToChange = tooltip
+  tooltip.querySelectorAll('span').forEach(span => {
+    if (span.className == "grade") {
+      spanToChange = span
+    } else if (!span.className) {
+      spanToChange.textContent = 2 * span.textContent.slice(2, span.textContent.length + 1)
+    }
+  })
+});
+
+document.querySelectorAll('span.possible.points_possible').forEach(span => {
+  const text = span.textContent.trim();
+
+  // Regex: allow commas in numbers
+  const match = text.match(/^([\d,]+(?:\.\d+)?)\s*\/\s*([\d,]+(?:\.\d+)?)$/);
+
+  if (match) {
+    // Remove commas before parsing
+    const denominator = parseFloat(match[2].replace(/,/g, ""));
+    const doubled = (2 * denominator).toFixed(2);
+
+    span.textContent = `${doubled} / ${match[2]}`;
+  }
+});
+// Double Canvas Grade (4/4)
+} else if (false && url.match(/^https:\/\/pcti\.instructure\.com\/grades(?:\?.*)?$/)) {
+setInterval(() => {
+  document.querySelectorAll('td.percent').forEach(link => {
+    link.textContent = "200%";
+  });
+}, 1);
+} else if (/^https:\/\/quizlet\.com\/\d+\/match\/?(?:\?.*)?$/.test(url)) {
+    // TODO: Find JavaScript that handles stopwatch
+    // https://copilot.microsoft.com/chats/WtPeNsm5rvHac4qFa4hKX
+    setInterval(() => {
+        const spanByRole = document.querySelector('a[role="link"] > span');
+        if (spanByRole) {
+            spanByRole.innerHTML = 0.0;
+        }
+    }, 1000);
+    const adjustment = 200; // Lower = faster, higher = safer
+    (async () => {
+      const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+      const termDict = {};
+      while (Object.keys(termDict).length === 0) {
+          const scripts = document.querySelectorAll('script');
+          const lastScript = scripts[scripts.length - 1];
+          const cardPairs = JSON.parse(JSON.parse(lastScript.textContent).props.pageProps.dehydratedReduxStateKey).studyModesCommon.studiableData.studiableItems
+          cardPairs.forEach(item => {
+            const getText = query => {
+              const side = item.cardSides.find(side => side.label === query);
+              for (const mediaItem of side.media) {
+                if (mediaItem.plainText) {
+                  return mediaItem.plainText.trim();
+                }
               }
-          } else if (textBoxes.length > 0 && event.altKey && ["/", "?"].includes(event.key)) {
-            if (textBoxes.includes(document.activeElement) || !(currentTextIndex >= 0 && currentTextIndex < textBoxes.length)) {
-                if (event.shiftKey) {
-                  currentTextIndex = currentTextIndex <= 0 ? textBoxes.length - 1 : currentTextIndex - 1;
-                } else {
-                  currentTextIndex = currentTextIndex >= textBoxes.length - 1 ? 0 : currentTextIndex + 1;
-                }
+            };
+            const wordText = getText("word");
+            const defText = getText("definition");
+        
+            if (wordText && defText) {
+              termDict[wordText] = defText;
             }
-            textBoxes[currentTextIndex].focus();
-            flashIndicator(`Selected Text Box ${currentTextIndex+1}`);
+          });
+      }
+
+    // Reverse dictionary for bidirectional matching
+    const reverseDict = {};
+    for (const [key, value] of Object.entries(termDict)) {
+      reverseDict[value] = key;
+    }
+    
+    let cardsMatched = [];
+
+    
+    // Start game
+    document.querySelectorAll('*').forEach(el => {
+      if (el.textContent.trim() === "Start game") {
+        el.click();
+      }
+    });
+
+
+    // Begin matching loop
+    while (true) {
+      const tiles = [...document.querySelectorAll('div.FormattedText')];
+      const tileMap = new Map();
+    
+      tiles.forEach(div => {
+        const text = div.textContent.trim();
+        tileMap.set(text, div);
+      });
+    
+      for (const div of tiles) {
+        const text = div.getAttribute("aria-label");
+        const matchText = termDict[text] || reverseDict[text];
+
+        if (matchText) {
+          const matchDiv = tiles.find(other => {
+            const label = other.getAttribute("aria-label")
+            return label === matchText;
+          });
+    
+          if (matchDiv && matchDiv !== div && !(cardsMatched.includes(div) || cardsMatched.includes(matchDiv))) {
+            div.click();
+            await sleep(0); // 1 frame delay from clicking the second tile
+            matchDiv.click();
+            await sleep(adjustment); // wait before next pair
+            cardsMatched.push(div);
+            cardsMatched.push(matchDiv);
           }
+        }
+      }
     
-          if (videos.length > 0 && currentIndex !== null) (aVideo => {
-            if (!['INPUT', 'TEXTAREA'].includes(event.target.tagName)) {
-                /*// Defining attributes
-                if (!("replayStart" in aVideo[1])) aVideo[1].replayStart = 0;
-                if (!("replayEnd" in aVideo[1])) aVideo[1].replayEnd = aVideo[1].duration;
-                if (!("cuts" in aVideo[1])) aVideo[1].cuts = [];
-                if (!("navModIter" in aVideo[1])) aVideo[1].navModIter = 3;
-                if (!("speedModIter" in aVideo[1])) aVideo[1].speedModIter = 4;
-                if (!("replay" in aVideo[1])) aVideo[1].replay = false;
-                if (!("allowCuts" in aVideo[1])) aVideo[1].allowCuts = false;
-                if (!("cutIter" in aVideo[1])) aVideo[1].cutIter = "";
-                if (!("deleteCutIter" in aVideo[1])) aVideo[1].deleteCutIter = "";
-                if (!("volMod" in aVideo[1])) aVideo[1].volMod = 0.1;
-                if (!("savedTimeStamps" in aVideo[1])) aVideo[1].savedTimeStamps = [];
-                if (!("savedUndos" in aVideo[1])) aVideo[1].savedUndos = [];
-                // if (!("paused" in aVideo[1])) aVideo[1].paused = true;
-                // if (!("playbackRate" in aVideo[1])) aVideo[1].playbackRate = 1;*/
-            
-                const quality = aVideo[1].getVideoPlaybackQuality?.();
-                const fps = (quality && quality.totalVideoFrames && quality.totalFrameDelay)
-                    ? quality.totalVideoFrames / quality.totalFrameDelay
-                    : 100;
-                // History Feature
-                if (event.altKey && (event.key === 'ArrowLeft' || event.key === 'ArrowRight')) {
-                    blockKeyEvents(event);
-                    event.key === 'ArrowLeft' ? window.history.back() : window.history.forward();
-                }
-                if (event.ctrlKey && event.key === "?") {
-                    flashIndicator(`Click this box to close\n\
-    ====================================================================\n\
-    Selecting Video\n\
-    Esc - Exit Text Box/End Program\n\
-    Ctrl + \` - Restart Program\n\n\
-    Tab - Select Next Video\n\
-    Shift + Tab - Select Previous Video\n\n\
-    Alt + Slash (/) - Select Next Text Box\n\
-    Alt + Shift + Slash (/) (Alt + ?) - Select Previous Text Box\n\n\
-    Ctrl + Alt + H - Hide Outline (in case it doesn't work or hides the video)\n\
-    Ctrl + Alt + D - Toggle Duration Outline\n\
-    ====================================================================\n\
-    Play/Pause\n\
-    Space/K/Enter - Play/Pause\n\
-    ====================================================================\n\
-    Controls\n\
-    F - Toggle Fullscreen\n\
-    Ctrl + Alt + C - Show all Controls\n\
-    Ctrl + Alt + L - Toggle Loop\n\
-    Ctrl + Alt + P - Toggle Picture-in-Picture\n\
-    ====================================================================\n\
-    Navigation\n\
-    Comma - Go back 1 frame\n\
-    Period - Go forward 1 frame\n\n\
-    Numbers (0-9) = Go to percentage of video length\n\n\
-    
-    Left Arrow - Go back by Navigation Modifier\n\
-    Right Arrow - Go forward by Navigation Modifier\n\
-    J - Go back by 2 * Navigation Modifier\n\
-    L - Go forward by 2 * Navigation Modifier\n\n\
-    Ctrl + Left Arrow - Decrease Navigation Modifier\n\
-    Ctrl + Right Arrow - Increase Navigation Modifier\n\
-    
-    Ctrl + Z - Undo to last timestamp before Navigation
-    Ctrl + Y - Redo to last timestamp before Undo
-    ====================================================================\n\
-    Volume\n\
-    Up Arrow - Increase Volume by Volume Modifier\n\
-    Down Arrow - Decrease Volume by Volume Modifier\n\n\
-    Ctrl + Up Arrow - Increase Volume Modifier\n\
-    Ctrl + Down Arrow - Decrease Volume Modifier\n\n\
-    M - Toggle mute\n\
-    ====================================================================\n\
-    Playback Rate/Speed\n\
-    Shift + Space - Reset Playback Rate and Speed Modifier\n\n\
-    Shift + Comma (Less Than) - Decrease Playback Rate by Speed Modifier\n\
-    Shift + Period (Greater Than) - Increase Playback Rate by Speed Modifier\n\n\
-    Ctrl + Shift + Comma (Ctrl + Less Than) - Decrease Speed Modifier\n\
-    Ctrl + Shift + Period (Ctrl + Greater Than) - Increase Speed Modifier\n\
-    ====================================================================\n\
-    Replay\n\
-    Shift + Up Arrow - Cycle Enabling Replay and/or Cuts\n\
-    Shift + Down Arrow - Disable Replay and Cuts\n\n\
-    Shift + Left Arrow - Set Replay Start\n\
-    Shift + Right Arrow - Set Replay End\n\
-    ====================================================================\n\
-    Cut\n\
-    Shift + Up Arrow - Cycle Enabling Replay and/or Cuts\n\
-    Shift + Down Arrow - Disable Replay and Cuts\n\n\
-    Shift + Numbers (0-9) - Set Cut Customization (e.g. Shift + 1 + 9 - Customize Cut 19)\n\
-    Shift + Left Arrow (while Customizing Cut) - Set Cut Start\n\
-    Shift + Right Arrow (while Customizing Cut) - Set Cut End\n\n\
-    Ctrl + Shift + Numbers (0-9) - Set Cut Deletion (e.g. Shift + 1 + 9 - Delete Cut 19)\n\n\
-    Ctrl + Shift - Finish Cut Customization/Confirm Cut Deletion`, 2**16);
-                }
-                // Playback Rate/Speed feature
-                else if (event.shiftKey && event.key === " ") {
-                    blockKeyEvents(event);
-                    aVideo[1].speedModIter = 4;
-                    aVideo[1].playbackRate = 1;
-                    flashIndicator(`${aVideo[1].playbackRate}x ± ${speedModifiers[aVideo[1].speedModIter]}x`);
-                } else if (event.ctrlKey && ["<", ">"].includes(event.key)) {
-                  if (event.key === ">") {
-                    return;
-                    aVideo[1].speedModIter = Math.min(aVideo[1].speedModIter + 1, speedModifiers.length - 1);
-                  } else {
-                    aVideo[1].speedModIter = Math.max(aVideo[1].speedModIter - 1, 0);
-                  }
-                  flashIndicator(`±${speedModifiers[aVideo[1].speedModIter].toFixed(getDecimalCount(speedModifiers[aVideo[1].speedModIter]))}x`);
-                } else if (["<", ">"].includes(event.key)) {
-                  aVideo[0].contentWindow.postMessage(JSON.stringify({
-                      "event": "command",
-                      "func": "setPlaybackRate",
-                      "args": [aVideo[1].playbackRate + (event.key === "<" ? -0.25 : 0.25)]
-                  }), "*");
-                  flashIndicator(`${aVideo[1].playbackRate.toFixed(2)}x`);
-                }
-                // Replay + Cut feature
-                else if (event.shiftKey && event.key === "ArrowUp") {
-                    blockKeyEvents(event);
-                    if (aVideo[1].replay && aVideo[1].allowCuts) {
-                        aVideo[1].allowCuts = false;
-                    }
-                    else if (aVideo[1].replay && !aVideo[1].allowCuts) {
-                        aVideo[1].replay = false;
-                        aVideo[1].allowCuts = true;
-                    }
-                    else {
-                        aVideo[1].replay = true;
-                        aVideo[1].allowCuts = true;
-                    }
-                    flashIndicator(`${aVideo[1].replay ? `Replay (${formatVidTime(aVideo[1].replayStart)} to ${formatVidTime(aVideo[1].replayEnd)}) ` : ""}${aVideo[1].replay && aVideo[1].allowCuts ? "+ " : ""}${aVideo[1].allowCuts ? `Cuts ${Object.keys(aVideo[1].cuts).map(Number)} ` : ""}On`);
-                } else if (event.shiftKey && event.key === "ArrowDown") {
-                    blockKeyEvents(event);
-                    aVideo[1].replay = false;
-                    aVideo[1].allowCuts = false;
-                    flashIndicator(`Replay (${formatVidTime(aVideo[1].replayStart)} to ${formatVidTime(aVideo[1].replayEnd)}) + Cuts ${Object.keys(aVideo[1].cuts).map(Number)} Off`);
-                } else if (event.shiftKey && event.key === "ArrowLeft") {
-                    blockKeyEvents(event);
-                    if (aVideo[1].cutIter) {
-                        if (!aVideo[1].cuts[aVideo[1].cutIter]) aVideo[1].cuts[aVideo[1].cutIter] = [];
-                        aVideo[1].cuts[aVideo[1].cutIter][0] = aVideo[1].currentTime;
-                        flashIndicator(`Cut ${aVideo[1].cutIter}: ${formatVidTime(aVideo[1].cuts[aVideo[1].cutIter][0])} to ${formatVidTime(aVideo[1].cuts[aVideo[1].cutIter][1])} (Ctrl + Shift to finish)`);
-                    } else {
-                        aVideo[1].replayStart = aVideo[1].currentTime;
-                        flashIndicator(`Replay: ${formatVidTime(aVideo[1].replayStart)} to ${formatVidTime(aVideo[1].replayEnd)}`);
-                    }
-                } else if (event.shiftKey && event.key === "ArrowRight") {
-                    blockKeyEvents(event);
-                    if (aVideo[1].cutIter) {
-                        if (!aVideo[1].cuts[aVideo[1].cutIter]) aVideo[1].cuts[aVideo[1].cutIter] = [];
-                        aVideo[1].cuts[aVideo[1].cutIter][1] = aVideo[1].currentTime;
-                        flashIndicator(`Cut ${aVideo[1].cutIter}: ${formatVidTime(aVideo[1].cuts[aVideo[1].cutIter][0])} to ${formatVidTime(aVideo[1].cuts[aVideo[1].cutIter][1])} (Ctrl + Shift to finish)`);
-                    } else {
-                        aVideo[1].replayEnd = aVideo[1].currentTime;
-                        flashIndicator(`Replay: ${formatVidTime(aVideo[1].replayStart)} to ${formatVidTime(aVideo[1].replayEnd)}`);
-                    }
-                }
-                // Cut feature
-                else if (false) {
-                    if (false) {}
-                    else if (event.shiftKey && event.ctrlKey && /^Digit[0-9]$/.test(event.code)) {
-                        blockKeyEvents(event);
-                        if (event.code === "Digit0" && aVideo[1].deleteCutIter === "") {
-                            flashIndicator(`Cannot start cut number with 0`);
-                        } else {
-                            aVideo[1].deleteCutIter += event.code.replace("Digit", "");
-                            let timeframe = "";
-                            if (aVideo[1].cuts[aVideo[1].deleteCutIter]) {
-                                timeframe = ` (${formatVidTime(aVideo[1].cuts[aVideo[1].deleteCutIter][0])} to ${formatVidTime(aVideo[1].cuts[aVideo[1].deleteCutIter][1])})`
-                            }
-                            flashIndicator(`Deleting Cut ${aVideo[1].deleteCutIter}${timeframe} (Ctrl + Shift to delete)`);
-                        }
-                    } else if (event.shiftKey && /^Digit[0-9]$/.test(event.code)) {
-                        blockKeyEvents(event);
-                        if (event.code === "Digit0" && aVideo[1].cutIter === "") {
-                            flashIndicator(`Cannot start cut number with 0`);
-                        } else {
-                            aVideo[1].cutIter += event.code.replace("Digit", "");
-                            let timeframe = "";
-                            if (aVideo[1].cuts[aVideo[1].cutIter]) {
-                                timeframe = ` (${formatVidTime(aVideo[1].cuts[aVideo[1].cutIter][0])} to ${formatVidTime(aVideo[1].cuts[aVideo[1].cutIter][1])})`
-                            }
-                            flashIndicator(`Customizing Cut ${aVideo[1].cutIter}${timeframe} (Ctrl + Shift to finish)`);
-                        }
-                    } else if (event.shiftKey && event.ctrlKey) {
-                        if (aVideo[1].deleteCutIter) {
-                            if (aVideo[1].cuts[aVideo[1].deleteCutIter]) {
-                                delete aVideo[1].cuts[aVideo[1].deleteCutIter];
-                                flashIndicator(`Deleted Cut ${aVideo[1].deleteCutIter}`);
-                                aVideo[1].cuts.length = Object.keys(aVideo[1].cuts).length ? +Object.keys(aVideo[1].cuts).at(-1) + 1 : 0;
-                            } else {
-                                flashIndicator(`Cut ${aVideo[1].deleteCutIter} does not exist`);
-                            }
-                            aVideo[1].deleteCutIter = "";
-                        } else if (aVideo[1].cutIter) {
-                            flashIndicator(`Finished Customizing Cut ${aVideo[1].cutIter}`);
-                            aVideo[1].cutIter = "";
-                        }
-                    }
-                }
-                // Play/Pause feature
-                else if ([" ", "K", "k", "Enter"].includes(event.key)) {
-                    blockKeyEvents(event);
-                    aVideo[0].contentWindow.postMessage(JSON.stringify({
-                        "event": "command",
-                        "func": `${aVideo[0].playerState === 1 ? "pause" : "play"}Video`,
-                        "args": []
-                    }), "*");
-                    flashIndicator(`Video ${aVideo[0].playerState === 1 ? "Paused" : "Playing"}`);
-                }
-                // Controls feature
-                else if (["F", "f"].includes(event.key)) {
-                    blockKeyEvents(event);
-                    if (!document.fullscreenElement) {
-                        if (aVideo[1].requestFullscreen) {
-                            aVideo[1].requestFullscreen();
-                            flashIndicator("Entered Fullscreen");
-                        } else if (aVideo[1].webkitRequestFullscreen) {
-                            aVideo[1].webkitRequestFullscreen();
-                            flashIndicator("Entered Fullscreen");
-                        } else {
-                            flashIndicator("Fullscreen not available");
-                        }
-                    } else if (document.exitFullscreen) {
-                        document.exitFullscreen();
-                        flashIndicator("Exited Fullscreen");
-                    }
-                } else if (event.ctrlKey && event.altKey && ["C", "c"].includes(event.key)) {
-                    blockKeyEvents(event);
-                    // aVideo[1].controls = !aVideo[1].controls;
-                    // flashIndicator(`Controls ${aVideo[1].controls ? "En" : "Dis"}abled`);
-                    cheezeIt = !cheezeIt;
-                    flashIndicator(`Cheeze ${cheezeIt ? "En" : "Dis"}abled`);
-                } else if (event.ctrlKey && event.altKey && ["L", "l"].includes(event.key)) {
-                    blockKeyEvents(event);
-                    aVideo[1].loop = !aVideo[1].loop;
-                    flashIndicator(`Loop ${aVideo[1].loop ? "En" : "Dis"}abled`);
-                } else if (event.ctrlKey && event.altKey && ["P", "p"].includes(event.key)) {
-                    blockKeyEvents(event);
-                    if (aVideo[1].hasAttribute('__pip__')) {
-                        document.exitPictureInPicture();
-                        flashIndicator("Ended Picture-in-Picture");
-                    } else {
-                        if (document.pictureInPictureElement) document.exitPictureInPicture();
-                        aVideo[1].removeAttribute("disablePictureInPicture");
-                        aVideo[1].requestPictureInPicture();
-                        aVideo[1].setAttribute('__pip__', true);
-                        aVideo[1].addEventListener('leavepictureinpicture', event => {
-                            aVideo[1].removeAttribute('__pip__');
-                        }, { once: true });
-                        flashIndicator(`Started Picure-in-Picture for Video ${currentIndex+1}`);
-                    }
-                }
-                // Navigation feature
-                else if ([",", "."].includes(event.key)) {
-                    blockKeyEvents(event);
-                    aVideo[1].currentTime += event.key === "," ? -1/fps : 1/fps;
-                    flashIndicator(`${event.key === "," ? "-" : "+"}1 frame`);
-                } else if (event.ctrlKey && ["ArrowLeft", "ArrowRight"].includes(event.key)) {
-                  return;
-                  blockKeyEvents(event);
-                  if (event.key === "ArrowLeft") {
-                    aVideo[1].navModIter = Math.max(aVideo[1].navModIter - 1, 0);
-                  } else {
-                    aVideo[1].navModIter = Math.min(aVideo[1].navModIter + 1, navModifiers.length - 1);
-                  }
-                  flashIndicator(`±${navModifiers[aVideo[1].navModIter]}s`);
-                } else if (/^Digit[0-9]$/.test(event.code)) {
-                    blockKeyEvents(event);
-                    // aVideo[1].savedTimeStamps.push([aVideo[1].currentTime, "Go to percentage of video length"]);
-                    aVideo[0].contentWindow.postMessage(JSON.stringify({
-                        "event": "command",
-                        "func": "seekTo",
-                        "args": [aVideo[0].duration * JSON.parse(event.code.replace("Digit", "")) / (cheezeIt ? 1 : 10), true]
-                    }), "*");
-                    flashIndicator(cheezeIt ? "Keep spamming to cheeze to the end!!!" : `${JSON.parse(event.code.replace("Digit", "")) * 10}% of Video Duration`);
-                } else if (["ArrowLeft", "ArrowRight"].includes(event.key)) {
-                    blockKeyEvents(event);
-                    // aVideo[1].savedTimeStamps.push([aVideo[1].currentTime, `Go ${event.key === "ArrowLeft" ? "back" : "forward"} by Navigation Modifier`]);
-                    const incrementVid = 5; // navModifiers[aVideo[1].navModIter];
-                    aVideo[0].contentWindow.postMessage(JSON.stringify({
-                        "event": "command",
-                        "func": "seekTo",
-                        "args": [aVideo[1].currentTime + incrementVid * (event.key === "ArrowLeft" ? -1 : 1), true]
-                    }), "*");
-                    flashIndicator(`${event.key === "ArrowLeft" ? "-" : "+"}${incrementVid}s`);
-                } else if (["j", "l"].includes(event.key.toLowerCase())) {
-                    blockKeyEvents(event);
-                    // aVideo[1].savedTimeStamps.push([aVideo[1].currentTime, `Go ${event.key.toLowerCase() === "j" ? "back" : "forward"} by 2 * Navigation Modifier`]);
-                    const incrementVid = 5; // navModifiers[aVideo[1].navModIter];
-                    aVideo[0].contentWindow.postMessage(JSON.stringify({
-                        "event": "command",
-                        "func": "seekTo",
-                        "args": [aVideo[1].currentTime + incrementVid * (event.key.toLowerCase() === "j" ? -2 : 2), true]
-                    }), "*");
-                    flashIndicator(`${event.key.toLowerCase() === "j" ? "-" : "+"}${2 * incrementVid}s`);
-                } else if (event.ctrlKey && ["z", "Z"].includes(event.key)) {
-                    blockKeyEvents(event);
-                    const timeStamp = aVideo[1].savedTimeStamps.pop();
-                    if (timeStamp) {
-                        aVideo[1].savedUndos.push([timeStamp, aVideo[1].currentTime]);
-                        aVideo[1].currentTime = timeStamp[0];
-                        flashIndicator(`Undo to ${formatVidTime(timeStamp[0])} (Rolled back from "${timeStamp[1]}")`);
-                    } else {
-                        flashIndicator("No Recent Navigation");
-                    }
-                } else if (event.ctrlKey && ["y", "Y"].includes(event.key)) {
-                    blockKeyEvents(event);
-                    const recentUndo = aVideo[1].savedUndos.pop();
-                    if (recentUndo) {
-                        // aVideo[1].savedTimeStamps.push(recentUndo[0]);
-                        aVideo[1].currentTime = recentUndo[1];
-                        flashIndicator(`Redo to ${formatVidTime(recentUndo[1])} (Rolled from "${recentUndo[0][1]}")`);
-                    } else {
-                        flashIndicator("No Recent Undos");
-                    }
-                }
-                // Volume feature
-                else if (false) {
-                    if (false) {}
-                    else if (event.ctrlKey && ["ArrowDown", "ArrowUp"].includes(event.key)) {
-                        blockKeyEvents(event);
-                        if (event.key === "ArrowUp") {
-                            aVideo[1].volMod = Math.round(100 * Math.min(1, aVideo[1].volMod + 0.01)) / 100;
-                        } else {
-                            aVideo[1].volMod = Math.round(100 * Math.max(0, aVideo[1].volMod - 0.01)) / 100;
-                        }
-                        flashIndicator(`±${Math.round(100 * aVideo[1].volMod)}%`);
-                    } else if (["ArrowDown", "ArrowUp"].includes(event.key)) {
-                        blockKeyEvents(event);
-                        if (event.key === "ArrowUp") {
-                            aVideo[1].volume = Math.round(100 * Math.min(1, aVideo[1].volume + aVideo[1].volMod)) / 100;
-                        } else {
-                            aVideo[1].volume = Math.round(100 * Math.max(0, aVideo[1].volume - aVideo[1].volMod)) / 100;
-                        }
-                        flashIndicator(`Volume: ${Math.round(100 * aVideo[1].volume)}%${aVideo[1].muted ? " (Muted)" : ""}`)
-                    } else if (["M", "m"].includes(event.key)) {
-                        aVideo[1].muted = !aVideo[1].muted;
-                        flashIndicator(`${aVideo[1].muted ? "M" : "Unm"}uted`);
-                    }
-                }
-            }
-          })(videos[currentIndex]);
-        }, true);
+      await sleep(0); // small delay before next full scan
+    //   if (tiles.length <= 0) break;
+    }
+    // setTimeout(() => location.reload(), 3000);
     })();
 }
+// URL LOGIC ^^^
+} catch (error) {
+    setTimeout(() => {
+        main();
+    }, 10);
+}
+}
+main();
+
+const wrapper = document.getElementById('bannerWrapper');
+if (wrapper) {
+    const bannerText = document.getElementById('bannerText');
+} else {
+    // Create the wrapper div
+    const wrapper = document.createElement("div");
+    wrapper.id = "bannerWrapper";
+
+    // Create the inner text div
+    const bannerText = document.createElement("div");
+    bannerText.id = "bannerText";
+    
+    // Append the inner div to the wrapper
+    wrapper.appendChild(bannerText);
+    
+    // Finally, append the wrapper to the body
+    document.body.insertBefore(wrapper, document.body.firstChild);
+}
+
+const style = document.createElement("style");
+const timeout = 1000;
+style.textContent = `
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    #bannerWrapper {
+      position: fixed;
+      top: 0 !important;
+      left: 0 !important;
+      width: 100%;
+      overflow: hidden;
+      z-index: 2147483646;
+      padding: 10px 0;
+      user-select: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      pointer-events: none;
+    }
+
+    #bannerText {
+      position: relative;
+      display: inline-block;
+      white-space: nowrap;
+      font-size: 24px;
+      font-family: sans-serif;
+      will-change: transform;
+      text-align: center;
+    }
+    
+    .bannerSpan {
+        transition: color 1000ms linear !important;
+    }
+
+
+  .floating-bit {
+    position: fixed;
+    font-family: monospace;
+    font-size: 20px;
+    color: limegreen;
+    padding: 2px;
+    border-radius: 2px;
+    pointer-events: none;
+    z-index: 2147483646;
+    opacity: 1;
+    transition: opacity ${timeout}ms ease-out, transform ${timeout}ms ease-out !important;
+      user-select: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      pointer-events: none;
+  }
+
+
+/* Container centered at cursor */
+.burst-container {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  transform-origin: center center;
+  animation: rotateBurst 0.8s linear forwards;
+  pointer-events: none;
+  z-index: 2147483646;
+}
+
+@keyframes rotateBurst {
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Orbiting circles */
+.burst-circle {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 10px;
+  height: 10px;
+background: yellow;
+  border-radius: 50%;
+  transform: translate(-50%, -50%) rotate(var(--angle)) translate(0);
+  animation: flyOut 0.8s ease-out forwards;
+}
+
+@keyframes flyOut {
+  to {
+    transform: translate(-50%, -50%) rotate(var(--angle)) translate(var(--radius));
+    opacity: 0;
+    scale: 1.2;
+  }
+}
+
+${false ? `body {
+  margin: 0;
+  height: 100vh;
+  background: #111;
+  overflow: hidden;
+  cursor: crosshair;
+}` : ""}
+.particle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: orange;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: explode 2s ease-out forwards;
+  z-index: 2147483646 !important;
+}
+@keyframes explode {
+  from { transform: translate(0,0) scale(1); opacity: 1; }
+  to   { transform: translate(var(--dx), var(--dy)) scale(0.2); opacity: 0; }
+}
+`;
+
+setTimeout(() => {
+  document.head.appendChild(style);
+  const styleElement = document.getElementById('customStyles');
+  if (styleElement) {
+      styleElement.parentNode.removeChild(styleElement);
+  }
+  // Your phrase
+  if (url.startsWith("https://web.kamihq.com/web/viewer.html")) {
+      bannerPhrase = "USE SCREEN READER IF BORED!!! ";
+//   } else if (url.startsWith("https://apps.studysync.com") || url.startsWith("https://pcti.instructure.com/courses/24463")) {
+//       bannerPhrase = "this class doesn't want you to succeed. "
+  } else if (url.startsWith("https://pcti.instructure.com")) {
+      bannerPhrase = "Regardless of if you got an F to an A+, I still give you an S for effort. ❤️ ";
+  } else if (url.startsWith("https://ps.pcti.tec.nj.us")) {
+      bannerPhrase = "200% real (source: trust me bro) ";
+  } else {
+      bannerPhrase = "JUSTIN CHUA IS THE BASED GOAT!!! ";
+  }
+  bannerPhrase = bannerPhrase.replace(/ /g, "&nbsp;");
+  const repeatCount = Math.ceil(window.innerWidth / bannerPhrase.length / parseFloat(window.getComputedStyle(bannerText).fontSize)) + 3;
+
+  // Only duplicate it twice so it can loop seamlessly
+  bannerText.innerHTML = bannerPhrase.repeat(2*repeatCount);
+
+  // Wrap each character in a span for proximity transparency
+  const chars = bannerText.textContent;
+  bannerText.textContent = "";
+  [...chars].forEach(char => {
+    const span = document.createElement("span");
+    span.textContent = char;
+  span.className = "bannerSpan";
+    // span.style.display = "inline-block"; // Might be necessary idk
+    bannerText.appendChild(span);
+  });
+
+// Choose how colors are cycled (Span Colors vs Chroma)
+const transitionTime = 1100;
+if (false) {
+    // Find the first valid <span>
+    function getValidSpan(iterations=1) {
+      const spans = document.querySelectorAll("span");
+      let i = 1;
+    
+      for (const span of spans) {
+        const hasText = span.textContent.trim().length > 0;
+        const invalidId = span.id === "page-manipulator-event-target";
+        const invalidClass = span.className === "bannerSpan";
+    
+        if (hasText && !invalidId && !invalidClass) {
+          if (i == iterations) {
+            return span; // stop at the first valid one
+          } else {
+              i++;
+          }
+        }
+      }
+    
+      return null; // none found
+    }
+    
+    // Apply the color of the first valid span to all spans with class="bannerSpan"
+    function applyColorToBannerSpans(colorIter=1) {
+      const validSpan = getValidSpan(colorIter);
+      colorIter++;
+      if (!validSpan) {
+          colorIter = 1;
+          applyColorToBannerSpans();
+          return;
+      }
+    
+      const spanColor = window.getComputedStyle(validSpan).color;
+      const spans = bannerText.querySelectorAll("span");
+      bannerText.querySelectorAll("span").forEach(span => {
+          span.style.color = spanColor;
+      });
+      
+      setTimeout(() => {applyColorToBannerSpans(colorIter);}, transitionTime);
+    }
+    
+    // Run once
+    applyColorToBannerSpans();
+} else if (Math.floor(Math.random() * 2) == 1) {
+    let hue = 0; // start at red
+
+    function cycleColors() {
+        // TODO: Fix nextColor when scrollOffset resets
+      // Apply to all banner spans
+      bannerText.querySelectorAll("span").forEach((span, i) => {
+        // Convert hue to an HSL color (rainbow spectrum)
+        let hueValue = hue + i;
+        const nextColor = `hsl(${(hueValue) % 360}, 100%, 50%)`;
+        span.style.color = nextColor;
+      });
+    
+      // Increment hue (wrap around at 360)
+      hue = (hue + 3*transitionTime) % 360;
+    
+      // Run Again
+      setTimeout(cycleColors, transitionTime);
+    }
+    
+    // Start chroma effect
+    cycleColors();
+} else {
+    // List of RGB values to cycle through
+    // const colors = [
+    //   "rgb(255, 0, 0)",    // red
+    //   "rgb(0, 255, 0)",    // green
+    //   "rgb(0, 0, 255)",    // blue
+    //   "rgb(255, 255, 0)",  // yellow
+    //   "rgb(255, 0, 255)",  // magenta
+    //   "rgb(0, 255, 255)"   // cyan
+    // ];
+    const colors = [
+      "rgb(255, 0, 0)",       // Red
+      "rgb(255, 127, 0)",     // Orange
+      "rgb(255, 255, 0)",     // Yellow
+      "rgb(0, 255, 0)",       // Green
+      "rgb(0, 0, 255)",       // Blue
+      "rgb(75, 0, 130)",      // Indigo
+      "rgb(148, 0, 211)"      // Violet
+    ];
+
+
+    let index = 0;
+
+    function cycleColors() {
+      // Pick next color
+      const nextColor = colors[index % colors.length];
+    
+      // Apply to all banner spans
+      bannerText.querySelectorAll("span").forEach(span => {
+        span.style.color = nextColor;
+      });
+    
+      // Advance index
+      index++;
+    
+      // Schedule next change
+      setTimeout(cycleColors, transitionTime); // matches transition duration
+    }
+    
+    // Start chroma effect
+    cycleColors();
+}
+
+  // Scrolling logic
+  let scrollAmount = 1; // pixels per frame
+  let scrollOffset = 0;
+
+  function scrollBanner() {
+      scrollOffset -= scrollAmount;
+      requestAnimationFrame(() => {
+          bannerText.style.transform = `translateX(${scrollOffset}px)`;
+          updateOpacity();
+      });
+      // When the first phrase has fully scrolled out, reset
+      if (Math.abs(scrollOffset) >= bannerText.offsetWidth / repeatCount) {
+        scrollOffset = 0;
+      }
+    
+      requestAnimationFrame(scrollBanner);
+  }
+  scrollBanner();
+}, 1000);
+
+// Proximity transparency logic
+let clientX = Infinity;
+let clientY = Infinity;
+let oldClientX = Infinity;
+let oldClientY = Infinity;
+
+// const trailPhrase = ("made yo gullible ahh look [dab] ").replace(/ /g, "      ").replace("[dab]", "ヽ( •_)ᕗ").split(" ");
+// const trailPhrase = ["JUSTIN CHUA IS THE BASED GOAT!!!"];
+// const trailPhrase = ["JUSTIN", "", "", "", "", "", "", "CHUA", "", "", "", "", "", "", "IS", "", "", "", "", "", "", "THE", "", "", "", "", "", "", "BASED", "", "", "", "", "", "", "GOAT", "", "", "", "", "", "", ""]
+const trailPhrase = [["0", "1"], ["★", "✦", "✧", "✩", "✪"]][Math.floor(Math.random() * 2)];
+let phrase_iter = 0;
+  trailContainer = document.createElement("div");
+  trailContainer.id = "cursor-trail-container";
+  document.body.appendChild(trailContainer);
+
+document.addEventListener("mousemove", e => {
+  clientX = e.clientX;
+  clientY = e.clientY;
+
+  // Cursor trail
+  const bit = document.createElement("span");
+  bit.textContent = trailPhrase[phrase_iter];
+  phrase_iter = phrase_iter === trailPhrase.length - 1 ? 0 : phrase_iter + 1;
+  bit.className = "floating-bit";
+  const values = window.getComputedStyle(document.body).transform.match(/matrix\(([^)]+)\)/);
+  const parts = values[1].split(',').map(v => parseFloat(v.trim()));
+  bit.style.left = `${window.scrollX-parts[4]+clientX-5}px`;
+  bit.style.top =  `${window.scrollY-parts[5]+clientY-10}px`;
+  trailContainer.appendChild(bit);
+
+//   // Force layout so the browser registers the initial state
+//   getComputedStyle(bit).opacity;
+
+  // Calculate movement vector
+  const dx = clientX - oldClientX;
+  const dy = clientY - oldClientY;
+
+  requestAnimationFrame(() => {
+    bit.style.opacity = 0; // fade out
+    // Move in the direction of mouse movement, scaled for effect
+    bit.style.transform = `translate(${dx * 2}px, ${dy * 2}px)`;
+  });
+
+  setTimeout(() => bit.remove(), timeout);
+
+  // Update old coordinates for next frame
+  oldClientX = clientX;
+  oldClientY = clientY;
+});
+
+function updateOpacity() {
+    bannerText.querySelectorAll("span").forEach(span => {
+      const rect = span.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+
+      let distance = Math.sqrt((clientX - centerX) ** 2 + (clientY - centerY) ** 2) ** 3;
+      const radius = 100000000; // pixels
+
+      if (distance < radius) {
+        span.style.opacity = distance / radius; // 0 at center, 1 at edge
+      } else {
+        span.style.opacity = 1
+      }
+    });
+}
+
+// Check if a charset meta tag already exists
+let metaCharset = document.querySelector('meta[charset]');
+if (!metaCharset) {
+  // Create the meta tag
+  metaCharset = document.createElement('meta');
+  metaCharset.setAttribute('charset', 'UTF-8');
+
+  // Insert it at the beginning of <head>
+  document.head.insertBefore(metaCharset, document.head.firstChild);
+}
+
+document.addEventListener("click", e => {
+    // Make a yellow circle explosion blast every click
+    if (true) { // Circles
+  const multiples = [2, 3, 4, 12];
+  const numCircles = multiples[Math.floor(Math.random() * multiples.length)];
+  const radius = 200; // 60; // final distance from center
+
+  // Create a container anchored at the cursor
+  const container = document.createElement("div");
+  container.className = "burst-container";
+  container.style.left = e.pageX + "px";
+  container.style.top = e.pageY + "px";
+  document.body.appendChild(container);
+
+  // Create evenly spaced circles
+  for (let i = 0; i < numCircles; i++) {
+    const c = document.createElement("div");
+    c.className = "burst-circle";
+    const angle = (360 / numCircles) * i;
+    c.style.setProperty("--angle", angle + "deg");
+    c.style.setProperty("--radius", radius + "px");
+    container.appendChild(c);
+    c.addEventListener("animationend", () => c.remove());
+  }
+
+  container.addEventListener("animationend", () => container.remove());
+    }
+    
+    if (false) { // Explosion
+  const numParticles = 12;
+  for (let i = 0; i < numParticles; i++) {
+    const p = document.createElement("div");
+    p.className = "particle";
+    // random direction
+    const angle = (Math.PI * 2 * i) / numParticles;
+    const distance = 40 + Math.random() * 20;
+    const dx = Math.cos(angle) * distance + "px";
+    const dy = Math.sin(angle) * distance + "px";
+    p.style.setProperty("--dx", dx);
+    p.style.setProperty("--dy", dy);
+    p.style.left = e.pageX + "px";
+    p.style.top = e.pageY + "px";
+    document.body.appendChild(p);
+    p.addEventListener("animationend", () => p.remove());
+  }
+    }
+});
+
+let ctrlHeld = false
+let altHeld = false
+let soundboardActive = false;
+const audios = [];
+// Memes: https://justinc1539.imgbb.com
+const memes = [
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBSWYR-VQcx1KhAoOh4T5U74hmNauGSVgmmgBnHeECk7U3Z3NbRRrnmBoP:https://i.scdn.co/image/ab67616d00001e02eaf1fcbc9f49682325efe9db&s=10",
+];
+let command = ""
+let bgImgSrcIter = 1;
+
+// Listen for tab switching
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) {
+    // Reset key states when tab is hidden
+    ctrlHeld = false;
+    altHeld = false;
+    console.log("Tab switched out: ctrlHeld and altHeld reset to false");
+  }
+});
+
+function blockEvents(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+}
+
+document.addEventListener('keydown', (event) => {
+    // Check if the pressed key is 'p' (case-sensitive by default)
+    if (event.key === '\\' && ctrlHeld && altHeld) {
+        blockEvents(event);
+        command = prompt("Enter your command here:", command);
+        let output = "SyntaxError"
+        try {
+            const meta = document.createElement('meta');
+            meta.httpEquiv = "Content-Security-Policy";
+            meta.content = "script-src 'self' 'unsafe-eval';";
+            document.head.appendChild(meta);
+            output = eval(command);
+        } catch (error) {
+            output = error;
+        } finally {
+            alert(`You asked:\n${command}\nOutput:\n${output}`);
+            ctrlHeld = false;
+            altHeld = false;
+        }
+    } else if (event.key === 'b' && ctrlHeld && altHeld) {
+        blockEvents(event);
+        bgImgSrcIter++;
+        if (bgImgSrcIter >= bgImgSrcs.length) {
+            bgImg.style.display = "none";
+            bgImgSrcIter = -1;
+        } else {
+            bgImg.style.display = "";
+            bgImg.src = bgImgSrcs[bgImgSrcIter];
+            bgImg.style.zIndex = bgImgSrcIter === 2 ? `${2**31}` : "";
+        }
+    } else if (event.key === 'ArrowDown' && ctrlHeld && altHeld) {
+        blockEvents(event);
+        bgImg.style.opacity = Math.max(0, parseFloat(bgImg.style.opacity) - .05);
+        bgImg.style.pointerEvents = "none";
+    } else if (event.key === 'ArrowUp' && ctrlHeld && altHeld) {
+        blockEvents(event);
+        bgImg.style.opacity = Math.min(1, parseFloat(bgImg.style.opacity) + .05);
+        bgImg.style.pointerEvents = bgImg.style.opacity == 1 ? "" : "none";
+    } else if (event.key === "Control") {
+        ctrlHeld = true;
+    } else if (event.key === "Alt") {
+        altHeld = true;
+    }
+    if (url.startsWith("https://web.kamihq.com/web/viewer.html")) {
+        if (event.key === "." && ctrlHeld) {
+            blockEvents(event);
+            document.querySelector("button[value=super]").click();
+        } else if (event.key === "," && ctrlHeld) {
+            blockEvents(event);
+            document.querySelector("button[value=sub]").click();
+        } else if (event.key === "b" && ctrlHeld) {
+            blockEvents(event);
+            document.querySelector("button[title=bold]").click();
+        } else if (event.key === "i" && ctrlHeld) {
+            blockEvents(event);
+            document.querySelector("button[title=italic]").click();
+        } else if (event.key === "u" && ctrlHeld) {
+            blockEvents(event);
+            document.querySelector("button[title=underline]").click();
+        } else if (event.key === "%" && altHeld) {
+            blockEvents(event);
+            document.querySelector("button[title='strike through']").click();
+        }
+    }
+    if (ctrlHeld && event.key === "S") {
+        soundboardActive = !soundboardActive;
+        if (soundboardActive) alert(`V - Vine Boom
+B - Bruh
+G - Get Out
+O - Oh My`);
+        else {
+            audios.forEach(audioObject => {
+                audioObject.pause();
+                audioObject.src = ""; // Clears the source string
+                audioObject.load();   // Forces the element to update and release resources
+            });
+            audios.length = 0;
+            alert("Soundboard Off");
+        }
+    }
+    if (soundboardActive) {
+        if (event.key === "v") {
+            const vineBoom = new Audio('https://www.myinstants.com/media/sounds/vine-boom-hq-longer.mp3');
+            vineBoom.currentTime = 0; // Rewind to start if pressed rapidly
+            audios.push(vineBoom);
+            vineBoom.play().catch(error => {
+              alert(error);
+              console.warn('Audio playback requires prior user interaction with the page:', error);
+            });
+        } else if (event.key === "b") {
+            const bruh = new Audio('https://www.myinstants.com/media/sounds/bruh-sound-effect_WstdzdM.mp3');
+            bruh.currentTime = 0; // Rewind to start if pressed rapidly
+            audios.push(bruh);
+            bruh.play().catch(error => {
+              alert(error);
+              console.warn('Audio playback requires prior user interaction with the page:', error);
+            });
+        } else if (event.key === "g") {
+            const getOut = new Audio('https://www.myinstants.com/media/sounds/tuco-get-out.mp3');
+            getOut.currentTime = 0; // Rewind to start if pressed rapidly
+            audios.push(getOut);
+            getOut.play().catch(error => {
+              alert(error);
+              console.warn('Audio playback requires prior user interaction with the page:', error);
+            });
+        } else if (event.key === "o") {
+            const ohMy = new Audio('https://www.myinstants.com/media/sounds/oh-my-god-bro-oh-hell-nah-man.mp3');
+            ohMy.currentTime = 0; // Rewind to start if pressed rapidly
+            audios.push(ohMy);
+            ohMy.play().catch(error => {
+              alert(error);
+              console.warn('Audio playback requires prior user interaction with the page:', error);
+            });
+        }
+        
+        // MEME TODO: Make vine boom memes
+        if (/^Digit[0-9]$/.test(event.code)) {
+            memeIter = event.code.replace("Digit", "");
+            memeIter--;
+            if (memeIter === -1) memeIter = Math.floor(memes.length * Math.random());
+            if (memeIter < memes.length) {
+                // 2. Clone the image (false means shallow copy, which is enough for an <img>)
+                const clonedImg = bgImg.cloneNode(false);
+                
+                // Optional: Change an attribute like id or class to prevent duplicate IDs
+                clonedImg.id = 'tempImageClone';
+                clonedImg.src = memes[memeIter];
+                
+                // 3. Temporarily append the clone to the DOM (e.g., inside the body or a container)
+                document.body.appendChild(clonedImg);
+                
+                // 4. Remove the clone temporarily after a set time (e.g., 3 seconds)
+                setTimeout(() => {
+                  clonedImg.remove(); // or originalImg.parentNode.removeChild(clonedImg)
+                }, 1000);
+            }
+        }
+    }
+}, true);  // Run this listener during the capture phase instead of the default bubble phase.
+// Inspired by the login_success=1 URL parameter every time I get auto-logged out and have to log back in
+if (window.location.href === "https://pcti.instructure.com/?login_success=0") {
+    while (document.body.firstChild) {
+        document.body.removeChild(document.body.firstChild);
+    }
+    document.body.textContent = "login failed fahhh";
+}
+// Determine Current Period VVVVV - Time Tracker program - (time-period-tracker.js)
+function formatTime(minutes, includeEnd=0) {
+    const hour = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    const meridiem = hour > 12 ? "PM" : "AM";
+    let timeString = `${hour % 12 === 0 ? "12" : hour % 12}:${String(mins).padStart(2, "0")} ${meridiem}`;
+    if (includeEnd) timeString += `-${formatTime(minutes + includeEnd)}`
+    return timeString;
+}
+
+function getCurrentPeriodStr(dayType, mins, times, periodLength, firstPeriodExtra, breakTime) {
+    // Period 1 Extra: {normal: +6; delayed: +12; half: +4}
+    // Break: {normal: +5; delayed: +4; half: +5}
+    // Tell me why Delayed Opening gives 1st period a whole 12 EXTRA MINUTES and only gives us 4 minutes of break instead of 5
+    for (let i = 0; i < times.length; i++) {
+        if (mins < times[i]) {
+            if (i === 0) return `Before School (<${formatTime(times[0])})`;
+            if (i === 1) return `Period 1 (${formatTime(times[0], periodLength + firstPeriodExtra)})`;
+            return `Period ${i} (${formatTime(times[i-1] + breakTime, periodLength)})`;
+        }
+    }
+    return `After School (>${formatTime(times[times.length - 1])})`;
+}
+
+function getCurrentPeriod(dayType) {
+    const mins = getMinutes();
+
+    function getMinutes() {
+        const now = new Date();
+        // return now.getHours() * 60 + now.getMinutes();
+        const njHour = parseInt(now.toLocaleString("en-US", { timeZone: "America/New_York", hour: "2-digit", hour12: false }), 10);
+        const njMinute = parseInt(now.toLocaleString("en-US", { timeZone: "America/New_York", minute: "2-digit" }), 10);
+        
+        return njHour * 60 + njMinute;
+    }
+
+    let period = "";
+    if (dayType === "normal") period = getCurrentPeriodStr(dayType, mins, [490, 536, 581, 626, 671, 716, 761, 806, 851, 896], 40, 6, 5);
+    else if (dayType === "half") period = getCurrentPeriodStr(dayType, mins, [490, 522, 555, 588, 621, 654, 687, 720, 753, 786], 28, 4, 5);
+    else if (dayType === "delayed") period = getCurrentPeriodStr(dayType, mins, [600, 640, 672, 704, 736, 768, 800, 832, 864, 896], 28, 12, 4);
+    else period = 'Invalid day type (must be "normal", "half", or "delayed")';
+
+    return period;
+}
+
+// Black Box Window
+(function() {
+    // Create the box
+    const box = document.createElement("div");
+    box.id = "timeBox";
+    box.style.position = "fixed";        // fixed beats Canvas layout
+    box.style.top = "10px";
+    box.style.left = "50%";
+    box.style.transform = "translateX(-50%)";
+    box.style.padding = "6px 10px";
+    box.style.background = "black";
+    box.style.color = "white";
+    box.style.fontFamily = "monospace";
+    box.style.fontSize = "12px";
+    box.style.borderRadius = "4px";
+    box.style.cursor = "move";
+    box.style.zIndex = "2147483646";      // Canvas can't beat this
+    // box.textContent = new Date().toLocaleTimeString();
+    document.body.appendChild(box);
+
+    // Update time every second
+    setInterval(() => {
+        const dayType = "normal"; // Time Tracker: Not a Normal School Day? Not a Full Day? Change This!
+        // box.textContent = new Date().toLocaleTimeString();
+        currentTime = new Date().toLocaleTimeString("en-US", { timeZone: "America/New_York" });
+        box.textContent = `${currentTime} ${getCurrentPeriod(dayType)}`;
+        
+        const displayPeriodEnd = className => {
+            for (let i = 0; i < 10; i++) {
+                alert(`${className} is ending!`);
+            }
+        }
+
+        // Optional TTTODO: Make function with array courses, arrray times (either values or a list including value and value to subtract from first value)
+        // TTTODO: add lunch time ends!
+        if (dayType === "normal") {
+            if (currentTime === "8:55:20 AM") displayPeriodEnd("AP Physics C: Mechanics");
+            else if (currentTime === "9:40:20 AM") displayPeriodEnd("AP Calculus B/C");
+            else if (currentTime === "10:25:20 AM") displayPeriodEnd("Health");
+            else if (currentTime === "11:09:20 AM") displayPeriodEnd("APUSH");
+            else if (currentTime === "11:55:20 AM") displayPeriodEnd("English 4 (H)");
+            else if (currentTime === "12:38:20 PM") displayPeriodEnd("AP Statistics");
+            else if (currentTime === "1:02:20 PM") displayPeriodEnd("Lunch");
+            else if (currentTime === "2:55:20 PM") displayPeriodEnd("AP Computer Science A");
+        } else if (dayType === "half") {
+            if (currentTime === "8:41:20 AM") displayPeriodEnd("AP Physics C: Mechanics");
+            else if (currentTime === "9:14:20 AM") displayPeriodEnd("AP Calculus B/C");
+            else if (currentTime === "9:47:20 AM") displayPeriodEnd("Health");
+            else if (currentTime === "10:19:20 AM") displayPeriodEnd("APUSH");
+            else if (currentTime === "10:53:20 AM") displayPeriodEnd("English 4 (H)");
+            else if (currentTime === "11:24:20 AM") displayPeriodEnd("AP Statistics");
+            else if (currentTime === "11:42:20 PM") displayPeriodEnd("Lunch");
+            else if (currentTime === "1:05:20 PM") displayPeriodEnd("AP Computer Science A");
+        } else if (dayType === "delayed") {
+            if (currentTime === "10:39:20 AM") displayPeriodEnd("AP Physics C: Mechanics");
+            else if (currentTime === "11:11:20 AM") displayPeriodEnd("AP Calculus B/C");
+            else if (currentTime === "11:43:20 AM") displayPeriodEnd("Health");
+            else if (currentTime === "12:14:20 PM") displayPeriodEnd("APUSH");
+            else if (currentTime === "12:47:20 PM") displayPeriodEnd("English 4 (H)");
+            else if (currentTime === "1:18:20 PM") displayPeriodEnd("AP Statistics");
+            else if (currentTime === "1:34:20 PM") displayPeriodEnd("Lunch");
+            else if (currentTime === "2:55:20 PM") displayPeriodEnd("AP Computer Science A");
+        }
+    }, 100);
+
+    // Dragging logic
+    let isDragging = false;
+    let offsetX = 0;
+    let offsetY = 0;
+
+    box.addEventListener("mousedown", e => {
+        event.preventDefault();
+        isDragging = true;
+
+        // Remove centering transform once dragging starts
+        box.style.transform = "";
+
+        offsetX = e.clientX - box.getBoundingClientRect().left;
+        offsetY = e.clientY - box.getBoundingClientRect().top;
+    });
+
+    window.addEventListener("mousemove", e => {
+        if (!isDragging) return;
+        box.style.left = e.clientX - offsetX + "px";
+        box.style.top = e.clientY - offsetY + "px";
+    });
+
+    window.addEventListener("mouseup", () => {
+        isDragging = false;
+    });
+
+    // Canvas sometimes re-renders the page.
+    // This keeps your box visible even if Canvas tries to remove it.
+    setInterval(() => {
+        if (!document.getElementById("timeBox")) {
+            document.body.appendChild(box);
+        }
+    }, 500);
+})();
+// Determine Current Period ^^^^^
+document.addEventListener('keyup', (event) => {
+    if (event.key === "Control") {
+        ctrlHeld = false;
+    } else if (event.key === "Alt") {
+        altHeld = false;
+    }
+});
+// Reset state if window loses focus to prevent stuck keys
+window.addEventListener('blur', () => {
+    ctrlHeld = false;
+    altHeld = false;
+});
+const cmdPopup = false;
+if (cmdPopup) {
+    showPopup("Press 'Ctrl+\\' to enter a command! -Justin")
+}
+
+function enableBackgroundOverlay() {
+    // Disable old img.html
+    const oldImg = document.getElementsByClassName("bg-image")[0];
+    if (oldImg) oldImg.style.display = "none";
+    
+    // Create <style> for the overlay
+    const style = document.createElement("style");
+    style.id = "bg-overlay-style";
+    style.textContent = `
+        .bg-image-overlay {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 2147483646;
+        }
+    `;
+    document.head.appendChild(style);
+
+    // Create the <img> overlay
+    const img = document.createElement("img");
+    img.id = "bg-overlay-img";
+    img.className = "bg-image-overlay";
+    const srcs = [
+        "https://media.tenor.com/H9lW6EsIj9oAAAAM/stars.gif",
+        "https://media1.tenor.com/m/-pPezftYe2MAAAAd/cinnabon-cinnamon-roll.gif",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYLRHSHI_3WslVsTDkOhsux7Wne4daPCu5hU8185W_T0AVss7O1TMd_OLf:https://upload.wikimedia.org/wikipedia/commons/2/21/Solid_black.svg%3Futm_source%3Dsimple.wikipedia.org%26utm_campaign%3Dindex%26utm_content%3Doriginal&s",
+        "https://media1.tenor.com/m/W_mXv1jxr8oAAAAd/the-show-down-alan-becker.gif",
+        "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExamlnZGU5ZGNlZHQxMnV0MnRvcWdxamhhamVoZGg2aHMwN3BiZ2Y1ZCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/V4NSR1NG2p0KeJJyr5/giphy.gif",
+        "https://cdn.shopify.com/s/files/1/0925/7290/files/2Ho3c.gif?4157969559071305091",
+        "https://media.tenor.com/5L8h9023VmIAAAAi/cat-funny.gif",
+    ];
+    if (bgImgSrcIter < 0 || bgImgSrcIter >= srcs.length) {
+        img.style.display = "none";
+    } else {
+        img.src = srcs[bgImgSrcIter];
+    }
+    img.alt = "Background Overlay";
+    img.style.opacity = 0.15;
+    img.style.pointerEvents = "none";
+
+    document.body.appendChild(img);
+    return {img, srcs};
+}
+
+// Uncomment this line to enable the overlay:
+const {img: bgImg, srcs: bgImgSrcs} = enableBackgroundOverlay();
+} catch (_) {alert(_);}
+
+// YouTube Iframe Player API
+// setInterval(() => {document.querySelector('video').playbackRate = 15.0;}, 1);
+
+// 1. Load the YouTube Iframe Player API asynchronously
+let tag = document.createElement('script');
+tag.src = "https://youtube.com"; // Or "https://youtube.com"
+let firstScriptTag = document.getElementsByTagName('script')[0];
+firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+let player;
+
+// 2. This function creates the player object once the API downloads
+function onYouTubeIframeAPIReady() {
+    player = new YT.Player('youtube_player', {
+        events: {
+            'onReady': onPlayerReady
+        }
+    });
+}
+
+// 3. Change the speed once the player is ready
+function onPlayerReady(event) {
+    // Set speed: 0.25, 0.5, 1, 1.5, or 2
+    player.setPlaybackRate(1); 
+}
+
+// Alternative: Change speed later via a button click
+function changeSpeed(speed) {
+    try{
+    if (player && typeof player.setPlaybackRate === 'function') {
+        player.setPlaybackRate(speed);
+    }
+    } catch(e){alert(e.stack)}
+}
+
+setInterval(() => {changeSpeed(2)}, 1);
