@@ -1417,12 +1417,24 @@ document.addEventListener("click", e => {
 let ctrlHeld = false
 let altHeld = false
 let soundboardActive = false;
+let currentMeme = [];
 const audios = [];
-// MEME TODO: Populate with memes
-// Memes: https://justinc1539.imgbb.com
+// To include an unblocked meme, upload to GitHub, and copy image address
 const memePopupTime = .5;
 const memes = [
+    // Online
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBSWYR-VQcx1KhAoOh4T5U74hmNauGSVgmmgBnHeECk7U3Z3NbRRrnmBoP:https://i.scdn.co/image/ab67616d00001e02eaf1fcbc9f49682325efe9db&s=10",
+    "https://media.tenor.com/nW6YblNGXocAAAAe/an-iq-too-low.png",
+    "https://media.tenor.com/N8mABRAlDpsAAAAe/get-out-sign-the-doors-right-there-pal.png",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTg12stH_jV6JrXDiJfErZaAyeDT5_UmPqt9cf5YWn3zhYyWOv8sptJjj6p:https://static01.nyt.com/images/2016/08/05/us/05onfire1_xp/05onfire1_xp-articleLarge-v2.jpg%3Fquality%3D75%26auto%3Davif%26disable%3Dupscale&s=10",    
+
+    // Personal
+    "https://raw.githubusercontent.com/justinc1539/My-Projects/a370f62da3a0749703db518aa0d72f12ff619f06/salih%20slimed.PNG",
+    "https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/gothamchess.png",
+    "https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/ham%20(TKAM).png",
+    "https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/jaineil%20is%20tung%20tung%20sahir%20(ded%20meme).png",
+    "https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/yaseen%20ayo%20what.png",
+    "https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/yaseen%20please.png",
 ];
 let command = ""
 let bgImgSrcIter = 1;
@@ -1569,7 +1581,53 @@ O - Oh My`);
             if (memeIter === -1) memeIter = Math.floor(memes.length * Math.random());
             if (memeIter < memes.length) {
                 if (event.shiftKey) {
-                    null; // MEME TODO: make permanent meme
+                    // MEME TODO: make permanent meme
+                    alert(`currentMeme[0]: ${currentMeme[0]}
+currentMeme[1]: ${currentMeme[1]}`)
+                    
+                    if (currentMeme[0]) {
+                        // 4. Remove the clone temporarily after a set time (e.g., 3 seconds)
+                        currentMeme[0].style.opacity = 0;
+                        setTimeout(() => {
+                            currentMeme[0].remove(); // or originalImg.parentNode.removeChild(currentMeme[0])
+                        }, 1000*memePopupTime);
+                        currentMeme[0] = null;
+                    }
+
+                    if (currentMeme[1] !== memeIter) {
+                        // 1. Play vine boom obviously
+                        const vineBoom = new Audio('https://www.myinstants.com/media/sounds/vine-boom-hq-longer.mp3');
+                        vineBoom.currentTime = 0; // Rewind to start if pressed rapidly
+                        audios.push(vineBoom);
+                        vineBoom.play().catch(error => {
+                          console.warn('Audio playback requires prior user interaction with the page:', error);
+                        });
+    
+                        // 2. Clone the image (false means shallow copy, which is enough for an <img>)
+                        const clonedImg = bgImg.cloneNode(false);
+                        
+                        // Optional: Change an attribute like id or class to prevent duplicate IDs
+                        clonedImg.id = 'tempImageClone';
+                        clonedImg.src = memes[memeIter];
+    
+                        clonedImg.style.position = 'fixed';
+                        clonedImg.style.top = '0';
+                        clonedImg.style.left = '0';
+                        clonedImg.style.width = '100vw';
+                        clonedImg.style.height = '100vh';
+                        clonedImg.style.objectFit = 'fill'; // Distorts the image to fit exact dimensions
+                        clonedImg.style.pointerEvents = 'none'; // Optional: lets clicks pass through
+    
+                        clonedImg.style.opacity = 1;
+                        clonedImg.style.transition = `opacity ${memePopupTime}s ease-in-out`;
+                        
+                        // 3. Temporarily append the clone to the DOM (e.g., inside the body or a container)
+                        document.body.appendChild(clonedImg);
+                        currentMeme[0] = clonedImg;
+                        currentMeme[1] = memeIter;
+                    } else {
+                        currentMeme[1] = null;
+                    }
                 } else {
                     // 1. Play vine boom obviously
                     const vineBoom = new Audio('https://www.myinstants.com/media/sounds/vine-boom-hq-longer.mp3');
@@ -1585,15 +1643,21 @@ O - Oh My`);
                     // Optional: Change an attribute like id or class to prevent duplicate IDs
                     clonedImg.id = 'tempImageClone';
                     clonedImg.src = memes[memeIter];
-                    clonedImg.style.width = "100vw";
-                    clonedImg.style.height = "100vh";
-                    clonedImg.style.objectFit = "fit";
+
+                    clonedImg.style.position = 'fixed';
+                    clonedImg.style.top = '0';
+                    clonedImg.style.left = '0';
+                    clonedImg.style.width = '100vw';
+                    clonedImg.style.height = '100vh';
+                    clonedImg.style.objectFit = 'fill'; // Distorts the image to fit exact dimensions
+                    clonedImg.style.pointerEvents = 'none'; // Optional: lets clicks pass through
+
                     clonedImg.style.opacity = 1;
                     clonedImg.style.transition = `opacity ${memePopupTime}s ease-in-out`;
                     
                     // 3. Temporarily append the clone to the DOM (e.g., inside the body or a container)
                     document.body.appendChild(clonedImg);
-                    
+
                     // 4. Remove the clone temporarily after a set time (e.g., 3 seconds)
                     setTimeout(() => {
                       clonedImg.style.opacity = 0;
