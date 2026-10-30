@@ -1682,13 +1682,6 @@ O - Oh My`);
     }
 }, { capture: true, passive: false });  // Run this listener during the capture phase instead of the default bubble phase.
 
-window.addEventListener('keyup', event => {
-    if (soundboardActive) blockEvents(event);
-}, { capture: true, passive: false });
-document.addEventListener('keyup', event => {
-    if (soundboardActive) blockEvents(event);
-}, { capture: true, passive: false });
-
 // Inspired by the login_success=1 URL parameter every time I get auto-logged out and have to log back in
 if (window.location.href === "https://pcti.instructure.com/?login_success=0") {
     while (document.body.firstChild) {
@@ -1847,7 +1840,8 @@ document.addEventListener('keyup', (event) => {
     } else if (event.key === "Alt") {
         altHeld = false;
     }
-});
+    if (soundboardActive) blockEvents(event);
+}, { capture: true, passive: false });
 // Reset state if window loses focus to prevent stuck keys
 window.addEventListener('blur', () => {
     ctrlHeld = false;
