@@ -1420,6 +1420,7 @@ let soundboardActive = false;
 let currentMeme = [];
 let permaMemeTimeout;
 const audios = [];
+const displaySoundboard = false;
 // To include an unblocked meme, upload to GitHub, and copy image address
 const memePopupTime = .5;
 const memes = [
@@ -1522,10 +1523,12 @@ document.addEventListener('keydown', (event) => {
     }
     if (ctrlHeld && event.key === "S") {
         soundboardActive = !soundboardActive;
-        if (soundboardActive) alert(`V - Vine Boom
+        if (displaySoundboard && soundboardActive) alert(`V - Vine Boom
 B - Bruh
 G - Get Out
-O - Oh My`);
+O - Oohhhhh my gawwwwww
+W - What the helllll
+H - Oh Hell No`);
         else {
             audios.forEach(audioObject => {
                 audioObject.pause();
@@ -1533,7 +1536,7 @@ O - Oh My`);
                 audioObject.load();   // Forces the element to update and release resources
             });
             audios.length = 0;
-            alert("Soundboard Off");
+            if (displaySoundboard) alert("Soundboard Off");
         }
     }
     if (soundboardActive) {
@@ -1571,12 +1574,30 @@ O - Oh My`);
             getOut.play().catch(error => {
               console.warn('Audio playback requires prior user interaction with the page:', error);
             });
+        } else if (event.key === "w") {
+            blockEvents(event);
+            return; // MEME TODO: What they hellllll ohhh my gawww ain't no wayyyyyyyy meme
+            const wTH = new Audio('https://www.myinstants.com/media/sounds/tuco-get-out.mp3');
+            wTH.currentTime = 0; // Rewind to start if pressed rapidly
+            audios.push(wTH);
+            wTH.play().catch(error => {
+              console.warn('Audio playback requires prior user interaction with the page:', error);
+            });
         } else if (event.key === "o") {
             blockEvents(event);
-            const ohMy = new Audio('https://www.myinstants.com/media/sounds/oh-my-god-bro-oh-hell-nah-man.mp3');
+            return; // MEME TODO: Play ohhh my gawhhhhhh
+            const ohMy = new Audio('https://www.myinstants.com/media/sounds/tuco-get-out.mp3');
             ohMy.currentTime = 0; // Rewind to start if pressed rapidly
             audios.push(ohMy);
             ohMy.play().catch(error => {
+              console.warn('Audio playback requires prior user interaction with the page:', error);
+            });
+        } else if (event.key === "h") {
+            blockEvents(event);
+            const ohHellNo = new Audio('https://www.myinstants.com/media/sounds/oh-my-god-bro-oh-hell-nah-man.mp3');
+            ohHellNo.currentTime = 0; // Rewind to start if pressed rapidly
+            audios.push(ohHellNo);
+            ohHellNo.play().catch(error => {
               console.warn('Audio playback requires prior user interaction with the page:', error);
             });
         }
@@ -1588,15 +1609,20 @@ O - Oh My`);
             if (memeIter === -1) memeIter = Math.floor(memes.length * Math.random());
             if (memeIter < memes.length) {
                 if (event.shiftKey) {
+                    try{
                     
-                    // MEME TODO: see what's wrong
                     if (currentMeme[0]) {
                         // 4. Remove the clone temporarily after a set time (e.g., 3 seconds)
                         currentMeme[0].style.opacity = 0;
+                        currentMeme[0].style.pointerEvents = 'none';
                         clearTimeout(permaMemeTimeout)
+                        // MEME TODO: WHY ISN'T REMOVED SAME REMOVING?!?!?!?!!
                         if (currentMeme[1] === memeIter) {
                             permaMemeTimeout = setTimeout(() => {
+                                // WHY DOESN'T THESE COMMANDS RUN!!!!
+                                alert("remove same start")
                                 currentMeme[0].remove(); // or originalImg.parentNode.removeChild(currentMeme[0])
+                                alert("removed same end")
                             }, 1000*memePopupTime);
                         } else {
                             currentMeme[0].remove();
@@ -1626,7 +1652,7 @@ O - Oh My`);
                         clonedImg.style.width = '100vw';
                         clonedImg.style.height = '100vh';
                         clonedImg.style.objectFit = 'fill'; // Distorts the image to fit exact dimensions
-                        clonedImg.style.pointerEvents = 'none'; // Optional: lets clicks pass through
+                        clonedImg.style.pointerEvents = ''; // Prevents clicks from passing through
     
                         clonedImg.style.opacity = 1;
                         clonedImg.style.transition = `opacity ${memePopupTime}s ease-in-out`;
@@ -1638,6 +1664,9 @@ O - Oh My`);
                     } else {
                         clearTimeout(permaMemeTimeout)
                         currentMeme[1] = null;
+                    }
+                    } catch(error) {
+                        alert(error.stack)
                     }
                 } else {
                     // 1. Play vine boom obviously
