@@ -1420,6 +1420,7 @@ let soundboardActive = false;
 const audios = [];
 // MEME TODO: Populate with memes
 // Memes: https://justinc1539.imgbb.com
+const memePopupTime = .5;
 const memes = [
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBSWYR-VQcx1KhAoOh4T5U74hmNauGSVgmmgBnHeECk7U3Z3NbRRrnmBoP:https://i.scdn.co/image/ab67616d00001e02eaf1fcbc9f49682325efe9db&s=10",
 ];
@@ -1523,12 +1524,20 @@ O - Oh My`);
         }
     }
     if (soundboardActive) {
+        if (event.key === "Escape" && audios.length > 0) {
+            blockEvents(event);
+            audios.forEach(audioObject => {
+                audioObject.pause();
+                audioObject.src = ""; // Clears the source string
+                audioObject.load();   // Forces the element to update and release resources
+            });
+            audios.length = 0;
+        }
         if (event.key === "v") {
             const vineBoom = new Audio('https://www.myinstants.com/media/sounds/vine-boom-hq-longer.mp3');
             vineBoom.currentTime = 0; // Rewind to start if pressed rapidly
             audios.push(vineBoom);
             vineBoom.play().catch(error => {
-              alert(error);
               console.warn('Audio playback requires prior user interaction with the page:', error);
             });
         } else if (event.key === "b") {
@@ -1536,7 +1545,6 @@ O - Oh My`);
             bruh.currentTime = 0; // Rewind to start if pressed rapidly
             audios.push(bruh);
             bruh.play().catch(error => {
-              alert(error);
               console.warn('Audio playback requires prior user interaction with the page:', error);
             });
         } else if (event.key === "g") {
@@ -1544,7 +1552,6 @@ O - Oh My`);
             getOut.currentTime = 0; // Rewind to start if pressed rapidly
             audios.push(getOut);
             getOut.play().catch(error => {
-              alert(error);
               console.warn('Audio playback requires prior user interaction with the page:', error);
             });
         } else if (event.key === "o") {
@@ -1552,33 +1559,49 @@ O - Oh My`);
             ohMy.currentTime = 0; // Rewind to start if pressed rapidly
             audios.push(ohMy);
             ohMy.play().catch(error => {
-              alert(error);
               console.warn('Audio playback requires prior user interaction with the page:', error);
             });
         }
-        
-        // MEME TODO: Make vine boom memes
+
         if (/^Digit[0-9]$/.test(event.code)) {
             memeIter = event.code.replace("Digit", "");
             memeIter--;
             if (memeIter === -1) memeIter = Math.floor(memes.length * Math.random());
             if (memeIter < memes.length) {
-                // 2. Clone the image (false means shallow copy, which is enough for an <img>)
-                const clonedImg = bgImg.cloneNode(false);
-                
-                // Optional: Change an attribute like id or class to prevent duplicate IDs
-                clonedImg.id = 'tempImageClone';
-                clonedImg.src = memes[memeIter];
-                clonedImg.style.opacity = 1;
-                
-                // 3. Temporarily append the clone to the DOM (e.g., inside the body or a container)
-                document.body.appendChild(clonedImg);
-                
-                // 4. Remove the clone temporarily after a set time (e.g., 3 seconds)
-                // MEME TODO: Give meme fading
-                setTimeout(() => {
-                  clonedImg.remove(); // or originalImg.parentNode.removeChild(clonedImg)
-                }, 1000);
+                if (event.shiftKey) {
+                    null; // MEME TODO: make permanent meme
+                } else {
+                    // 1. Play vine boom obviously
+                    const vineBoom = new Audio('https://www.myinstants.com/media/sounds/vine-boom-hq-longer.mp3');
+                    vineBoom.currentTime = 0; // Rewind to start if pressed rapidly
+                    audios.push(vineBoom);
+                    vineBoom.play().catch(error => {
+                      console.warn('Audio playback requires prior user interaction with the page:', error);
+                    });
+
+                    // 2. Clone the image (false means shallow copy, which is enough for an <img>)
+                    const clonedImg = bgImg.cloneNode(false);
+                    
+                    // Optional: Change an attribute like id or class to prevent duplicate IDs
+                    clonedImg.id = 'tempImageClone';
+                    clonedImg.src = memes[memeIter];
+                    clonedImg.style.width = "100vw";
+                    clonedImg.style.height = "100vh";
+                    clonedImg.style.objectFit = "fit";
+                    clonedImg.style.opacity = 1;
+                    clonedImg.style.transition = `opacity ${memePopupTime}s ease-in-out`;
+                    
+                    // 3. Temporarily append the clone to the DOM (e.g., inside the body or a container)
+                    document.body.appendChild(clonedImg);
+                    
+                    // 4. Remove the clone temporarily after a set time (e.g., 3 seconds)
+                    setTimeout(() => {
+                      clonedImg.style.opacity = 0;
+                      setTimeout(() => {
+                        clonedImg.remove(); // or originalImg.parentNode.removeChild(clonedImg)
+                      }, 1000*memePopupTime);
+                    }, 500);
+                }
             }
         }
     }
