@@ -1537,7 +1537,7 @@ O - Oh My`);
         }
     }
     if (soundboardActive) {
-        if (event.key === "Escape" && audios.length > 0) {
+        if (event.key === "0" && event.altKey) {
             blockEvents(event);
             audios.forEach(audioObject => {
                 audioObject.pause();
@@ -1546,7 +1546,9 @@ O - Oh My`);
             });
             audios.length = 0;
         }
-        if (event.key === "v") {
+
+        else if (event.key === "v") {
+            blockEvents(event);
             const vineBoom = new Audio('https://www.myinstants.com/media/sounds/vine-boom-hq-longer.mp3');
             vineBoom.currentTime = 0; // Rewind to start if pressed rapidly
             audios.push(vineBoom);
@@ -1554,6 +1556,7 @@ O - Oh My`);
               console.warn('Audio playback requires prior user interaction with the page:', error);
             });
         } else if (event.key === "b") {
+            blockEvents(event);
             const bruh = new Audio('https://www.myinstants.com/media/sounds/bruh-sound-effect_WstdzdM.mp3');
             bruh.currentTime = 0; // Rewind to start if pressed rapidly
             audios.push(bruh);
@@ -1561,6 +1564,7 @@ O - Oh My`);
               console.warn('Audio playback requires prior user interaction with the page:', error);
             });
         } else if (event.key === "g") {
+            blockEvents(event);
             const getOut = new Audio('https://www.myinstants.com/media/sounds/tuco-get-out.mp3');
             getOut.currentTime = 0; // Rewind to start if pressed rapidly
             audios.push(getOut);
@@ -1568,6 +1572,7 @@ O - Oh My`);
               console.warn('Audio playback requires prior user interaction with the page:', error);
             });
         } else if (event.key === "o") {
+            blockEvents(event);
             const ohMy = new Audio('https://www.myinstants.com/media/sounds/oh-my-god-bro-oh-hell-nah-man.mp3');
             ohMy.currentTime = 0; // Rewind to start if pressed rapidly
             audios.push(ohMy);
@@ -1576,7 +1581,8 @@ O - Oh My`);
             });
         }
 
-        if (/^Digit[0-9]$/.test(event.code)) {
+        else if (/^Digit[0-9]$/.test(event.code)) {
+            blockEvents(event);
             memeIter = event.code.replace("Digit", "");
             memeIter--;
             if (memeIter === -1) memeIter = Math.floor(memes.length * Math.random());
@@ -1674,7 +1680,15 @@ O - Oh My`);
             }
         }
     }
-}, true);  // Run this listener during the capture phase instead of the default bubble phase.
+}, { capture: true, passive: false });  // Run this listener during the capture phase instead of the default bubble phase.
+
+window.addEventListener('keyup', event => {
+    if (soundboardActive) blockEvents(event);
+}, { capture: true, passive: false });
+document.addEventListener('keyup', event => {
+    if (soundboardActive) blockEvents(event);
+}, { capture: true, passive: false });
+
 // Inspired by the login_success=1 URL parameter every time I get auto-logged out and have to log back in
 if (window.location.href === "https://pcti.instructure.com/?login_success=0") {
     while (document.body.firstChild) {
