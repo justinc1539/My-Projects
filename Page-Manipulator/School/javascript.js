@@ -699,13 +699,13 @@ Calc.observe('change', function() {
     autoSaveGraph();
 });
 } else if (url.includes("https://runestone.academy")) { // CSAWESOME
-    alert(`Be sure to Ctrl + F the following:
+    /*alert(`Be sure to Ctrl + F the following:
 Next >
 Check Me
 Save & Run
 Video
 Check
-Save`);
+Save`);*/
 
     const activities = document.querySelectorAll(".btn.btn-success");
     if (!['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
