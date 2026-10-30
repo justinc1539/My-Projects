@@ -1519,6 +1519,9 @@ document.addEventListener('keydown', (event) => {
         } else if (event.key === "%" && altHeld) {
             blockEvents(event);
             document.querySelector("button[title='strike through']").click();
+        } else if (event.key === "f" && altHeld) {
+            blockEvents(event);
+            document.querySelector("button[title='formula']").click();
         }
     }
     if (ctrlHeld && event.key === "S") {
