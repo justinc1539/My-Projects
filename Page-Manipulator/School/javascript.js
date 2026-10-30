@@ -1,4 +1,4 @@
-// V10.29.2026
+// V10.30.2026
 // Active Websites: All
 
 try {
@@ -706,6 +706,7 @@ Save & Run
 Video
 Check
 Save`);
+    // runestone TODO: .focus() on next element, similar to text editor Ctrl + f
 } else if (url.startsWith("https://ps.pcti.tec.nj.us/guardian/home.html")) {
 const fail_lunch_links = [
     'scores.html?frn=0042115146&fg=R1&schoolid=50',
@@ -1584,7 +1585,6 @@ H - Oh Hell No`);
         } else if (event.key === "w") {
             blockEvents(event);
             return; // MEME TODO: What they hellllll ohhh my gawww ain't no wayyyyyyyy meme
-            // MEME TODO: not rlly lol but runestone TODO: .focus() on next element, similar to text editor Ctrl + f
             const wTH = new Audio('https://www.myinstants.com/media/sounds/tuco-get-out.mp3');
             wTH.currentTime = 0; // Rewind to start if pressed rapidly
             audios.push(wTH);
