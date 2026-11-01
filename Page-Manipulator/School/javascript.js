@@ -1,4 +1,4 @@
-// V10.30.2026
+// V11.1.2026
 // Active Websites: All
 
 try {
@@ -1646,13 +1646,15 @@ document.addEventListener("click", e => {
 let ctrlHeld = false
 let altHeld = false
 let soundboardActive = false;
-let currentMeme = [];
 let permaMemeTimeout;
+const currentMeme = [];
 const audios = [];
+const videos = [];
+const memes = [];
 const displaySoundboard = false;
 // To include an unblocked meme, upload to GitHub, and copy image address
 const memePopupTime = .5;
-const memes = [
+const memeSrcs = [
     // Online
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBSWYR-VQcx1KhAoOh4T5U74hmNauGSVgmmgBnHeECk7U3Z3NbRRrnmBoP:https://i.scdn.co/image/ab67616d00001e02eaf1fcbc9f49682325efe9db&s=10",
     "https://media.tenor.com/nW6YblNGXocAAAAe/an-iq-too-low.png",
@@ -1763,6 +1765,7 @@ document.addEventListener('keydown', (event) => {
 B - Bruh
 G - Get Out
 O - Oohhhhh my gawwwwww
+F = Fah
 W - What the helllll
 H - Oh Hell No`);
         else {
@@ -1784,6 +1787,12 @@ H - Oh Hell No`);
                 audioObject.load();   // Forces the element to update and release resources
             });
             audios.length = 0;
+            videos.forEach(video => video.remove());
+            videos.length = 0;
+            memes.forEach(meme => meme.remove());
+            memes.length = 0;
+            currentMeme[0] = null;
+            currentMeme[1] = null;
         }
 
         else if (event.key === "v") {
@@ -1810,10 +1819,17 @@ H - Oh Hell No`);
             getOut.play().catch(error => {
               console.warn('Audio playback requires prior user interaction with the page:', error);
             });
+        } else if (event.key === "f") {
+            blockEvents(event);
+            const fah = new Audio('https://www.myinstants.com/media/sounds/fah-perfect-sync.mp3');
+            fah.currentTime = 0; // Rewind to start if pressed rapidly
+            audios.push(fah);
+            fah.play().catch(error => {
+              console.warn('Audio playback requires prior user interaction with the page:', error);
+            });
         } else if (event.key === "w") {
             blockEvents(event);
-            return; // MEME TODO: What they hellllll ohhh my gawww ain't no wayyyyyyyy meme
-            const wTH = new Audio('https://www.myinstants.com/media/sounds/tuco-get-out.mp3');
+            const wTH = new Audio('https://www.myinstants.com/media/sounds/what-the-hell-meme-sfx.mp3');
             wTH.currentTime = 0; // Rewind to start if pressed rapidly
             audios.push(wTH);
             wTH.play().catch(error => {
@@ -1821,8 +1837,7 @@ H - Oh Hell No`);
             });
         } else if (event.key === "a") {
             blockEvents(event);
-            return; // MEME TODO: What they air horn meme
-            const airHorn = new Audio('https://www.myinstants.com/media/sounds/tuco-get-out.mp3');
+            const airHorn = new Audio('https://www.myinstants.com/media/sounds/single-air-horn.mp3');
             airHorn.currentTime = 0; // Rewind to start if pressed rapidly
             audios.push(airHorn);
             airHorn.play().catch(error => {
@@ -1830,13 +1845,31 @@ H - Oh Hell No`);
             });
         } else if (event.key === "o") {
             blockEvents(event);
-            return; // MEME TODO: Play ohhh my gawhhhhhh
-            const ohMy = new Audio('https://www.myinstants.com/media/sounds/tuco-get-out.mp3');
+            const ohMy = new Audio('https://www.myinstants.com/media/sounds/oh-my-god-meme.mp3');
             ohMy.currentTime = 0; // Rewind to start if pressed rapidly
             audios.push(ohMy);
             ohMy.play().catch(error => {
               console.warn('Audio playback requires prior user interaction with the page:', error);
             });
+        } else if (event.key === "s") {
+          blockEvents(event);
+          // 2. Create the video element
+          const video = document.createElement('video');
+          videos.push(video);
+          video.src = "https://cdn.vlipsy.com/clips/8KvJYoBR/360p-watermark.mp4?token=v1_f_1793654716_qS76Rc0cw";
+          video.controls = true;
+          video.autoplay = true;
+          video.style.width = '100vw';
+          video.style.height = '100vh';
+          video.style.boxShadow = '0 4px 20px rgba(0,0,0,0.5)';
+        
+          // 3. Assemble and inject into the DOM
+          document.body.appendChild(video);
+        
+          // 4. Remove the element automatically when finished
+          video.addEventListener('ended', () => {
+            video.remove();
+          });
         } else if (event.key === "h") {
             blockEvents(event);
             const ohHellNo = new Audio('https://www.myinstants.com/media/sounds/oh-my-god-bro-oh-hell-nah-man.mp3');
@@ -1851,17 +1884,16 @@ H - Oh Hell No`);
             blockEvents(event);
             memeIter = event.code.replace("Digit", "");
             memeIter--;
-            if (memeIter === -1) memeIter = Math.floor(memes.length * Math.random());
-            if (memeIter < memes.length) {
+            if (memeIter === -1) memeIter = Math.floor(memeSrcs.length * Math.random());
+            if (memeIter < memeSrcs.length) {
                 if (event.shiftKey) {
                     try{
-                    
                     if (currentMeme[0]) {
                         // 4. Remove the clone temporarily after a set time (e.g., 3 seconds)
                         currentMeme[0].style.opacity = 0;
                         currentMeme[0].style.pointerEvents = 'none';
                         clearTimeout(permaMemeTimeout)
-                        // MEME TODO: WHY ISN'T REMOVED SAME REMOVING?!?!?!?!!
+                        // OPTIONAL MEME TODO: WHY ISN'T REMOVED SAME REMOVING?!?!?!?!!
                         if (currentMeme[1] === memeIter) {
                             permaMemeTimeout = setTimeout(() => {
                                 // WHY DOESN'T THESE COMMANDS RUN!!!!
@@ -1886,10 +1918,11 @@ H - Oh Hell No`);
     
                         // 2. Clone the image (false means shallow copy, which is enough for an <img>)
                         const clonedImg = bgImg.cloneNode(false);
+                        memes.push(clonedImg);
                         
                         // Optional: Change an attribute like id or class to prevent duplicate IDs
                         clonedImg.id = 'tempImageClone';
-                        clonedImg.src = memes[memeIter];
+                        clonedImg.src = memeSrcs[memeIter];
     
                         clonedImg.style.position = 'fixed';
                         clonedImg.style.top = '0';
@@ -1924,10 +1957,11 @@ H - Oh Hell No`);
 
                     // 2. Clone the image (false means shallow copy, which is enough for an <img>)
                     const clonedImg = bgImg.cloneNode(false);
+                    memes.push(clonedImg);
                     
                     // Optional: Change an attribute like id or class to prevent duplicate IDs
                     clonedImg.id = 'tempImageClone';
-                    clonedImg.src = memes[memeIter];
+                    clonedImg.src = memeSrcs[memeIter];
 
                     clonedImg.style.position = 'fixed';
                     clonedImg.style.top = '0';
