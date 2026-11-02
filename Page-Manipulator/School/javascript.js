@@ -1773,7 +1773,8 @@ document.addEventListener('keydown', (event) => {
     }
     if (ctrlHeld && event.key === "S") {
         soundboardActive = !soundboardActive;
-        if (displaySoundboard && soundboardActive) alert(`V - Vine Boom
+        if (soundboardActive) {
+            if (displaySoundboard) alert(`V - Vine Boom
 A - Airhorn
 B - Bruh
 C - Clapping
@@ -1790,13 +1791,20 @@ S - Oh Brother This Guy Stinks
 T - Tung Tung Sahur
 W - What the helllll
 Y - Yay`);
-        else {
+        } else {
+            blockEvents(event);
             audios.forEach(audioObject => {
                 audioObject.pause();
                 audioObject.src = ""; // Clears the source string
                 audioObject.load();   // Forces the element to update and release resources
             });
             audios.length = 0;
+            videos.forEach(video => video.remove());
+            videos.length = 0;
+            memes.forEach(meme => meme.remove());
+            memes.length = 0;
+            currentMeme[0] = null;
+            currentMeme[1] = null;
             if (displaySoundboard) alert("Soundboard Off");
         }
     }
