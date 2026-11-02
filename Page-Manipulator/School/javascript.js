@@ -1663,6 +1663,7 @@ const memeSrcs = [
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTkXEEKvdNUKHs7yD1UZKwNRvzcnD6NPWbeonkCgyPMFA&s",
     "https://media.tenor.com/bkl4kbX9g8EAAAAM/speedddd.gif",
     "https://preview.redd.it/why-is-she-doing-the-speed-face-v0-86rtkepnukuf1.jpg?width=577&format=pjpg&auto=webp&s=e544d633b907bdcf66c2e663beaf0848c81baf21",
+    "https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExM29wZzFweXc1czBleHR2a2Nsbmg0a2x1dDNlcjljcDdxM2QxdzR4NSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/8OYnFrez06yQt9zJFW/giphy.gif",
 
     // Personal
     "https://raw.githubusercontent.com/justinc1539/My-Projects/a370f62da3a0749703db518aa0d72f12ff619f06/salih%20slimed.PNG",
@@ -1775,6 +1776,7 @@ L - Laughing Cat
 O - Oohhhhh my
 P - Please Speed
 S - Oh Brother This Guy Stinks
+T - Tung Tung Sahur
 W - What the helllll
 Y - Yay`);
         else {
@@ -1904,6 +1906,14 @@ Y - Yay`);
           video.addEventListener('ended', () => {
             video.remove();
           });
+        } else if (event.key === "t") {
+            blockEvents(event);
+            const tungTungSahur = new Audio('https://www.myinstants.com/media/sounds/tung-tung-sahur.mp3');
+            tungTungSahur.currentTime = 0; // Rewind to start if pressed rapidly
+            audios.push(tungTungSahur);
+            tungTungSahur.play().catch(error => {
+              console.warn('Audio playback requires prior user interaction with the page:', error);
+            });
         } else if (event.key === "w") {
             blockEvents(event);
             const wTH = new Audio('https://www.myinstants.com/media/sounds/what-the-hell-meme-sfx.mp3');
