@@ -919,11 +919,13 @@ Save`);*/
         if (e.key === 'Enter') {
           if (e.shiftKey) {
             prevBtn.click();
+          } else if (e.ctrlKey && matches && matches[currentIndex]) {
+              matches[currentIndex].focus();
           } else {
             nextBtn.click();
           }
-        } else if (e.key === 'Escape' && matches && matches[currentIndex]) {
-          matches[currentIndex].focus();
+        } else if (e.key === 'Escape') {
+          closeBtn.click();
         }
       });
     
@@ -2089,6 +2091,11 @@ Y - Yay`);
                 }
             }
         }
+    }
+    const input = document.getElementById('aceSearchInput');
+    if (input && event.ctrlKey && event.key === "f") {
+        blockEvents(event);
+        input.focus();
     }
 }, { capture: true, passive: false });  // Run this listener during the capture phase instead of the default bubble phase.
 
