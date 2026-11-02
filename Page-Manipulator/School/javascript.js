@@ -1800,7 +1800,7 @@ Y - Yay`);
             if (displaySoundboard) alert("Soundboard Off");
         }
     }
-    if (soundboardActive) {
+    if (soundboardActive && !event.ctrlKey) {
         if (event.key === "0" && event.altKey) {
             blockEvents(event);
             audios.forEach(audioObject => {
