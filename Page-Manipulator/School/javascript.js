@@ -1780,13 +1780,13 @@ document.addEventListener('keydown', (event) => {
 A - Airhorn
 B - Bruh
 C - Clapping
-E - Erm Actually (Loud Kid) MEME TODO
+E - Erm Actually (Loud Kid)
 F - Fah
 G - Get Out
 H - Oh Hell No
 I - This Is Fine
 L - Laughing Cat
-M - According to my calculations MEME TODO
+M - According to my calculations
 O - Oohhhhh my
 P - Please Speed
 S - Oh Brother This Guy Stinks
@@ -1828,7 +1828,7 @@ Y - Yay`);
         }
 
         // Sound Effects
-        // MEME TODO: Upload all these to github & replace URLs
+        // MEME TODO: Upload all these to github (WITH CREDITS) & replace URLs
         else if (event.key === "v") {
             blockEvents(event);
             const vineBoom = new Audio('https://www.myinstants.com/media/sounds/vine-boom-hq-longer.mp3');
@@ -2000,7 +2000,7 @@ Y - Yay`);
                         // OPTIONAL MEME TODO: WHY ISN'T REMOVED SAME REMOVING?!?!?!?!!
                         if (currentMeme[1] === memeIter) {
                             permaMemeTimeout = setTimeout(() => {
-                                // WHY DOESN'T THESE COMMANDS RUN!!!!
+                                // OPTIONAL MEME TODO: WHY DOESN'T THESE COMMANDS RUN!!!!
                                 alert("remove same start")
                                 currentMeme[0].remove(); // or originalImg.parentNode.removeChild(currentMeme[0])
                                 alert("removed same end")
