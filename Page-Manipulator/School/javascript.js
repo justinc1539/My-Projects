@@ -727,7 +727,7 @@ Save`);*/
           position: fixed;
           top: 10px;
           right: 10px;
-          z-index: 999999;
+          z-index: 2147483646;
           background-color: #2d2d2d;
           border: 1.5px solid #4a8bf5;
           border-radius: 6px;
@@ -1659,7 +1659,10 @@ const memeSrcs = [
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBSWYR-VQcx1KhAoOh4T5U74hmNauGSVgmmgBnHeECk7U3Z3NbRRrnmBoP:https://i.scdn.co/image/ab67616d00001e02eaf1fcbc9f49682325efe9db&s=10",
     "https://media.tenor.com/nW6YblNGXocAAAAe/an-iq-too-low.png",
     "https://media.tenor.com/N8mABRAlDpsAAAAe/get-out-sign-the-doors-right-there-pal.png",
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTg12stH_jV6JrXDiJfErZaAyeDT5_UmPqt9cf5YWn3zhYyWOv8sptJjj6p:https://static01.nyt.com/images/2016/08/05/us/05onfire1_xp/05onfire1_xp-articleLarge-v2.jpg%3Fquality%3D75%26auto%3Davif%26disable%3Dupscale&s=10",    
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTg12stH_jV6JrXDiJfErZaAyeDT5_UmPqt9cf5YWn3zhYyWOv8sptJjj6p:https://static01.nyt.com/images/2016/08/05/us/05onfire1_xp/05onfire1_xp-articleLarge-v2.jpg%3Fquality%3D75%26auto%3Davif%26disable%3Dupscale&s=10",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTkXEEKvdNUKHs7yD1UZKwNRvzcnD6NPWbeonkCgyPMFA&s",
+    "https://media.tenor.com/bkl4kbX9g8EAAAAM/speedddd.gif",
+    "https://preview.redd.it/why-is-she-doing-the-speed-face-v0-86rtkepnukuf1.jpg?width=577&format=pjpg&auto=webp&s=e544d633b907bdcf66c2e663beaf0848c81baf21",
 
     // Personal
     "https://raw.githubusercontent.com/justinc1539/My-Projects/a370f62da3a0749703db518aa0d72f12ff619f06/salih%20slimed.PNG",
@@ -1762,12 +1765,19 @@ document.addEventListener('keydown', (event) => {
     if (ctrlHeld && event.key === "S") {
         soundboardActive = !soundboardActive;
         if (displaySoundboard && soundboardActive) alert(`V - Vine Boom
+A - Airhorn
 B - Bruh
+C - Clapping
+F - Fah
 G - Get Out
+H - Oh Hell No
+L - Laughing Cat
+M - Oh my
 O - Oohhhhh my gawwwwww
-F = Fah
+P - Please Speed
+S - Oh Brother This Guy Stinks
 W - What the helllll
-H - Oh Hell No`);
+Y - Yay`);
         else {
             audios.forEach(audioObject => {
                 audioObject.pause();
@@ -1835,6 +1845,38 @@ H - Oh Hell No`);
             wTH.play().catch(error => {
               console.warn('Audio playback requires prior user interaction with the page:', error);
             });
+        } else if (event.key === "l") {
+            blockEvents(event);
+            const laughingCat = new Audio('https://www.myinstants.com/media/sounds/cat-laugh-meme-1.mp3');
+            laughingCat.currentTime = 0; // Rewind to start if pressed rapidly
+            audios.push(laughingCat);
+            laughingCat.play().catch(error => {
+              console.warn('Audio playback requires prior user interaction with the page:', error);
+            });
+        } else if (event.key === "c") {
+            blockEvents(event);
+            const clapping = new Audio('https://www.myinstants.com/media/sounds/crowd-cheering-applause.mp3');
+            clapping.currentTime = 0; // Rewind to start if pressed rapidly
+            audios.push(clapping);
+            clapping.play().catch(error => {
+              console.warn('Audio playback requires prior user interaction with the page:', error);
+            });
+        } else if (event.key === "y") {
+            blockEvents(event);
+            const yayChildren = new Audio('https://www.myinstants.com/media/sounds/children-yaysound-effect.mp3');
+            yayChildren.currentTime = 0; // Rewind to start if pressed rapidly
+            audios.push(yayChildren);
+            yayChildren.play().catch(error => {
+              console.warn('Audio playback requires prior user interaction with the page:', error);
+            });
+        } else if (event.key === "p") {
+            blockEvents(event);
+            const plsSpeed = new Audio('https://www.myinstants.com/media/sounds/please-speed-i-need-this.mp3');
+            plsSpeed.currentTime = 0; // Rewind to start if pressed rapidly
+            audios.push(plsSpeed);
+            plsSpeed.play().catch(error => {
+              console.warn('Audio playback requires prior user interaction with the page:', error);
+            });
         } else if (event.key === "a") {
             blockEvents(event);
             const airHorn = new Audio('https://www.myinstants.com/media/sounds/single-air-horn.mp3');
@@ -1861,6 +1903,7 @@ H - Oh Hell No`);
           video.autoplay = true;
           video.style.width = '100vw';
           video.style.height = '100vh';
+          video.style.zIndex = "2147483647";
           video.style.boxShadow = '0 4px 20px rgba(0,0,0,0.5)';
         
           // 3. Assemble and inject into the DOM
