@@ -1769,11 +1769,13 @@ document.addEventListener('keydown', (event) => {
 A - Airhorn
 B - Bruh
 C - Clapping
+E - Erm Actually (Loud Kid) MEME TODO
 F - Fah
 G - Get Out
 H - Oh Hell No
 I - This Is Fine
 L - Laughing Cat
+M - According to my calculations MEME TODO
 O - Oohhhhh my
 P - Please Speed
 S - Oh Brother This Guy Stinks
@@ -1839,6 +1841,14 @@ Y - Yay`);
             clapping.play().catch(error => {
               console.warn('Audio playback requires prior user interaction with the page:', error);
             });
+        } else if (event.key === "e") {
+            blockEvents(event);
+            const ermActually = new Audio('https://www.myinstants.com/media/sounds/errrm-actually.mp3');
+            ermActually.currentTime = 0; // Rewind to start if pressed rapidly
+            audios.push(ermActually);
+            ermActually.play().catch(error => {
+              console.warn('Audio playback requires prior user interaction with the page:', error);
+            });
         } else if (event.key === "f") {
             blockEvents(event);
             const fah = new Audio('https://www.myinstants.com/media/sounds/fah-perfect-sync.mp3');
@@ -1877,6 +1887,14 @@ Y - Yay`);
             laughingCat.currentTime = 0; // Rewind to start if pressed rapidly
             audios.push(laughingCat);
             laughingCat.play().catch(error => {
+              console.warn('Audio playback requires prior user interaction with the page:', error);
+            });
+        } else if (event.key === "m") {
+            blockEvents(event);
+            const myCalculations = new Audio('https://www.myinstants.com/media/sounds/according-to-my-calculations.mp3');
+            myCalculations.currentTime = 0; // Rewind to start if pressed rapidly
+            audios.push(myCalculations);
+            myCalculations.play().catch(error => {
               console.warn('Audio playback requires prior user interaction with the page:', error);
             });
         } else if (event.key === "o") {
