@@ -1850,6 +1850,7 @@ Y - Yay`);
               console.warn('Audio playback requires prior user interaction with the page:', error);
             });
         } else if (event.key === "e") {
+            return; // TODO: Consider replacing with another sound
             blockEvents(event);
             const ermActually = new Audio('https://www.myinstants.com/media/sounds/errrm-actually.mp3');
             ermActually.currentTime = 0; // Rewind to start if pressed rapidly
