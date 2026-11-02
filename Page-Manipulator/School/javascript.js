@@ -1758,9 +1758,17 @@ document.addEventListener('keydown', (event) => {
             blockEvents(event);
             document.querySelector("button[title='formula']").click();
         } else if (event.key === "c" && altHeld) {
-            // KAMI TODO: select colors
             blockEvents(event);
-            document.querySelector("span[aria-controls='ql-picker-options-7']").click();
+            
+            // 1. Target the picker label using a static class/title
+            const colorPickerLabel = document.querySelector(".ql-color .ql-picker-label") 
+                                  || document.querySelector("span[title='text color'] .ql-picker-label");
+            
+            if (colorPickerLabel) {
+                // 2. Dispatch mousedown (which Quill listens for to open dropdowns)
+                colorPickerLabel.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true }));
+                colorPickerLabel.click();
+            }
         }
     }
     if (ctrlHeld && event.key === "S") {
