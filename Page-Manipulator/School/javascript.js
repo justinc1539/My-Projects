@@ -1772,6 +1772,7 @@ C - Clapping
 F - Fah
 G - Get Out
 H - Oh Hell No
+I - This Is Fine
 L - Laughing Cat
 O - Oohhhhh my
 P - Please Speed
@@ -1860,6 +1861,14 @@ Y - Yay`);
             ohHellNo.currentTime = 0; // Rewind to start if pressed rapidly
             audios.push(ohHellNo);
             ohHellNo.play().catch(error => {
+              console.warn('Audio playback requires prior user interaction with the page:', error);
+            });
+        } else if (event.key === "i") {
+            blockEvents(event);
+            const thisIsFine = new Audio('https://www.myinstants.com/media/sounds/fine.mp3');
+            thisIsFine.currentTime = 0; // Rewind to start if pressed rapidly
+            audios.push(thisIsFine);
+            thisIsFine.play().catch(error => {
               console.warn('Audio playback requires prior user interaction with the page:', error);
             });
         } else if (event.key === "l") {
