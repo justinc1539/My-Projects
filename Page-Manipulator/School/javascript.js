@@ -1772,8 +1772,7 @@ F - Fah
 G - Get Out
 H - Oh Hell No
 L - Laughing Cat
-M - Oh my
-O - Oohhhhh my gawwwwww
+O - Oohhhhh my
 P - Please Speed
 S - Oh Brother This Guy Stinks
 W - What the helllll
@@ -1813,44 +1812,20 @@ Y - Yay`);
             vineBoom.play().catch(error => {
               console.warn('Audio playback requires prior user interaction with the page:', error);
             });
+        } else if (event.key === "a") {
+            blockEvents(event);
+            const airHorn = new Audio('https://www.myinstants.com/media/sounds/single-air-horn.mp3');
+            airHorn.currentTime = 0; // Rewind to start if pressed rapidly
+            audios.push(airHorn);
+            airHorn.play().catch(error => {
+              console.warn('Audio playback requires prior user interaction with the page:', error);
+            });
         } else if (event.key === "b") {
             blockEvents(event);
             const bruh = new Audio('https://www.myinstants.com/media/sounds/bruh-sound-effect_WstdzdM.mp3');
             bruh.currentTime = 0; // Rewind to start if pressed rapidly
             audios.push(bruh);
             bruh.play().catch(error => {
-              console.warn('Audio playback requires prior user interaction with the page:', error);
-            });
-        } else if (event.key === "g") {
-            blockEvents(event);
-            const getOut = new Audio('https://www.myinstants.com/media/sounds/tuco-get-out.mp3');
-            getOut.currentTime = 0; // Rewind to start if pressed rapidly
-            audios.push(getOut);
-            getOut.play().catch(error => {
-              console.warn('Audio playback requires prior user interaction with the page:', error);
-            });
-        } else if (event.key === "f") {
-            blockEvents(event);
-            const fah = new Audio('https://www.myinstants.com/media/sounds/fah-perfect-sync.mp3');
-            fah.currentTime = 0; // Rewind to start if pressed rapidly
-            audios.push(fah);
-            fah.play().catch(error => {
-              console.warn('Audio playback requires prior user interaction with the page:', error);
-            });
-        } else if (event.key === "w") {
-            blockEvents(event);
-            const wTH = new Audio('https://www.myinstants.com/media/sounds/what-the-hell-meme-sfx.mp3');
-            wTH.currentTime = 0; // Rewind to start if pressed rapidly
-            audios.push(wTH);
-            wTH.play().catch(error => {
-              console.warn('Audio playback requires prior user interaction with the page:', error);
-            });
-        } else if (event.key === "l") {
-            blockEvents(event);
-            const laughingCat = new Audio('https://www.myinstants.com/media/sounds/cat-laugh-meme-1.mp3');
-            laughingCat.currentTime = 0; // Rewind to start if pressed rapidly
-            audios.push(laughingCat);
-            laughingCat.play().catch(error => {
               console.warn('Audio playback requires prior user interaction with the page:', error);
             });
         } else if (event.key === "c") {
@@ -1861,28 +1836,36 @@ Y - Yay`);
             clapping.play().catch(error => {
               console.warn('Audio playback requires prior user interaction with the page:', error);
             });
-        } else if (event.key === "y") {
+        } else if (event.key === "f") {
             blockEvents(event);
-            const yayChildren = new Audio('https://www.myinstants.com/media/sounds/children-yaysound-effect.mp3');
-            yayChildren.currentTime = 0; // Rewind to start if pressed rapidly
-            audios.push(yayChildren);
-            yayChildren.play().catch(error => {
+            const fah = new Audio('https://www.myinstants.com/media/sounds/fah-perfect-sync.mp3');
+            fah.currentTime = 0; // Rewind to start if pressed rapidly
+            audios.push(fah);
+            fah.play().catch(error => {
               console.warn('Audio playback requires prior user interaction with the page:', error);
             });
-        } else if (event.key === "p") {
+        } else if (event.key === "g") {
             blockEvents(event);
-            const plsSpeed = new Audio('https://www.myinstants.com/media/sounds/please-speed-i-need-this.mp3');
-            plsSpeed.currentTime = 0; // Rewind to start if pressed rapidly
-            audios.push(plsSpeed);
-            plsSpeed.play().catch(error => {
+            const getOut = new Audio('https://www.myinstants.com/media/sounds/tuco-get-out.mp3');
+            getOut.currentTime = 0; // Rewind to start if pressed rapidly
+            audios.push(getOut);
+            getOut.play().catch(error => {
               console.warn('Audio playback requires prior user interaction with the page:', error);
             });
-        } else if (event.key === "a") {
+        } else if (event.key === "h") {
             blockEvents(event);
-            const airHorn = new Audio('https://www.myinstants.com/media/sounds/single-air-horn.mp3');
-            airHorn.currentTime = 0; // Rewind to start if pressed rapidly
-            audios.push(airHorn);
-            airHorn.play().catch(error => {
+            const ohHellNo = new Audio('https://www.myinstants.com/media/sounds/oh-my-god-bro-oh-hell-nah-man.mp3');
+            ohHellNo.currentTime = 0; // Rewind to start if pressed rapidly
+            audios.push(ohHellNo);
+            ohHellNo.play().catch(error => {
+              console.warn('Audio playback requires prior user interaction with the page:', error);
+            });
+        } else if (event.key === "l") {
+            blockEvents(event);
+            const laughingCat = new Audio('https://www.myinstants.com/media/sounds/cat-laugh-meme-1.mp3');
+            laughingCat.currentTime = 0; // Rewind to start if pressed rapidly
+            audios.push(laughingCat);
+            laughingCat.play().catch(error => {
               console.warn('Audio playback requires prior user interaction with the page:', error);
             });
         } else if (event.key === "o") {
@@ -1891,6 +1874,14 @@ Y - Yay`);
             ohMy.currentTime = 0; // Rewind to start if pressed rapidly
             audios.push(ohMy);
             ohMy.play().catch(error => {
+              console.warn('Audio playback requires prior user interaction with the page:', error);
+            });
+        } else if (event.key === "p") {
+            blockEvents(event);
+            const plsSpeed = new Audio('https://www.myinstants.com/media/sounds/please-speed-i-need-this.mp3');
+            plsSpeed.currentTime = 0; // Rewind to start if pressed rapidly
+            audios.push(plsSpeed);
+            plsSpeed.play().catch(error => {
               console.warn('Audio playback requires prior user interaction with the page:', error);
             });
         } else if (event.key === "s") {
@@ -1913,12 +1904,20 @@ Y - Yay`);
           video.addEventListener('ended', () => {
             video.remove();
           });
-        } else if (event.key === "h") {
+        } else if (event.key === "w") {
             blockEvents(event);
-            const ohHellNo = new Audio('https://www.myinstants.com/media/sounds/oh-my-god-bro-oh-hell-nah-man.mp3');
-            ohHellNo.currentTime = 0; // Rewind to start if pressed rapidly
-            audios.push(ohHellNo);
-            ohHellNo.play().catch(error => {
+            const wTH = new Audio('https://www.myinstants.com/media/sounds/what-the-hell-meme-sfx.mp3');
+            wTH.currentTime = 0; // Rewind to start if pressed rapidly
+            audios.push(wTH);
+            wTH.play().catch(error => {
+              console.warn('Audio playback requires prior user interaction with the page:', error);
+            });
+        } else if (event.key === "y") {
+            blockEvents(event);
+            const yayChildren = new Audio('https://www.myinstants.com/media/sounds/children-yaysound-effect.mp3');
+            yayChildren.currentTime = 0; // Rewind to start if pressed rapidly
+            audios.push(yayChildren);
+            yayChildren.play().catch(error => {
               console.warn('Audio playback requires prior user interaction with the page:', error);
             });
         }
