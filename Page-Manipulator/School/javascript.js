@@ -1921,13 +1921,17 @@ Y - Yay`);
           video.src = "https://cdn.vlipsy.com/clips/8KvJYoBR/360p-watermark.mp4?token=v1_f_1793654716_qS76Rc0cw";
           video.controls = true;
           video.autoplay = true;
+          video.style.zIndex = "2147483646";
+          video.style.position = 'fixed';
+          video.style.top = '0';
+          video.style.left = '0';
           video.style.width = '100vw';
           video.style.height = '100vh';
-          video.style.zIndex = "2147483647";
-          video.style.boxShadow = '0 4px 20px rgba(0,0,0,0.5)';
+          video.style.objectFit = 'fill'; // Distorts the image to fit exact dimensions
+          video.style.pointerEvents = 'none'; // Optional: lets clicks pass through
         
           // 3. Assemble and inject into the DOM
-          document.body.appendChild(video);
+          document.body.prepend(video);
         
           // 4. Remove the element automatically when finished
           video.addEventListener('ended', () => {
