@@ -1652,6 +1652,7 @@ let soundboardActive = false;
 let permaMemeTimeout;
 const currentMeme = [];
 const audios = [];
+const tempAudios = [];
 const videos = [];
 const memes = [];
 const displaySoundboard = false;
@@ -1801,11 +1802,20 @@ Y - Yay/Yippie`);
             blockEvents(event);
             audios.forEach(audioObject => {
                 audioObject.pause();
+            });
+            audios.length = 0;
+            tempAudios.forEach(audioObject => {
+                audioObject.pause();
                 audioObject.src = ""; // Clears the source string
                 audioObject.load();   // Forces the element to update and release resources
             });
-            audios.length = 0;
-            videos.forEach(video => video.remove());
+            tempAudios.length = 0;
+            videos.forEach(videoObject => {
+                videoObject.pause();
+                videoObject.src = ""; // Clears the source string
+                videoObject.load();   // Forces the element to update and release resources
+                videoObject.remove();
+            });
             videos.length = 0;
             memePlayer.pause();
             memePlayer.style.display = "none";
@@ -1819,13 +1829,23 @@ Y - Yay/Yippie`);
     if (soundboardActive && !event.ctrlKey) {
         if (event.key === "0" && event.altKey) {
             blockEvents(event);
+            
             audios.forEach(audioObject => {
+                audioObject.pause();
+            });
+            audios.length = 0;
+            tempAudios.forEach(audioObject => {
                 audioObject.pause();
                 audioObject.src = ""; // Clears the source string
                 audioObject.load();   // Forces the element to update and release resources
             });
-            audios.length = 0;
-            videos.forEach(video => video.remove());
+            tempAudios.length = 0;
+            videos.forEach(videoObject => {
+                videoObject.pause();
+                videoObject.src = ""; // Clears the source string
+                videoObject.load();   // Forces the element to update and release resources
+                videoObject.remove();
+            });
             videos.length = 0;
             memePlayer.pause();
             memePlayer.style.display = "none";
@@ -2160,9 +2180,11 @@ function playAudio(event, anAudio) {
     blockEvents(event);
     if (event.shiftKey) {
         anAudio = anAudio.cloneNode(true);
+        tempAudios.push(anAudio);
+    } else {
+        audios.push(anAudio);
     }
     anAudio.currentTime = 0; // Rewind to start if pressed rapidly
-    audios.push(anAudio);
     anAudio.play().catch(error => {
         console.warn('Audio playback requires prior user interaction with the page:', error);
     });
