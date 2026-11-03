@@ -1863,7 +1863,7 @@ Y - Yay/Yippie`);
             playAudio(event, ohMy);
         } else if (event.key.toLowerCase() === "p") {
             playAudio(event, plsSpeed);
-        } else if (event.key.toLowerCase() === "s") { // MEME TODO: Also make single copy version
+        } else if (event.key.toLowerCase() === "s") {
             // Source: "https://vlipsy.com/clips/spongebob-squarepants-oh-brother-this-guy-stinks-8KvJYoBR"
             playVideo(event, thisGuyStinks, memePlayer);
         } else if (event.key.toLowerCase() === "t") {
@@ -2170,10 +2170,8 @@ function playAudio(event, anAudio) {
 
 function playVideo(event, videoSrc, memePlayer) {
   blockEvents(event);
-  memePlayer.src = videoSrc;
   if (event.shiftKey) {
       memePlayer = memePlayer.cloneNode(true);
-      memePlayer.autoplay = true;
       videos.push(memePlayer);
       // 3. Assemble and inject into the DOM
       document.body.appendChild(memePlayer);
@@ -2183,6 +2181,7 @@ function playVideo(event, videoSrc, memePlayer) {
         memePlayer.remove();
       });
   }
+  if (memePlayer.src !== videoSrc) memePlayer.src = videoSrc;
   memePlayer.style.display = "";
   memePlayer.currentTime = 0;
   memePlayer.play();
