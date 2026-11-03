@@ -1,4 +1,4 @@
-// V11.1.2026
+// V11.3.2026
 // Active Websites: All
 
 try {
@@ -831,6 +831,7 @@ Save`);*/
       searchBox.innerHTML = `
         <div style="display: flex; align-items: flex-start;">
           <div class="ace-search-body">
+          Trial Sample by Justin (11/3/2026)
             <div class="ace-search-row">
               <input type="text" id="aceSearchInput" class="ace-search-input" value=".btn.btn-success" placeholder="Search selector..." spellcheck="false" />
               <button id="aceSearchPrev" class="ace-btn" title="Find Previous">&lt;</button>
@@ -1663,8 +1664,10 @@ const memeSrcs = [
     "https://media.tenor.com/N8mABRAlDpsAAAAe/get-out-sign-the-doors-right-there-pal.png",
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTg12stH_jV6JrXDiJfErZaAyeDT5_UmPqt9cf5YWn3zhYyWOv8sptJjj6p:https://static01.nyt.com/images/2016/08/05/us/05onfire1_xp/05onfire1_xp-articleLarge-v2.jpg%3Fquality%3D75%26auto%3Davif%26disable%3Dupscale&s=10",
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTkXEEKvdNUKHs7yD1UZKwNRvzcnD6NPWbeonkCgyPMFA&s",
+    "https://i.makeagif.com/media/9-10-2025/Amta8Q.gif",
     "https://media.tenor.com/bkl4kbX9g8EAAAAM/speedddd.gif",
     "https://preview.redd.it/why-is-she-doing-the-speed-face-v0-86rtkepnukuf1.jpg?width=577&format=pjpg&auto=webp&s=e544d633b907bdcf66c2e663beaf0848c81baf21",
+    "https://media.tenor.com/9IgA6IjB46YAAAAj/yippee.gif",
     "https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExM29wZzFweXc1czBleHR2a2Nsbmg0a2x1dDNlcjljcDdxM2QxdzR4NSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/8OYnFrez06yQt9zJFW/giphy.gif",
 
     // Personal
@@ -1792,7 +1795,8 @@ P - Please Speed
 S - Oh Brother This Guy Stinks
 T - Tung Tung Sahur
 W - What the helllll
-Y - Yay`);
+X - Six Seven
+Y - Yay/Yippie`);
         } else {
             blockEvents(event);
             audios.forEach(audioObject => {
@@ -1974,14 +1978,31 @@ Y - Yay`);
             wTH.play().catch(error => {
               console.warn('Audio playback requires prior user interaction with the page:', error);
             });
-        } else if (event.key === "y") {
+        } else if (event.key === "x") {
             blockEvents(event);
-            const yayChildren = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/children-yaysound-effect.mp3');
-            yayChildren.currentTime = 0; // Rewind to start if pressed rapidly
-            audios.push(yayChildren);
-            yayChildren.play().catch(error => {
+            const sixSeven = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/eyyyyyyy-six-seven.mp3');
+            sixSeven.currentTime = 0; // Rewind to start if pressed rapidly
+            audios.push(sixSeven);
+            sixSeven.play().catch(error => {
               console.warn('Audio playback requires prior user interaction with the page:', error);
             });
+        } else if (event.key === "y") {
+            blockEvents(event);
+            if (true) {
+                const yippie = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/yippie_2IJl9cR.mp3');
+                yippie.currentTime = 0; // Rewind to start if pressed rapidly
+                audios.push(yippie);
+                yippie.play().catch(error => {
+                  console.warn('Audio playback requires prior user interaction with the page:', error);
+                });
+            } else {
+                const yayChildren = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/children-yaysound-effect.mp3');
+                yayChildren.currentTime = 0; // Rewind to start if pressed rapidly
+                audios.push(yayChildren);
+                yayChildren.play().catch(error => {
+                  console.warn('Audio playback requires prior user interaction with the page:', error);
+                });
+            }
         }
 
         else if (/^Digit[0-9]$/.test(event.code)) {
