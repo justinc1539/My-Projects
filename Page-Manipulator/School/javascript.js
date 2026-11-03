@@ -1827,11 +1827,10 @@ Y - Yay`);
             currentMeme[1] = null;
         }
 
-        // Sound Effects
-        // MEME TODO: Upload all these to github (WITH CREDITS) & replace URLs
+        // Sound Effects (see https://www.myinstants.com/media/sounds/???.mp3)
         else if (event.key === "v") {
             blockEvents(event);
-            const vineBoom = new Audio('https://www.myinstants.com/media/sounds/vine-boom-hq-longer.mp3');
+            const vineBoom = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/vine-boom-hq-longer.mp3');
             vineBoom.currentTime = 0; // Rewind to start if pressed rapidly
             audios.push(vineBoom);
             vineBoom.play().catch(error => {
@@ -1839,7 +1838,7 @@ Y - Yay`);
             });
         } else if (event.key === "a") {
             blockEvents(event);
-            const airHorn = new Audio('https://www.myinstants.com/media/sounds/single-air-horn.mp3');
+            const airHorn = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/single-air-horn.mp3');
             airHorn.currentTime = 0; // Rewind to start if pressed rapidly
             audios.push(airHorn);
             airHorn.play().catch(error => {
@@ -1847,7 +1846,7 @@ Y - Yay`);
             });
         } else if (event.key === "b") {
             blockEvents(event);
-            const bruh = new Audio('https://www.myinstants.com/media/sounds/bruh-sound-effect_WstdzdM.mp3');
+            const bruh = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/bruh-sound-effect_WstdzdM.mp3');
             bruh.currentTime = 0; // Rewind to start if pressed rapidly
             audios.push(bruh);
             bruh.play().catch(error => {
@@ -1855,7 +1854,7 @@ Y - Yay`);
             });
         } else if (event.key === "c") {
             blockEvents(event);
-            const clapping = new Audio('https://www.myinstants.com/media/sounds/crowd-cheering-applause.mp3');
+            const clapping = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/crowd-cheering-applause.mp3');
             clapping.currentTime = 0; // Rewind to start if pressed rapidly
             audios.push(clapping);
             clapping.play().catch(error => {
@@ -1864,7 +1863,7 @@ Y - Yay`);
         } else if (event.key === "e") {
             return; // TODO: Consider replacing with another sound
             blockEvents(event);
-            const ermActually = new Audio('https://www.myinstants.com/media/sounds/errrm-actually.mp3');
+            const ermActually = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/errrm-actually.mp3');
             ermActually.currentTime = 0; // Rewind to start if pressed rapidly
             audios.push(ermActually);
             ermActually.play().catch(error => {
@@ -1872,7 +1871,7 @@ Y - Yay`);
             });
         } else if (event.key === "f") {
             blockEvents(event);
-            const fah = new Audio('https://www.myinstants.com/media/sounds/fah-perfect-sync.mp3');
+            const fah = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/fah-perfect-sync.mp3');
             fah.currentTime = 0; // Rewind to start if pressed rapidly
             audios.push(fah);
             fah.play().catch(error => {
@@ -1880,7 +1879,7 @@ Y - Yay`);
             });
         } else if (event.key === "g") {
             blockEvents(event);
-            const getOut = new Audio('https://www.myinstants.com/media/sounds/tuco-get-out.mp3');
+            const getOut = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/tuco-get-out.mp3');
             getOut.currentTime = 0; // Rewind to start if pressed rapidly
             audios.push(getOut);
             getOut.play().catch(error => {
@@ -1888,7 +1887,7 @@ Y - Yay`);
             });
         } else if (event.key === "h") {
             blockEvents(event);
-            const ohHellNo = new Audio('https://www.myinstants.com/media/sounds/oh-my-god-bro-oh-hell-nah-man.mp3');
+            const ohHellNo = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/oh-my-god-bro-oh-hell-nah-man.mp3');
             ohHellNo.currentTime = 0; // Rewind to start if pressed rapidly
             audios.push(ohHellNo);
             ohHellNo.play().catch(error => {
@@ -1896,7 +1895,7 @@ Y - Yay`);
             });
         } else if (event.key === "i") {
             blockEvents(event);
-            const thisIsFine = new Audio('https://www.myinstants.com/media/sounds/fine.mp3');
+            const thisIsFine = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/fine.mp3');
             thisIsFine.currentTime = 0; // Rewind to start if pressed rapidly
             audios.push(thisIsFine);
             thisIsFine.play().catch(error => {
@@ -1904,7 +1903,7 @@ Y - Yay`);
             });
         } else if (event.key === "l") {
             blockEvents(event);
-            const laughingCat = new Audio('https://www.myinstants.com/media/sounds/cat-laugh-meme-1.mp3');
+            const laughingCat = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/cat-laugh-meme-1.mp3');
             laughingCat.currentTime = 0; // Rewind to start if pressed rapidly
             audios.push(laughingCat);
             laughingCat.play().catch(error => {
@@ -1912,7 +1911,7 @@ Y - Yay`);
             });
         } else if (event.key === "m") {
             blockEvents(event);
-            const myCalculations = new Audio('https://www.myinstants.com/media/sounds/according-to-my-calculations.mp3');
+            const myCalculations = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/according-to-my-calculations.mp3');
             myCalculations.currentTime = 0; // Rewind to start if pressed rapidly
             audios.push(myCalculations);
             myCalculations.play().catch(error => {
@@ -1920,7 +1919,7 @@ Y - Yay`);
             });
         } else if (event.key === "o") {
             blockEvents(event);
-            const ohMy = new Audio('https://www.myinstants.com/media/sounds/oh-my-god-meme.mp3');
+            const ohMy = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/oh-my-god-meme.mp3');
             ohMy.currentTime = 0; // Rewind to start if pressed rapidly
             audios.push(ohMy);
             ohMy.play().catch(error => {
@@ -1928,7 +1927,7 @@ Y - Yay`);
             });
         } else if (event.key === "p") {
             blockEvents(event);
-            const plsSpeed = new Audio('https://www.myinstants.com/media/sounds/please-speed-i-need-this.mp3');
+            const plsSpeed = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/please-speed-i-need-this.mp3');
             plsSpeed.currentTime = 0; // Rewind to start if pressed rapidly
             audios.push(plsSpeed);
             plsSpeed.play().catch(error => {
@@ -1939,7 +1938,8 @@ Y - Yay`);
           // 2. Create the video element
           const video = document.createElement('video');
           videos.push(video);
-          video.src = "https://cdn.vlipsy.com/clips/8KvJYoBR/360p-watermark.mp4?token=v1_f_1793654716_qS76Rc0cw";
+          // video.src = "https://vlipsy.com/clips/spongebob-squarepants-oh-brother-this-guy-stinks-8KvJYoBR";
+          video.src = "https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/360p-watermark.mp4";
           video.controls = true;
           video.autoplay = true;
           video.style.zIndex = "2147483646";
@@ -1960,7 +1960,7 @@ Y - Yay`);
           });
         } else if (event.key === "t") {
             blockEvents(event);
-            const tungTungSahur = new Audio('https://www.myinstants.com/media/sounds/tung-tung-sahur.mp3');
+            const tungTungSahur = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/tung-tung-sahur.mp3');
             tungTungSahur.currentTime = 0; // Rewind to start if pressed rapidly
             audios.push(tungTungSahur);
             tungTungSahur.play().catch(error => {
@@ -1968,7 +1968,7 @@ Y - Yay`);
             });
         } else if (event.key === "w") {
             blockEvents(event);
-            const wTH = new Audio('https://www.myinstants.com/media/sounds/what-the-hell-meme-sfx.mp3');
+            const wTH = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/what-the-hell-meme-sfx.mp3');
             wTH.currentTime = 0; // Rewind to start if pressed rapidly
             audios.push(wTH);
             wTH.play().catch(error => {
@@ -1976,7 +1976,7 @@ Y - Yay`);
             });
         } else if (event.key === "y") {
             blockEvents(event);
-            const yayChildren = new Audio('https://www.myinstants.com/media/sounds/children-yaysound-effect.mp3');
+            const yayChildren = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/children-yaysound-effect.mp3');
             yayChildren.currentTime = 0; // Rewind to start if pressed rapidly
             audios.push(yayChildren);
             yayChildren.play().catch(error => {
@@ -2013,7 +2013,7 @@ Y - Yay`);
 
                     if (currentMeme[1] !== memeIter) {
                         // 1. Play vine boom obviously
-                        const vineBoom = new Audio('https://www.myinstants.com/media/sounds/vine-boom-hq-longer.mp3');
+                        const vineBoom = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/vine-boom-hq-longer.mp3');
                         vineBoom.currentTime = 0; // Rewind to start if pressed rapidly
                         audios.push(vineBoom);
                         vineBoom.play().catch(error => {
@@ -2052,7 +2052,7 @@ Y - Yay`);
                     }
                 } else {
                     // 1. Play vine boom obviously
-                    const vineBoom = new Audio('https://www.myinstants.com/media/sounds/vine-boom-hq-longer.mp3');
+                    const vineBoom = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/vine-boom-hq-longer.mp3');
                     vineBoom.currentTime = 0; // Rewind to start if pressed rapidly
                     audios.push(vineBoom);
                     vineBoom.play().catch(error => {
