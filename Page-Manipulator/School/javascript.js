@@ -2176,8 +2176,6 @@ if (cmdPopup) {
 
 // VVVVV FOR SOUNDBOARD
 function playAudio(event, anAudio) {
-        // MEME TODO: Checkup
-        try{
     blockEvents(event);
     if (event.shiftKey) {
         anAudio = anAudio.cloneNode(true);
@@ -2187,9 +2185,6 @@ function playAudio(event, anAudio) {
     anAudio.play().catch(error => {
         console.warn('Audio playback requires prior user interaction with the page:', error);
     });
-        } catch(e) {
-            alert(e.stack)
-        }
 }
 
 const vineBoom = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/vine-boom-hq-longer.mp3');
