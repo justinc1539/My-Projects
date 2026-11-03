@@ -1807,6 +1807,8 @@ Y - Yay/Yippie`);
             audios.length = 0;
             videos.forEach(video => video.remove());
             videos.length = 0;
+            memePlayer.pause();
+            memePlayer.style.display = "none";
             memes.forEach(meme => meme.remove());
             memes.length = 0;
             currentMeme[0] = null;
@@ -1825,6 +1827,8 @@ Y - Yay/Yippie`);
             audios.length = 0;
             videos.forEach(video => video.remove());
             videos.length = 0;
+            memePlayer.pause();
+            memePlayer.style.display = "none";
             memes.forEach(meme => meme.remove());
             memes.length = 0;
             currentMeme[0] = null;
@@ -1859,31 +1863,9 @@ Y - Yay/Yippie`);
             playAudio(event, ohMy);
         } else if (event.key.toLowerCase() === "p") {
             playAudio(event, plsSpeed);
-        } else if (event.key === "s") { // MEME TODO: Also make single copy version
-          blockEvents(event);
-          // 2. Create the video element
-          const video = document.createElement('video');
-          videos.push(video);
-          // video.src = "https://vlipsy.com/clips/spongebob-squarepants-oh-brother-this-guy-stinks-8KvJYoBR";
-          video.src = "https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/360p-watermark.mp4";
-          video.controls = true;
-          video.autoplay = true;
-          video.style.zIndex = "2147483646";
-          video.style.position = 'fixed';
-          video.style.top = '0';
-          video.style.left = '0';
-          video.style.width = '100vw';
-          video.style.height = '100vh';
-          video.style.objectFit = 'fill'; // Distorts the image to fit exact dimensions
-          video.style.pointerEvents = 'none'; // Optional: lets clicks pass through
-        
-          // 3. Assemble and inject into the DOM
-          document.body.prepend(video);
-        
-          // 4. Remove the element automatically when finished
-          video.addEventListener('ended', () => {
-            video.remove();
-          });
+        } else if (event.key.toLowerCase() === "s") { // MEME TODO: Also make single copy version
+            // Source: "https://vlipsy.com/clips/spongebob-squarepants-oh-brother-this-guy-stinks-8KvJYoBR"
+            playVideo(event, thisGuyStinks, memePlayer);
         } else if (event.key.toLowerCase() === "t") {
             playAudio(event, tungTungSahur);
         } else if (event.key.toLowerCase() === "w") {
@@ -1912,7 +1894,6 @@ Y - Yay/Yippie`);
                         currentMeme[0].style.opacity = 0;
                         currentMeme[0].style.pointerEvents = 'none';
                         clearTimeout(permaMemeTimeout)
-                        // OPTIONAL MEME TODO: WHY ISN'T REMOVED SAME REMOVING?!?!?!?!!
                         if (currentMeme[1] === memeIter) {
                             permaMemeTimeout = setTimeout(() => {
                                 // OPTIONAL MEME TODO: WHY DOESN'T THESE COMMANDS RUN!!!!
@@ -2187,6 +2168,26 @@ function playAudio(event, anAudio) {
     });
 }
 
+function playVideo(event, videoSrc, memePlayer) {
+  blockEvents(event);
+  memePlayer.src = videoSrc;
+  if (event.shiftKey) {
+      memePlayer = memePlayer.cloneNode(true);
+      memePlayer.autoplay = true;
+      videos.push(memePlayer);
+      // 3. Assemble and inject into the DOM
+      document.body.appendChild(memePlayer);
+    
+      // 4. Remove the element automatically when finished
+      memePlayer.addEventListener('ended', () => {
+        memePlayer.remove();
+      });
+  }
+  memePlayer.style.display = "";
+  memePlayer.currentTime = 0;
+  memePlayer.play();
+}
+
 const vineBoom = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/vine-boom-hq-longer.mp3');
 const airHorn = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/single-air-horn.mp3');
 const bruh = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/bruh-sound-effect_WstdzdM.mp3');
@@ -2205,6 +2206,31 @@ const wTH = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects
 const sixSeven = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/eyyyyyyy-six-seven.mp3');
 const yippie = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/yippie_2IJl9cR.mp3');
 const yayChildren = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/children-yaysound-effect.mp3');
+
+// 2. Create the video element
+const memePlayer = document.createElement('video');
+memePlayer.style.display = "none";
+memePlayer.controls = false;
+memePlayer.style.zIndex = "2147483646";
+memePlayer.style.position = 'fixed';
+memePlayer.style.top = '0';
+memePlayer.style.left = '0';
+memePlayer.style.width = '100vw';
+memePlayer.style.height = '100vh';
+memePlayer.style.objectFit = 'fill'; // Distorts the image to fit exact dimensions
+memePlayer.style.pointerEvents = 'none'; // Optional: lets clicks pass through
+
+// 3. Assemble and inject into the DOM
+document.body.appendChild(memePlayer);
+
+// 4. Remove the element automatically when finished
+memePlayer.addEventListener('ended', () => {
+    memePlayer.style.display = "none";
+});
+
+
+// const thisGuyStinks = "https://vlipsy.com/clips/spongebob-squarepants-oh-brother-this-guy-stinks-8KvJYoBR";
+const thisGuyStinks = "https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/360p-watermark.mp4";
 // ^^^^^ FOR SOUNDBOARD
 
 function enableBackgroundOverlay() {
