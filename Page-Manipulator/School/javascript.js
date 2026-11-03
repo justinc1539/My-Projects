@@ -1832,112 +1832,34 @@ Y - Yay/Yippie`);
         }
 
         // Sound Effects (see https://www.myinstants.com/media/sounds/???.mp3)
-        else if (event.key === "v") {
-            blockEvents(event);
-            const vineBoom = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/vine-boom-hq-longer.mp3');
-            vineBoom.currentTime = 0; // Rewind to start if pressed rapidly
-            audios.push(vineBoom);
-            vineBoom.play().catch(error => {
-              console.warn('Audio playback requires prior user interaction with the page:', error);
-            });
-        } else if (event.key === "a") {
-            blockEvents(event);
-            const airHorn = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/single-air-horn.mp3');
-            airHorn.currentTime = 0; // Rewind to start if pressed rapidly
-            audios.push(airHorn);
-            airHorn.play().catch(error => {
-              console.warn('Audio playback requires prior user interaction with the page:', error);
-            });
-        } else if (event.key === "b") {
-            blockEvents(event);
-            const bruh = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/bruh-sound-effect_WstdzdM.mp3');
-            bruh.currentTime = 0; // Rewind to start if pressed rapidly
-            audios.push(bruh);
-            bruh.play().catch(error => {
-              console.warn('Audio playback requires prior user interaction with the page:', error);
-            });
-        } else if (event.key === "c") {
-            blockEvents(event);
-            const clapping = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/crowd-cheering-applause.mp3');
-            clapping.currentTime = 0; // Rewind to start if pressed rapidly
-            audios.push(clapping);
-            clapping.play().catch(error => {
-              console.warn('Audio playback requires prior user interaction with the page:', error);
-            });
-        } else if (event.key === "e") {
+        else if (event.key.toLowerCase() === "v") {
+            playAudio(event, vineBoom);
+        } else if (event.key.toLowerCase() === "a") {
+            playAudio(event, airHorn);
+        } else if (event.key.toLowerCase() === "b") {
+            playAudio(event, bruh);
+        } else if (event.key.toLowerCase() === "c") {
+            playAudio(event, clapping);
+        } else if (event.key.toLowerCase() === "e") {
             return; // TODO: Consider replacing with another sound
-            blockEvents(event);
-            const ermActually = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/errrm-actually.mp3');
-            ermActually.currentTime = 0; // Rewind to start if pressed rapidly
-            audios.push(ermActually);
-            ermActually.play().catch(error => {
-              console.warn('Audio playback requires prior user interaction with the page:', error);
-            });
-        } else if (event.key === "f") {
-            blockEvents(event);
-            const fah = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/fah-perfect-sync.mp3');
-            fah.currentTime = 0; // Rewind to start if pressed rapidly
-            audios.push(fah);
-            fah.play().catch(error => {
-              console.warn('Audio playback requires prior user interaction with the page:', error);
-            });
-        } else if (event.key === "g") {
-            blockEvents(event);
-            const getOut = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/tuco-get-out.mp3');
-            getOut.currentTime = 0; // Rewind to start if pressed rapidly
-            audios.push(getOut);
-            getOut.play().catch(error => {
-              console.warn('Audio playback requires prior user interaction with the page:', error);
-            });
-        } else if (event.key === "h") {
-            blockEvents(event);
-            const ohHellNo = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/oh-my-god-bro-oh-hell-nah-man.mp3');
-            ohHellNo.currentTime = 0; // Rewind to start if pressed rapidly
-            audios.push(ohHellNo);
-            ohHellNo.play().catch(error => {
-              console.warn('Audio playback requires prior user interaction with the page:', error);
-            });
-        } else if (event.key === "i") {
-            blockEvents(event);
-            const thisIsFine = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/fine.mp3');
-            thisIsFine.currentTime = 0; // Rewind to start if pressed rapidly
-            audios.push(thisIsFine);
-            thisIsFine.play().catch(error => {
-              console.warn('Audio playback requires prior user interaction with the page:', error);
-            });
-        } else if (event.key === "l") {
-            blockEvents(event);
-            const laughingCat = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/cat-laugh-meme-1.mp3');
-            laughingCat.currentTime = 0; // Rewind to start if pressed rapidly
-            audios.push(laughingCat);
-            laughingCat.play().catch(error => {
-              console.warn('Audio playback requires prior user interaction with the page:', error);
-            });
-        } else if (event.key === "m") {
-            blockEvents(event);
-            const myCalculations = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/according-to-my-calculations.mp3');
-            myCalculations.currentTime = 0; // Rewind to start if pressed rapidly
-            audios.push(myCalculations);
-            myCalculations.play().catch(error => {
-              console.warn('Audio playback requires prior user interaction with the page:', error);
-            });
-        } else if (event.key === "o") {
-            blockEvents(event);
-            const ohMy = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/oh-my-god-meme.mp3');
-            ohMy.currentTime = 0; // Rewind to start if pressed rapidly
-            audios.push(ohMy);
-            ohMy.play().catch(error => {
-              console.warn('Audio playback requires prior user interaction with the page:', error);
-            });
-        } else if (event.key === "p") {
-            blockEvents(event);
-            const plsSpeed = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/please-speed-i-need-this.mp3');
-            plsSpeed.currentTime = 0; // Rewind to start if pressed rapidly
-            audios.push(plsSpeed);
-            plsSpeed.play().catch(error => {
-              console.warn('Audio playback requires prior user interaction with the page:', error);
-            });
-        } else if (event.key === "s") {
+            playAudio(event, ermActually);
+        } else if (event.key.toLowerCase() === "f") {
+            playAudio(event, fah);
+        } else if (event.key.toLowerCase() === "g") {
+            playAudio(event, getOut);
+        } else if (event.key.toLowerCase() === "h") {
+            playAudio(event, ohHellNo);
+        } else if (event.key.toLowerCase() === "i") {
+            playAudio(event, thisIsFine);
+        } else if (event.key.toLowerCase() === "l") {
+            playAudio(event, laughingCat);
+        } else if (event.key.toLowerCase() === "m") {
+            playAudio(event, myCalculations);
+        } else if (event.key.toLowerCase() === "o") {
+            playAudio(event, ohMy);
+        } else if (event.key.toLowerCase() === "p") {
+            playAudio(event, plsSpeed);
+        } else if (event.key === "s") { // MEME TODO: Also make single copy version
           blockEvents(event);
           // 2. Create the video element
           const video = document.createElement('video');
@@ -1962,46 +1884,18 @@ Y - Yay/Yippie`);
           video.addEventListener('ended', () => {
             video.remove();
           });
-        } else if (event.key === "t") {
-            blockEvents(event);
-            const tungTungSahur = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/tung-tung-sahur.mp3');
-            tungTungSahur.currentTime = 0; // Rewind to start if pressed rapidly
-            audios.push(tungTungSahur);
-            tungTungSahur.play().catch(error => {
-              console.warn('Audio playback requires prior user interaction with the page:', error);
-            });
-        } else if (event.key === "w") {
-            blockEvents(event);
-            const wTH = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/what-the-hell-meme-sfx.mp3');
-            wTH.currentTime = 0; // Rewind to start if pressed rapidly
-            audios.push(wTH);
-            wTH.play().catch(error => {
-              console.warn('Audio playback requires prior user interaction with the page:', error);
-            });
-        } else if (event.key === "x") {
-            blockEvents(event);
-            const sixSeven = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/eyyyyyyy-six-seven.mp3');
-            sixSeven.currentTime = 0; // Rewind to start if pressed rapidly
-            audios.push(sixSeven);
-            sixSeven.play().catch(error => {
-              console.warn('Audio playback requires prior user interaction with the page:', error);
-            });
-        } else if (event.key === "y") {
+        } else if (event.key.toLowerCase() === "t") {
+            playAudio(event, tungTungSahur);
+        } else if (event.key.toLowerCase() === "w") {
+            playAudio(event, wTH);
+        } else if (event.key.toLowerCase() === "x") {
+            playAudio(event, sixSeven);
+        } else if (event.key.toLowerCase() === "y") {
             blockEvents(event);
             if (true) {
-                const yippie = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/yippie_2IJl9cR.mp3');
-                yippie.currentTime = 0; // Rewind to start if pressed rapidly
-                audios.push(yippie);
-                yippie.play().catch(error => {
-                  console.warn('Audio playback requires prior user interaction with the page:', error);
-                });
+                playAudio(event, yippie);
             } else {
-                const yayChildren = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/children-yaysound-effect.mp3');
-                yayChildren.currentTime = 0; // Rewind to start if pressed rapidly
-                audios.push(yayChildren);
-                yayChildren.play().catch(error => {
-                  console.warn('Audio playback requires prior user interaction with the page:', error);
-                });
+                playAudio(event, yayChildren);
             }
         }
 
@@ -2034,12 +1928,7 @@ Y - Yay/Yippie`);
 
                     if (currentMeme[1] !== memeIter) {
                         // 1. Play vine boom obviously
-                        const vineBoom = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/vine-boom-hq-longer.mp3');
-                        vineBoom.currentTime = 0; // Rewind to start if pressed rapidly
-                        audios.push(vineBoom);
-                        vineBoom.play().catch(error => {
-                          console.warn('Audio playback requires prior user interaction with the page:', error);
-                        });
+                        playAudio(event, vineBoom);
     
                         // 2. Clone the image (false means shallow copy, which is enough for an <img>)
                         const clonedImg = bgImg.cloneNode(false);
@@ -2073,12 +1962,7 @@ Y - Yay/Yippie`);
                     }
                 } else {
                     // 1. Play vine boom obviously
-                    const vineBoom = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/vine-boom-hq-longer.mp3');
-                    vineBoom.currentTime = 0; // Rewind to start if pressed rapidly
-                    audios.push(vineBoom);
-                    vineBoom.play().catch(error => {
-                      console.warn('Audio playback requires prior user interaction with the page:', error);
-                    });
+                    playAudio(event, vineBoom);
 
                     // 2. Clone the image (false means shallow copy, which is enough for an <img>)
                     const clonedImg = bgImg.cloneNode(false);
@@ -2289,6 +2173,44 @@ const cmdPopup = false;
 if (cmdPopup) {
     showPopup("Press 'Ctrl+\\' to enter a command! -Justin")
 }
+
+// VVVVV FOR SOUNDBOARD
+function playAudio(event, anAudio) {
+        // MEME TODO: Checkup
+        try{
+    blockEvents(event);
+    if (event.shiftKey) {
+        anAudio = anAudio.cloneNode(true);
+    }
+    anAudio.currentTime = 0; // Rewind to start if pressed rapidly
+    audios.push(anAudio);
+    anAudio.play().catch(error => {
+        console.warn('Audio playback requires prior user interaction with the page:', error);
+    });
+        } catch(e) {
+            alert(e.stack)
+        }
+}
+
+const vineBoom = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/vine-boom-hq-longer.mp3');
+const airHorn = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/single-air-horn.mp3');
+const bruh = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/bruh-sound-effect_WstdzdM.mp3');
+const clapping = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/crowd-cheering-applause.mp3');
+const ermActually = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/errrm-actually.mp3');
+const fah = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/fah-perfect-sync.mp3');
+const getOut = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/tuco-get-out.mp3');
+const ohHellNo = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/oh-my-god-bro-oh-hell-nah-man.mp3');
+const thisIsFine = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/fine.mp3');
+const laughingCat = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/cat-laugh-meme-1.mp3');
+const myCalculations = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/according-to-my-calculations.mp3');
+const ohMy = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/oh-my-god-meme.mp3');
+const plsSpeed = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/please-speed-i-need-this.mp3');
+const tungTungSahur = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/tung-tung-sahur.mp3');
+const wTH = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/what-the-hell-meme-sfx.mp3');
+const sixSeven = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/eyyyyyyy-six-seven.mp3');
+const yippie = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/yippie_2IJl9cR.mp3');
+const yayChildren = new Audio('https://raw.githubusercontent.com/justinc1539/My-Projects/refs/heads/main/testImgs/children-yaysound-effect.mp3');
+// ^^^^^ FOR SOUNDBOARD
 
 function enableBackgroundOverlay() {
     // Disable old img.html
