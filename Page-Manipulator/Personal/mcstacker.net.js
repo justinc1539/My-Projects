@@ -103,20 +103,21 @@ if (window.location.href.includes("mcstacker.net/?cmd=summon")) {
         document.body.appendChild(newCmdStackBtn);
         newCmdStackBtn.addEventListener("click", () => {
             // Confirm Command
-            const commandList = prompt(`Enter command list here (seperate with new line and use "${excludeChar}" before a line to exclude it):`).split("\n");
-            commandList.forEach(command => {
+            const commandList = prompt(`Enter command list here (seperate with new line and use "${excludeChar}" before a line to exclude it):`)
+                .split("\n")
+                .filter(command => command.trimEnd().length > 0 && !command.startsWith(excludeChar));
+            if (commandList.length <= 9) commandList.forEach(command => {
                 command = command.trimEnd();
-                if (command && !command.startsWith(excludeChar)) {
-                    iterations++;
-                    if (iterations === 2) currentID = 3;
-                    if (iterations > 2) {
-                        addPassenger(`Passengers${currentID}Pane`);
-                        currentID += 2;
-                    }
-                    newCmd(currentID, iterations, command);
-                    newCmdStackBtn.focus();
+                iterations++;
+                if (iterations === 2) currentID = 3;
+                if (iterations > 2) {
+                    addPassenger(`Passengers${currentID}Pane`);
+                    currentID += 2;
                 }
+                newCmd(currentID, iterations, command);
+                newCmdStackBtn.focus();
             });
+            else alert("Please do not use more than 9 commands for performance.")
         })
     const endBtn = document.createElement("button");
         endBtn.style.position = "fixed";
