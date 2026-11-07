@@ -36,11 +36,8 @@ if (window.location.href.includes("mcstacker.net/?cmd=summon")) {
         document.activeElement.dispatchEvent(new Event('change'));
     }
 
-    function newCmd(numID, iterations) {
+    function newCmd(numID, iterations, command) {
         console.log(`newCmd(${numID}, ${iterations})`)
-        // Confirm Command
-        const command = prompt("Enter command here:");
-        if (!command) return alert("Please try again.");
         
         // First Usage Exception
         // Optional TODO: have first commmand be "/execute at @p run kill @e[type=minecraft:armor_stand,dy=256,y=-64]"
@@ -81,14 +78,18 @@ if (window.location.href.includes("mcstacker.net/?cmd=summon")) {
         newCmdBtn.textContent = "New Falling Command Block";
         document.body.appendChild(newCmdBtn);
         newCmdBtn.addEventListener("click", () => {
-            iterations++;
-            if (iterations === 2) currentID = 3;
-            if (iterations > 2) {
-                addPassenger(`Passengers${currentID}Pane`);
-                currentID += 2;
-            }
-            newCmd(currentID, iterations);
-            newCmdBtn.focus();
+            // Confirm Command
+            const command = prompt("Enter command here:");
+            if (command) {
+                iterations++;
+                if (iterations === 2) currentID = 3;
+                if (iterations > 2) {
+                    addPassenger(`Passengers${currentID}Pane`);
+                    currentID += 2;
+                }
+                newCmd(currentID, iterations, command);
+                newCmdBtn.focus();
+            } else alert("Please try again.");
         })
     const endBtn = document.createElement("button");
         endBtn.style.position = "fixed";
