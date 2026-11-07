@@ -88,6 +88,7 @@ if (window.location.href.includes("mcstacker.net/?cmd=summon")) {
                 currentID += 2;
             }
             newCmd(currentID, iterations);
+            newCmdBtn.focus();
         })
     const endBtn = document.createElement("button");
         endBtn.style.position = "fixed";
@@ -99,8 +100,7 @@ if (window.location.href.includes("mcstacker.net/?cmd=summon")) {
         endBtn.textContent = "Finish Command Chain";
         document.body.appendChild(endBtn);
         endBtn.addEventListener("click", () => {
-            // document.querySelector(`#passengerEntity_${currentID} a`).click();
-            newCmdBtn.style.display = "none";
-            endBtn.style.display = "none";
+            newCmdBtn.remove();
+            endBtn.remove();
         })
 }
