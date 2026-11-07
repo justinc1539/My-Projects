@@ -65,6 +65,7 @@ if (window.location.href.includes("mcstacker.net/?cmd=summon")) {
         fallingBlockCmd(numID, command);
     }
     
+    const excludeChar = "#"; // <-- CHANGE EXCLUSION CHARACTER HERE
     let currentID = 0;
     let iterations = 0;
     
@@ -91,9 +92,35 @@ if (window.location.href.includes("mcstacker.net/?cmd=summon")) {
                 newCmdBtn.focus();
             } else alert("Please try again.");
         })
+    const newCmdStackBtn = document.createElement("button");
+        newCmdStackBtn.style.position = "fixed";
+        newCmdStackBtn.style.top = "60px";
+        newCmdStackBtn.style.left = "10px";
+        newCmdStackBtn.style.zIndex = "2147483646";   // make sure it's above everything
+        newCmdStackBtn.style.padding = "10px 15px";
+        newCmdStackBtn.style.fontSize = "16px";
+        newCmdStackBtn.textContent = "New Falling Command Block Stack";
+        document.body.appendChild(newCmdStackBtn);
+        newCmdStackBtn.addEventListener("click", () => {
+            // Confirm Command
+            const commandList = prompt(`Enter command list here (seperate with new line and use "${excludeChar}" before a line to exclude it):`).split("\n");
+            commandList.forEach(command => {
+                command = command.trimEnd();
+                if (command && !command.startsWith(excludeChar)) {
+                    iterations++;
+                    if (iterations === 2) currentID = 3;
+                    if (iterations > 2) {
+                        addPassenger(`Passengers${currentID}Pane`);
+                        currentID += 2;
+                    }
+                    newCmd(currentID, iterations, command);
+                    newCmdStackBtn.focus();
+                }
+            });
+        })
     const endBtn = document.createElement("button");
         endBtn.style.position = "fixed";
-        endBtn.style.top = "60px";
+        endBtn.style.top = "110px";
         endBtn.style.left = "10px";
         endBtn.style.zIndex = "2147483646";   // make sure it's above everything
         endBtn.style.padding = "10px 15px";
@@ -102,6 +129,7 @@ if (window.location.href.includes("mcstacker.net/?cmd=summon")) {
         document.body.appendChild(endBtn);
         endBtn.addEventListener("click", () => {
             newCmdBtn.remove();
+            newCmdStackBtn.remove();
             endBtn.remove();
         })
 }
