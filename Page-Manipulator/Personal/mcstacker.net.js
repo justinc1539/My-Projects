@@ -43,6 +43,7 @@ if (window.location.href.includes("mcstacker.net/?cmd=summon")) {
         if (!command) return alert("Please try again.");
         
         // First Usage Exception
+        // Optional TODO: have first commmand be "/execute at @p run kill @e[type=minecraft:armor_stand,dy=256,y=-64]"
         if (iterations === 1) {
             addPassenger(`Passengers0Pane`);
             fallingBlockCmd(0, command);
