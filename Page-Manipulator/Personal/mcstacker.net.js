@@ -166,6 +166,10 @@ if (window.location.href.includes("mcstacker.net/?cmd=setblock")) {
     block0.value = 'repeating_command_block';
     block0.dispatchEvent(new Event('change'));
     
+    const facingBS0 = document.getElementById("facingBS0");
+    facingBS0.value = 'up';
+    facingBS0.dispatchEvent(new Event('change'));
+    
     const auto0 = document.getElementById("auto0");
     auto0.value = '1';
     auto0.dispatchEvent(new Event('change'));
@@ -179,7 +183,7 @@ if (window.location.href.includes("mcstacker.net/?cmd=setblock")) {
         newBlockBtn.style.zIndex = "2147483646";   // make sure it's above everything
         newBlockBtn.style.padding = "10px 15px";
         newBlockBtn.style.fontSize = "16px";
-        newBlockBtn.textContent = "New Falling Command Block";
+        newBlockBtn.textContent = "New Command Block";
         document.body.appendChild(newBlockBtn);
         newBlockBtn.addEventListener("click", () => {
             // Confirm Command
@@ -190,17 +194,38 @@ if (window.location.href.includes("mcstacker.net/?cmd=setblock")) {
                 auto0.dispatchEvent(new Event('change'));
                 blockY++;
                 
-                outputBtn.textContent += `/setblock ${Block.value} repeating_command_block{auto:1b,Command:"${Command0.value}"} replace\n`;
+                outputBtn.textContent += `/setblock ${Block.value} repeating_command_block[facing=up]{auto:1b,Command:"${Command0.value}"} replace\n`;
+            } else alert("Please try again.");
+        });
+    const newBlockBtn = document.createElement("button");
+        newBlockBtn.style.position = "fixed";
+        newBlockBtn.style.top = "60px";
+        newBlockBtn.style.left = "10px";
+        newBlockBtn.style.zIndex = "2147483646";   // make sure it's above everything
+        newBlockBtn.style.padding = "10px 15px";
+        newBlockBtn.style.fontSize = "16px";
+        newBlockBtn.textContent = "New Command Stack";
+        document.body.appendChild(newBlockBtn);
+        newBlockBtn.addEventListener("click", () => {
+            // Confirm Command
+            const command = prompt("Enter ALL commands here:");
+            if (command) {
+                setBlockPos();
+                Command0.value = command;
+                auto0.dispatchEvent(new Event('change'));
+                blockY++;
+                
+                outputBtn.textContent += `/setblock ${Block.value} repeating_command_block[facing=up]{auto:1b,Command:"${Command0.value}"} replace\n`;
             } else alert("Please try again.");
         });
     const newColumnBtn = document.createElement("button");
         newColumnBtn.style.position = "fixed";
-        newColumnBtn.style.top = "60px";
+        newColumnBtn.style.top = "110px";
         newColumnBtn.style.left = "10px";
         newColumnBtn.style.zIndex = "2147483646";   // make sure it's above everything
         newColumnBtn.style.padding = "10px 15px";
         newColumnBtn.style.fontSize = "16px";
-        newColumnBtn.textContent = "New Falling Command Block Stack";
+        newColumnBtn.textContent = "New Column";
         document.body.appendChild(newColumnBtn);
         newColumnBtn.addEventListener("click", () => {
             blockX++;
@@ -212,7 +237,7 @@ if (window.location.href.includes("mcstacker.net/?cmd=setblock")) {
         });
     const endBtn = document.createElement("button");
         endBtn.style.position = "fixed";
-        endBtn.style.top = "110px";
+        endBtn.style.top = "160px";
         endBtn.style.left = "10px";
         endBtn.style.zIndex = "2147483646";   // make sure it's above everything
         endBtn.style.padding = "10px 15px";
@@ -227,7 +252,7 @@ if (window.location.href.includes("mcstacker.net/?cmd=setblock")) {
         });
     const outputBtn = document.createElement("button");
         outputBtn.style.position = "fixed";
-        outputBtn.style.top = "160px";
+        outputBtn.style.top = "210px";
         outputBtn.style.left = "10px";
         outputBtn.style.zIndex = "2147483646";   // make sure it's above everything
         outputBtn.style.padding = "10px 15px";
