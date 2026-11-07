@@ -156,8 +156,9 @@ if (window.location.href.includes("mcstacker.net/?cmd=setblock")) {
         Block.dispatchEvent(new Event('change'));
     }
     
-    blockX = 1;
-    blockY = 0;
+    const excludeChar = "#"; // <-- CHANGE EXCLUSION CHARACTER HERE
+    let blockX = 1;
+    let blockY = 0;
     
     const Block = document.getElementById("Block");
     document.getElementById("toClipBoard").addEventListener("click", () => newBlockBtn.focus());
@@ -197,26 +198,31 @@ if (window.location.href.includes("mcstacker.net/?cmd=setblock")) {
                 outputBtn.textContent += `/setblock ${Block.value} repeating_command_block[facing=up]{auto:1b,Command:"${Command0.value}"} replace\n`;
             } else alert("Please try again.");
         });
-    const newBlockBtn = document.createElement("button");
-        newBlockBtn.style.position = "fixed";
-        newBlockBtn.style.top = "60px";
-        newBlockBtn.style.left = "10px";
-        newBlockBtn.style.zIndex = "2147483646";   // make sure it's above everything
-        newBlockBtn.style.padding = "10px 15px";
-        newBlockBtn.style.fontSize = "16px";
-        newBlockBtn.textContent = "New Command Stack";
-        document.body.appendChild(newBlockBtn);
-        newBlockBtn.addEventListener("click", () => {
+    const newStackBtn = document.createElement("button");
+        newStackBtn.style.position = "fixed";
+        newStackBtn.style.top = "60px";
+        newStackBtn.style.left = "10px";
+        newStackBtn.style.zIndex = "2147483646";   // make sure it's above everything
+        newStackBtn.style.padding = "10px 15px";
+        newStackBtn.style.fontSize = "16px";
+        newStackBtn.textContent = "New Command Stack";
+        document.body.appendChild(newStackBtn);
+        newStackBtn.addEventListener("click", () => {
             // Confirm Command
-            const command = prompt("Enter ALL commands here:");
-            if (command) {
-                setBlockPos();
-                Command0.value = command;
-                auto0.dispatchEvent(new Event('change'));
-                blockY++;
-                
-                outputBtn.textContent += `/setblock ${Block.value} repeating_command_block[facing=up]{auto:1b,Command:"${Command0.value}"} replace\n`;
-            } else alert("Please try again.");
+            const commandList = prompt(`Enter command list here (seperate with new line and use "${excludeChar}" before a line to exclude it):`)
+                .split("\n")
+            commandList.forEach(command => {
+                if (command.trimEnd().length > 0) {
+                    if (!command.startsWith(excludeChar)) {
+                        setBlockPos();
+                        Command0.value = command.replace('"', '\"');
+                        auto0.dispatchEvent(new Event('change'));
+                        blockY++;
+                        
+                        outputBtn.textContent += `/setblock ${Block.value} repeating_command_block[facing=up]{auto:1b,Command:"${Command0.value}"} replace\n`;
+                    }
+                } else newColumnBtn.click();
+            });
         });
     const newColumnBtn = document.createElement("button");
         newColumnBtn.style.position = "fixed";
@@ -246,6 +252,7 @@ if (window.location.href.includes("mcstacker.net/?cmd=setblock")) {
         document.body.appendChild(endBtn);
         endBtn.addEventListener("click", () => {
             newBlockBtn.remove();
+            newStackBtn.remove();
             newColumnBtn.remove();
             endBtn.remove();
             outputBtn.remove();
