@@ -159,7 +159,8 @@ if (window.location.href.includes("mcstacker.net/?cmd=setblock")) {
     blockX = 1;
     blockY = 0;
     
-    const Block = document.getElementById("Block")
+    const Block = document.getElementById("Block");
+    document.getElementById("toClipBoard").addEventListener("click", () => newBlockBtn.focus());
     
     const block0 = document.getElementById("block0");
     block0.value = 'repeating_command_block';
@@ -188,6 +189,8 @@ if (window.location.href.includes("mcstacker.net/?cmd=setblock")) {
                 Command0.value = command;
                 auto0.dispatchEvent(new Event('change'));
                 blockY++;
+                
+                outputBtn.textContent += `/setblock ${Block.value} repeating_command_block{auto:1b,Command:"${Command0.value}"} replace\n`;
             } else alert("Please try again.");
         });
     const newColumnBtn = document.createElement("button");
@@ -205,6 +208,7 @@ if (window.location.href.includes("mcstacker.net/?cmd=setblock")) {
             Command0.value = '';
             setBlockPos();
             auto0.dispatchEvent(new Event('change'));
+            outputBtn.textContent += "\n";
         });
     const endBtn = document.createElement("button");
         endBtn.style.position = "fixed";
@@ -219,5 +223,24 @@ if (window.location.href.includes("mcstacker.net/?cmd=setblock")) {
             newBlockBtn.remove();
             newColumnBtn.remove();
             endBtn.remove();
+            outputBtn.remove();
+        });
+    const outputBtn = document.createElement("button");
+        outputBtn.style.position = "fixed";
+        outputBtn.style.top = "160px";
+        outputBtn.style.left = "10px";
+        outputBtn.style.zIndex = "2147483646";   // make sure it's above everything
+        outputBtn.style.padding = "10px 15px";
+        outputBtn.style.fontSize = "16px";
+        outputBtn.style.whiteSpace = "pre-line";
+        document.body.appendChild(outputBtn);
+        outputBtn.addEventListener("click", () => {
+            navigator.clipboard.writeText(outputBtn.textContent)
+                .then(() => {
+                    alert("Text copied to clipboard!");
+                })
+                .catch(err => {
+                    alert("Failed to copy:", err);
+                });
         });
 }
