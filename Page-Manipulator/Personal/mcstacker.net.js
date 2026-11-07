@@ -151,22 +151,25 @@ https://far.ddns.me/cba`);
         });
 }
 if (window.location.href.includes("mcstacker.net/?cmd=setblock")) {
+    function setBlockPos() {
+        Block.value = `~${blockX} ~${blockY} ~`;
+        Block.dispatchEvent(new Event('change'));
+    }
+    
     blockX = 1;
     blockY = 0;
     
-    function setBlockPos() {
-        document.getElementById("Block").focus();
-        document.activeElement.value = `~${blockX} ~${blockY} ~`;
-        document.activeElement.dispatchEvent(new Event('change'));
-    }
+    const Block = document.getElementById("Block")
     
-    document.getElementById("block0").focus();
-    document.activeElement.value = 'repeating_command_block';
-    document.activeElement.dispatchEvent(new Event('change'));
+    const block0 = document.getElementById("block0");
+    block0.value = 'repeating_command_block';
+    block0.dispatchEvent(new Event('change'));
     
-    document.getElementById("auto0").focus();
-    document.activeElement.value = '1';
-    document.activeElement.dispatchEvent(new Event('change'));
+    const auto0 = document.getElementById("auto0");
+    auto0.value = '1';
+    auto0.dispatchEvent(new Event('change'));
+    
+    const Command0 = document.getElementById("Command0");
     
     const newBlockBtn = document.createElement("button");
         newBlockBtn.style.position = "fixed";
@@ -181,14 +184,10 @@ if (window.location.href.includes("mcstacker.net/?cmd=setblock")) {
             // Confirm Command
             const command = prompt("Enter command here:");
             if (command) {
-                iterations++;
-                if (iterations === 2) currentID = 3;
-                if (iterations > 2) {
-                    addPassenger(`Passengers${currentID}Pane`);
-                    currentID += 2;
-                }
-                newCmd(currentID, iterations, command);
-                newBlockBtn.focus();
+                setBlockPos();
+                Command0.value = command;
+                auto0.dispatchEvent(new Event('change'));
+                blockY++;
             } else alert("Please try again.");
         });
     const newColumnBtn = document.createElement("button");
@@ -201,7 +200,11 @@ if (window.location.href.includes("mcstacker.net/?cmd=setblock")) {
         newColumnBtn.textContent = "New Falling Command Block Stack";
         document.body.appendChild(newColumnBtn);
         newColumnBtn.addEventListener("click", () => {
-            null;
+            blockX++;
+            blockY = 0;
+            Command0.value = '';
+            setBlockPos();
+            auto0.dispatchEvent(new Event('change'));
         });
     const endBtn = document.createElement("button");
         endBtn.style.position = "fixed";
