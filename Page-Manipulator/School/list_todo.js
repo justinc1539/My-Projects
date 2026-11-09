@@ -11,7 +11,7 @@ setInterval(() => {
 
 const classTODOs = [];
 
-function toggleOnlyCustomTODO () {
+function toggleOnlyCustomTODO(customTODOs) {
     if (classTODOs.length > 0) {
         classTODOs.forEach(aDiv => {
             aDiv[0].style.display = "";
@@ -43,7 +43,7 @@ function outOfBounds(element) {
   return directions;
 }
 
-function toggleMin(box, minimize, minimizeTutorial) {
+function toggleMin(box, minimize, minimizeTutorial, customTODOs, customTODOsTutorial) {
     // Minimize feature
     if (box.style.maxHeight === "600px") {
         box.style.maxWidth = "80px";
@@ -53,6 +53,8 @@ function toggleMin(box, minimize, minimizeTutorial) {
         box.style.overflowY = "none";
         minimize.textContent = "+";
         minimizeTutorial.textContent = "";
+        customTODOs.style.display = "none";
+        customTODOsTutorial.textContent = "";
         // document.getElementById("Toggle Minimize feature").addEventListener("click", e => {
         //     toggleMin(box);
         // });
@@ -64,6 +66,8 @@ function toggleMin(box, minimize, minimizeTutorial) {
         box.style.overflowY = "auto";
         minimize.textContent = "-";
         minimizeTutorial.textContent = " <-- Minimize";
+        customTODOs.style.display = "";
+        customTODOsTutorial.textContent = " <-- Custom TODOs only";
         box.appendChild(document.querySelector("#canvasrefined-todo-list"));
         // document.getElementById("Toggle Minimize feature").addEventListener("click", e => {
         //     toggleMin(box);
@@ -106,17 +110,18 @@ function toggleMin(box, minimize, minimizeTutorial) {
     minimize.style.fontSize = "50px";
     minimize.textContent = "-"; // Sets the visual minus sign
     const minimizeTutorial = document.createTextNode(" <-- Minimize");
-
     box.appendChild(minimize);
     box.appendChild(minimizeTutorial);
     
+    // Add line break between sections
+    box.appendChild(document.createElement("br"));
+    
     const customTODOs = document.createElement("a");
-    customTODOs.id = "Toggle customTODOs feature";
+    customTODOs.id = "Toggle Custom TODO feature";
     customTODOs.style.cursor = "pointer";
     customTODOs.style.fontSize = "50px";
     customTODOs.textContent = "-"; // Sets the visual minus sign
-    const customTODOsTutorial = document.createTextNode(" <-- Custom TODOs only");
-
+    customTODOsTutorial = document.createTextNode(" <-- Custom TODOs only");
     box.appendChild(customTODOs);
     box.appendChild(customTODOsTutorial);
     
@@ -163,7 +168,11 @@ function toggleMin(box, minimize, minimizeTutorial) {
     });
 
     document.getElementById("Toggle Minimize feature").addEventListener("click", e => {
-        toggleMin(box, minimize, minimizeTutorial);
+        toggleMin(box, minimize, minimizeTutorial, customTODOs, customTODOsTutorial);
+    });
+    
+    document.getElementById("Toggle Custom TODO feature").addEventListener("click", e => {
+        toggleOnlyCustomTODO(customTODOs);
     });
     
     // Canvas sometimes re-renders the page.
