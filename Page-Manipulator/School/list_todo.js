@@ -1,5 +1,36 @@
-// V10.7.2026
+// V11.9.2026
 // Active Websites: All
+
+// Fill in empty Canvas Refined Custom Tasks
+// <span style="color:#cccccc;font-size:12px;margin-top:-2px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;box-sizing:border-box;padding-right:22px;">
+setInterval(() => {
+    document.querySelectorAll('span[style="color:#cccccc;font-size:12px;margin-top:-2px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;box-sizing:border-box;padding-right:22px;"]').forEach(ele => {
+        ele.innerHTML = "<span style='color:black'>Custom Task</span>";
+    });
+}, 1);
+
+const classTODOs = [];
+
+function toggleOnlyCustomTODO () {
+    if (classTODOs.length > 0) {
+        classTODOs.forEach(aDiv => {
+            aDiv[0].style.display = "";
+            aDiv[0].innerHTML = aDiv[1];
+        });
+        classTODOs.length = 0;
+        customTODOs.textContent = "-";
+    } else {
+        document.querySelectorAll(".todo-group-list").forEach(aList => {
+            aList.querySelectorAll("div div div div").forEach(aDiv => {
+                if (aDiv.querySelector("span") && !(aDiv.querySelector("span span")  )) {
+                    classTODOs.push([aDiv, aDiv.innerHTML]);
+                    aDiv.style.display = "none";
+                }
+            });
+        });
+        customTODOs.textContent = "+";
+    }
+}
 
 function outOfBounds(element) {
   const rect = element.getBoundingClientRect();
@@ -12,7 +43,7 @@ function outOfBounds(element) {
   return directions;
 }
 
-function toggleMin(box) {
+function toggleMin(box, minimize, minimizeTutorial) {
     // Minimize feature
     if (box.style.maxHeight === "600px") {
         box.style.maxWidth = "80px";
@@ -20,21 +51,23 @@ function toggleMin(box) {
         box.style.maxHeight = "80px";
         box.style.overflowX = "auto";
         box.style.overflowY = "none";
-        box.innerHTML = "<a id=\"Toggle Minimize feature\" style=\"cursor: pointer;font-size: 50px;\">+</a>";
-        document.getElementById("Toggle Minimize feature").addEventListener("click", e => {
-            toggleMin(box);
-        });
+        minimize.textContent = "+";
+        minimizeTutorial.textContent = "";
+        // document.getElementById("Toggle Minimize feature").addEventListener("click", e => {
+        //     toggleMin(box);
+        // });
     } else {
         box.style.maxWidth = "250px";
         box.style.minWidth = "250px";
         box.style.maxHeight = "600px";
         box.style.overflowX = "auto";
         box.style.overflowY = "auto";
-        box.innerHTML = "<a id=\"Toggle Minimize feature\" style=\"cursor: pointer;font-size: 50px;\">-</a>";
+        minimize.textContent = "-";
+        minimizeTutorial.textContent = " <-- Minimize";
         box.appendChild(document.querySelector("#canvasrefined-todo-list"));
-        document.getElementById("Toggle Minimize feature").addEventListener("click", e => {
-            toggleMin(box);
-        });
+        // document.getElementById("Toggle Minimize feature").addEventListener("click", e => {
+        //     toggleMin(box);
+        // });
     }
 }
 
@@ -67,8 +100,27 @@ function toggleMin(box) {
     box.style.minWidth = "250px";
     document.body.appendChild(box);
     
+    const minimize = document.createElement("a");
+    minimize.id = "Toggle Minimize feature";
+    minimize.style.cursor = "pointer";
+    minimize.style.fontSize = "50px";
+    minimize.textContent = "-"; // Sets the visual minus sign
+    const minimizeTutorial = document.createTextNode(" <-- Minimize");
+
+    box.appendChild(minimize);
+    box.appendChild(minimizeTutorial);
+    
+    const customTODOs = document.createElement("a");
+    customTODOs.id = "Toggle customTODOs feature";
+    customTODOs.style.cursor = "pointer";
+    customTODOs.style.fontSize = "50px";
+    customTODOs.textContent = "-"; // Sets the visual minus sign
+    const customTODOsTutorial = document.createTextNode(" <-- Custom TODOs only");
+
+    box.appendChild(customTODOs);
+    box.appendChild(customTODOsTutorial);
+    
     // Add TODO List to box
-    box.innerHTML = "<a id=\"Toggle Minimize feature\" style=\"cursor: pointer;font-size: 50px;\">-</a> <-- Minimize";
     box.appendChild(document.querySelector("#canvasrefined-todo-list"));
     
     // Dragging logic
@@ -111,7 +163,7 @@ function toggleMin(box) {
     });
 
     document.getElementById("Toggle Minimize feature").addEventListener("click", e => {
-        toggleMin(box);
+        toggleMin(box, minimize, minimizeTutorial);
     });
     
     // Canvas sometimes re-renders the page.
@@ -122,3 +174,13 @@ function toggleMin(box) {
         }
     }, 500);
 })();
+
+/*// TODO: show only custom tasks
+document.querySelectorAll(".todo-group-list").forEach(aList => {
+    aList.querySelectorAll("div div div div").forEach(aDiv => {
+        if (!(aDiv.querySelector("span span")  )) { //  && aDiv.querySelector("span span").innerHTML === "Custom Task"
+            if (aDiv.querySelector("span")) aDiv.style.display = "none";
+            // parentElement
+        }
+    });
+});*/
