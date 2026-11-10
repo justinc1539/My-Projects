@@ -1,4 +1,36 @@
 // V11.10.2026
+let activeElement;
+
+async function simulateTyping(text, delay = 120) {
+  // 1. Target Google's search input (currently a textarea with name="q")
+  // const input = document.querySelector('textarea[name="q"], input[name="q"]');
+  const input = activeElement;
+  if (!input) {
+    console.error('Google search bar not found.');
+    return;
+  }
+
+  input.focus();
+  input.value = ''; // Clear existing text
+
+  // 2. Loop through each character and trigger real input events
+  for (const char of text) {
+    input.value += char;
+
+    // Fire keydown
+    input.dispatchEvent(new KeyboardEvent('keydown', { key: char, bubbles: true }));
+
+    // Fire input event (required for Google's live autocomplete dropdown to respond)
+    input.dispatchEvent(new InputEvent('input', { data: char, bubbles: true, inputType: 'insertText' }));
+
+    // Fire keyup
+    input.dispatchEvent(new KeyboardEvent('keyup', { key: char, bubbles: true }));
+
+    // Delay between keystrokes for realistic typing effect
+    await new Promise(resolve => setTimeout(resolve, delay));
+  }
+};
+
 (function() {
   // 1. Clean up any existing instances
   const existingPicker = document.getElementById('unicodePickerModal');
@@ -6,7 +38,7 @@
   const existingStyle = document.getElementById('unicodePickerStyles');
   if (existingStyle) existingStyle.remove();
 
-  // 2. Comprehensive Symbol Dataset (Math, Greek, Logic, Geometry, Music)
+  // 2. Comprehensive Symbol Dataset
   const symbols = [
     // Greek Letters
     { char: 'α', name: 'alpha' }, { char: 'β', name: 'beta' }, { char: 'γ', name: 'gamma' },
@@ -47,7 +79,7 @@
     { char: '♬', name: 'beamed sixteenth notes' }
   ];
 
-  // 3. Inject Modal Styles matching your screenshots
+  // 3. Inject Modal Styles (with active selection state)
   const style = document.createElement('style');
   style.id = 'unicodePickerStyles';
   style.textContent = `
@@ -120,13 +152,14 @@
       transition: background-color 0.1s, border-color 0.1s;
     }
 
-    .unicode-item:hover {
+    /* Selected state for mouse hover AND keyboard arrow navigation */
+    .unicode-item:hover,
+    .unicode-item.selected {
       background-color: #ffffff;
       color: #111111;
       border-color: #ffffff;
     }
 
-    /* Tooltip styling matching screenshot */
     .unicode-item .tooltip {
       visibility: hidden;
       position: absolute;
@@ -144,7 +177,8 @@
       pointer-events: none;
     }
 
-    .unicode-item:hover .tooltip {
+    .unicode-item:hover .tooltip,
+    .unicode-item.selected .tooltip {
       visibility: visible;
     }
   `;
@@ -165,53 +199,88 @@
   const searchInput = document.getElementById('unicodeSearchInput');
   const grid = document.getElementById('unicodeGrid');
 
-  // 5. Render Symbols
+  // State
+  let currentMatches = [];
+  let selectedIndex = 0;
+  const GRID_COLS = 6;
+
+  // 5. Update Highlighted Selection & Auto-Scroll
+  function updateSelection(newIndex) {
+    if (currentMatches.length === 0) return;
+
+    // Clamp index bounds
+    selectedIndex = Math.max(0, Math.min(newIndex, currentMatches.length - 1));
+
+    const children = grid.children;
+    for (let i = 0; i < children.length; i++) {
+      if (i === selectedIndex) {
+        children[i].classList.add('selected');
+        children[i].scrollIntoView({ block: 'nearest' });
+      } else {
+        children[i].classList.remove('selected');
+      }
+    }
+  }
+
+  // 6. Select Character Action (Copy & Close)
+  function selectCharacter(index) {
+    if (index >= 0 && index < currentMatches.length) {
+      if (['INPUT', 'TEXTAREA'].includes(activeElement.tagName)) {
+          // TODO: Append to current text
+           (async () => {
+               simulateTyping(currentMatches[index].char);
+           })();
+      } else navigator.clipboard.writeText(currentMatches[index].char);
+      modal.classList.add('hidden');
+    }
+  }
+
+  // 7. Render Filtered Symbols
   function renderSymbols(filter = '') {
     grid.innerHTML = '';
     const query = filter.toLowerCase().trim();
 
-    symbols.forEach(sym => {
-      if (!query || sym.name.toLowerCase().includes(query) || sym.char.includes(query)) {
-        const item = document.createElement('div');
-        item.className = 'unicode-item';
-        item.innerHTML = `${sym.char}<span class="tooltip">${sym.name}</span>`;
-        
-        item.addEventListener('click', () => {
-          if (['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
-              // TODO: Append to current text
-              const kbEvent = new KeyboardEvent('keydown', {
-                key: 'Enter',
-                code: 'Enter',
-                bubbles: true,      // Allows the event to bubble up the DOM
-                cancelable: true    // Allows event.preventDefault() to work
-              });
-            //   document.activeElement.dispatchEvent(kbEvent);
-          } else {
-              navigator.clipboard.writeText(sym.char);
-          }
-          modal.classList.add('hidden');
-        });
+    currentMatches = symbols.filter(sym => 
+      !query || sym.name.toLowerCase().includes(query) || sym.char.includes(query)
+    );
 
-        grid.appendChild(item);
-      }
+    currentMatches.forEach((sym, idx) => {
+      const item = document.createElement('div');
+      item.className = 'unicode-item';
+      item.innerHTML = `${sym.char}<span class="tooltip">${sym.name}</span>`;
+
+      item.addEventListener('mouseenter', () => {
+        updateSelection(idx);
+      });
+
+      item.addEventListener('click', () => {
+        selectCharacter(idx);
+      });
+
+      grid.appendChild(item);
     });
+
+    // Default selection to first result
+    updateSelection(0);
   }
 
-  // 6. Search Filter Listener
+  // Search Input Listener
   searchInput.addEventListener('input', (e) => {
     renderSymbols(e.target.value);
   });
 
-  // 7. Global Key Listener for Alt + \
+  // 8. Global Interceptor (Capture Phase)
   document.addEventListener('keydown', function(e) {
+    const isModalOpen = !modal.classList.contains('hidden');
+
+    // Shortcut: Alt + \
     if (e.altKey && (e.key === '\\' || e.code === 'Backslash')) {
-      // Block event propagation completely
+      activeElement = document.activeElement;
       e.preventDefault();
       e.stopPropagation();
       e.stopImmediatePropagation();
 
-      const isHidden = modal.classList.contains('hidden');
-      if (isHidden) {
+      if (!isModalOpen) {
         modal.classList.remove('hidden');
         renderSymbols();
         searchInput.value = '';
@@ -219,9 +288,32 @@
       } else {
         modal.classList.add('hidden');
       }
-    } else if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
-      modal.classList.add('hidden');
+      return;
     }
-  }, true); // Use Capture phase to intercept before page listeners
 
-})();
+    // Modal Active Controls
+    if (isModalOpen) {
+      // Prevent key events from reaching the background site while picker is open
+      if (['Escape', 'Enter', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+      }
+
+      if (e.key === 'Escape') {
+        modal.classList.add('hidden');
+      } else if (e.key === 'Enter') {
+        selectCharacter(selectedIndex);
+      } else if (e.key === 'ArrowRight') {
+        updateSelection(selectedIndex + 1);
+      } else if (e.key === 'ArrowLeft') {
+        updateSelection(selectedIndex - 1);
+      } else if (e.key === 'ArrowDown') {
+        updateSelection(selectedIndex + GRID_COLS);
+      } else if (e.key === 'ArrowUp') {
+        updateSelection(selectedIndex - GRID_COLS);
+      }
+    }
+  }, true); // Use capture phase to intercept before site listeners
+
+})();//TODO: call
