@@ -11,7 +11,7 @@ async function simulateTyping(text, delay = 120) {
   }
 
   input.focus();
-  input.value = ''; // Clear existing text
+  // input.value = ''; // Clear existing text
 
   // 2. Loop through each character and trigger real input events
   for (const char of text) {
