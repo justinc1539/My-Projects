@@ -1,4 +1,4 @@
-// V11.10.2026
+// V11.11.2026
 // Active Websites: All
 
 try {
@@ -2082,7 +2082,10 @@ async function simulateTyping(text, delay = 120) {
 
     // Music & Extra
     { char: '♩', name: 'quarter note' }, { char: '♪', name: 'eighth note' }, { char: '♫', name: 'beamed eighth notes' },
-    { char: '♬', name: 'beamed sixteenth notes' }
+    { char: '♬', name: 'beamed sixteenth notes' },
+    
+    // PALETTE TODO: ADD EXTRA CHARS
+    // △∠√≈°θπ⁄
   ];
 
   // 3. Inject Modal Styles (with active selection state)
@@ -2232,7 +2235,7 @@ async function simulateTyping(text, delay = 120) {
   function selectCharacter(index) {
     if (index >= 0 && index < currentMatches.length) {
       if (['INPUT', 'TEXTAREA'].includes(activeElement.tagName)) {
-          // TODO: Append to current text
+          // PALETTE TODO: Kami text when I ctrl + \ doesn't work, refocus on the box and see why activeElement doesn't focus
            (async () => {
                simulateTyping(currentMatches[index].char);
            })();
@@ -2411,7 +2414,6 @@ function getCurrentPeriod(dayType) {
         }
 
         // Optional TTTODO: Make function with array courses, arrray times (either values or a list including value and value to subtract from first value)
-        // TTTODO: add lunch time ends!
         if (dayType === "normal") {
             if (currentTime === "8:55:20 AM") displayPeriodEnd("AP Physics C: Mechanics");
             else if (currentTime === "9:40:20 AM") displayPeriodEnd("AP Calculus B/C");
