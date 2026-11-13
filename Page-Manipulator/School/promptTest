@@ -1,6 +1,7 @@
+// V11.13.2026
 (function() {
   // 1. Check host URL
-  if (window.location.hostname !== "example.com") return;
+//   if (window.location.hostname !== "example.com") return;
 
   // Change this to a unique, secret room name so random people don't join
   const ROOM_TOPIC = "my-secret-example-chat-84729";
@@ -156,6 +157,8 @@
     container.classList.toggle("minimized");
     toggleBtn.textContent = container.classList.contains("minimized") ? "+" : "_";
   });
+  
+  toggleBtn.click();
 
   // Helper to safely render a message into the chatlog
   function appendMessage(sender, text, timestamp) {
@@ -194,6 +197,8 @@
       method: "POST",
       body: payload
     });
+    
+    localStorage.setItem("latestMessage", text);
   }
 
   sendBtn.addEventListener("click", sendMessage);
@@ -253,18 +258,54 @@ async function getLatestMessage(topic = "my-secret-example-chat-84729") {
 }
 
 const prevMsg = localStorage.getItem("latestMessage");
-if (prevMsg && true) {}
-/*//TODO: use localstorage to auto open popup
-// Save data
-localStorage.setItem("username", "Alex");
+getLatestMessage().then(msg => {
+// Initialize baseline if this is the first time running
+    if (!prevMsg && msg) {
+        localStorage.setItem("latestMessage", msg);
+        return;
+    }
 
-// Retrieve data (returns null if the key doesn't exist)
-const user = localStorage.getItem("username"); 
-console.log(user); // Output: "Alex"
+    if (msg && prevMsg !== msg) {
+        // Prevent duplicate circles if polling in a loop
+        if (!document.getElementById("chatNotifBadge")) {
+            const badge = document.createElement("span");
+            badge.id = "chatNotifBadge";
+            badge.textContent = "!";
+            Object.assign(badge.style, {
+                backgroundColor: "#e60000",
+                color: "#ffea00",
+                fontWeight: "bold",
+                fontSize: "12px",
+                width: "18px",
+                height: "18px",
+                borderRadius: "50%",
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                boxShadow: "0 0 4px rgba(0, 0, 0, 0.5)",
+                flexShrink: "0",
+                cursor: "pointer"
+            });
 
-// Remove a single item
-localStorage.removeItem("username");
+            // Place it inside the header right before the '+' button
+            const header = document.getElementById("chatHeader");
+            const toggleBtn = document.getElementById("chatToggleBtn");
+            if (header && toggleBtn) {
+                header.insertBefore(badge, toggleBtn);
+            }
 
-// Clear all saved data for the current website
-localStorage.clear();
-*/
+            // Dismiss the badge and mark message as read when clicked or expanded
+            const clearNotif = () => {
+                badge.remove();
+                localStorage.setItem("latestMessage", msg);
+            };
+
+            badge.addEventListener("click", (e) => {
+                e.stopPropagation();
+                toggleBtn?.click();
+                clearNotif();
+            });
+            toggleBtn?.addEventListener("click", clearNotif, { once: true });
+        }
+    }
+});
