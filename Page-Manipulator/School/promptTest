@@ -274,8 +274,8 @@
     }
     
     if (packet.time > latestTime) {
-        localStorage.setItem("latestTime", packet.time);
         if (container.classList.contains("minimized")) addNotif();
+        else localStorage.setItem("latestTime", packet.time);
     }
     // TODO: make it work!!!
   };
