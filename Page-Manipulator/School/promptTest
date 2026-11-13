@@ -3,7 +3,7 @@
     const latestTime = Number(localStorage.getItem("latestTime")) || 0;
 
   // 1. Check host URL
-//   if (window.location.hostname !== "example.com") return;
+  if (window.location.hostname !== "claude.ai") return;
 
   // Change this to a unique, secret room name so random people don't join
   const ROOM_TOPIC = "my-secret-example-chat-84729";
