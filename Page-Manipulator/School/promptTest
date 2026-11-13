@@ -1,5 +1,7 @@
 // V11.13.2026
 (function() {
+    const latestTime = Number(localStorage.getItem("latestTime")) || 0;
+
   // 1. Check host URL
 //   if (window.location.hostname !== "example.com") return;
 
@@ -125,7 +127,7 @@
   document.head.appendChild(style);
 
   // 3. Build Chat UI
-  const savedName = localStorage.getItem("chat_username") || "Jaineil" // "User_" + Math.floor(Math.random() * 1000);
+  const savedName = localStorage.getItem("chat_username") || "User_" + Math.floor(Math.random() * 1000);
   const container = document.createElement("div");
   container.id = "injectedChatOverlay";
   container.innerHTML = `
@@ -192,7 +194,6 @@
             // Dismiss the badge and mark message as read when clicked or expanded
             const clearNotif = () => {
                 badge.remove();
-                localStorage.setItem("latestMessage", msg);
             };
 
             badge.addEventListener("click", (e) => {
@@ -241,8 +242,6 @@
       method: "POST",
       body: payload
     });
-    
-    localStorage.setItem("latestMessage", text);
   }
 
   sendBtn.addEventListener("click", sendMessage);
@@ -274,7 +273,11 @@
       appendMessage("System", packet.message, packet.time);
     }
     
-    if (container.classList.contains("minimized")) addNotif();
+    if (packet.time > latestTime) {
+        localStorage.setItem("latestTime", packet.time);
+        if (container.classList.contains("minimized")) addNotif();
+    }
+    // TODO: make it work!!!
   };
 })();
 
@@ -302,14 +305,3 @@ async function getLatestMessage(topic = "my-secret-example-chat-84729") {
     return packet.message;
   }
 }
-
-const prevMsg = localStorage.getItem("latestMessage");
-getLatestMessage().then(msg => {
-    // Initialize baseline if this is the first time running
-    if (!prevMsg && msg) {
-        localStorage.setItem("latestMessage", msg);
-        return;
-    }
-
-    if (msg && prevMsg !== msg) addNotif();
-});
