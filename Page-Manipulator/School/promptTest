@@ -125,7 +125,7 @@
   document.head.appendChild(style);
 
   // 3. Build Chat UI
-  const savedName = localStorage.getItem("chat_username") || "User_" + Math.floor(Math.random() * 1000);
+  const savedName = localStorage.getItem("chat_username") || "Jaineil" // "User_" + Math.floor(Math.random() * 1000);
   const container = document.createElement("div");
   container.id = "injectedChatOverlay";
   container.innerHTML = `
@@ -159,6 +159,50 @@
   });
   
   toggleBtn.click();
+
+  function addNotif() {
+        // Prevent duplicate circles if polling in a loop
+        if (!document.getElementById("chatNotifBadge")) {
+            const badge = document.createElement("span");
+            badge.id = "chatNotifBadge";
+            badge.textContent = "!";
+            Object.assign(badge.style, {
+                backgroundColor: "#e60000",
+                color: "#ffea00",
+                fontWeight: "bold",
+                fontSize: "12px",
+                width: "18px",
+                height: "18px",
+                borderRadius: "50%",
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                boxShadow: "0 0 4px rgba(0, 0, 0, 0.5)",
+                flexShrink: "0",
+                cursor: "pointer"
+            });
+
+            // Place it inside the header right before the '+' button
+            const header = document.getElementById("chatHeader");
+            const toggleBtn = document.getElementById("chatToggleBtn");
+            if (header && toggleBtn) {
+                header.insertBefore(badge, toggleBtn);
+            }
+
+            // Dismiss the badge and mark message as read when clicked or expanded
+            const clearNotif = () => {
+                badge.remove();
+                localStorage.setItem("latestMessage", msg);
+            };
+
+            badge.addEventListener("click", (e) => {
+                e.stopPropagation();
+                toggleBtn?.click();
+                clearNotif();
+            });
+            toggleBtn?.addEventListener("click", clearNotif, { once: true });
+        }
+    }
 
   // Helper to safely render a message into the chatlog
   function appendMessage(sender, text, timestamp) {
@@ -229,6 +273,8 @@
       // Fallback if a plain text message was sent to the topic
       appendMessage("System", packet.message, packet.time);
     }
+    
+    if (container.classList.contains("minimized")) addNotif();
   };
 })();
 
@@ -259,53 +305,11 @@ async function getLatestMessage(topic = "my-secret-example-chat-84729") {
 
 const prevMsg = localStorage.getItem("latestMessage");
 getLatestMessage().then(msg => {
-// Initialize baseline if this is the first time running
+    // Initialize baseline if this is the first time running
     if (!prevMsg && msg) {
         localStorage.setItem("latestMessage", msg);
         return;
     }
 
-    if (msg && prevMsg !== msg) {
-        // Prevent duplicate circles if polling in a loop
-        if (!document.getElementById("chatNotifBadge")) {
-            const badge = document.createElement("span");
-            badge.id = "chatNotifBadge";
-            badge.textContent = "!";
-            Object.assign(badge.style, {
-                backgroundColor: "#e60000",
-                color: "#ffea00",
-                fontWeight: "bold",
-                fontSize: "12px",
-                width: "18px",
-                height: "18px",
-                borderRadius: "50%",
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-                boxShadow: "0 0 4px rgba(0, 0, 0, 0.5)",
-                flexShrink: "0",
-                cursor: "pointer"
-            });
-
-            // Place it inside the header right before the '+' button
-            const header = document.getElementById("chatHeader");
-            const toggleBtn = document.getElementById("chatToggleBtn");
-            if (header && toggleBtn) {
-                header.insertBefore(badge, toggleBtn);
-            }
-
-            // Dismiss the badge and mark message as read when clicked or expanded
-            const clearNotif = () => {
-                badge.remove();
-                localStorage.setItem("latestMessage", msg);
-            };
-
-            badge.addEventListener("click", (e) => {
-                e.stopPropagation();
-                toggleBtn?.click();
-                clearNotif();
-            });
-            toggleBtn?.addEventListener("click", clearNotif, { once: true });
-        }
-    }
+    if (msg && prevMsg !== msg) addNotif();
 });
