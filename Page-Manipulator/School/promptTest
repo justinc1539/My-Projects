@@ -1,6 +1,7 @@
 // V11.13.2026
 (function() {
-    const latestTime = Number(localStorage.getItem("latestTime")) || 0;
+  let latestTime = Number(localStorage.getItem("latestTime")) || 0;
+  let latestSeenTime = latestTime;
 
   // 1. Check host URL
   if (window.location.hostname !== "claude.ai") return;
@@ -11,9 +12,12 @@
   // Clean up old instances if re-running
   const existing = document.getElementById("injectedChatOverlay");
   if (existing) existing.remove();
+  const existingStyle = document.getElementById("injectedChatStyle");
+  if (existingStyle) existingStyle.remove();
 
   // 2. Inject Dark Theme Styles
   const style = document.createElement("style");
+  style.id = "injectedChatStyle";
   style.textContent = `
     #injectedChatOverlay {
       position: fixed;
@@ -89,14 +93,43 @@
       color: #4a8bf5;
       font-weight: bold;
     }
+    .msg-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 6px;
+    }
+    .msg-text {
+      flex: 1;
+      word-break: break-word;
+      white-space: pre-wrap;
+    }
+    .copy-msg-btn {
+      background: transparent;
+      border: none;
+      color: #888888;
+      cursor: pointer;
+      padding: 2px;
+      border-radius: 3px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: color 0.15s, background-color 0.15s;
+    }
+    .copy-msg-btn:hover {
+      color: #ffffff;
+      background-color: #444444;
+    }
     .chat-footer {
       display: flex;
+      align-items: flex-end;
       padding: 8px;
       gap: 6px;
       background-color: #1e1e1e;
       border-top: 1px solid #444;
     }
-    .chat-footer input {
+    .chat-footer textarea {
       flex: 1;
       background: #2d2d2d;
       border: 1px solid #444;
@@ -105,9 +138,14 @@
       border-radius: 4px;
       font-family: inherit;
       font-size: 12px;
+      line-height: 1.4;
+      box-sizing: border-box;
+      resize: none;
+      overflow-y: hidden;
+      max-height: 100px;
       outline: none;
     }
-    .chat-footer input:focus {
+    .chat-footer textarea:focus {
       border-color: #4a8bf5;
     }
     .chat-footer button {
@@ -115,7 +153,7 @@
       color: #ffffff;
       border: none;
       border-radius: 4px;
-      padding: 0 12px;
+      padding: 6px 12px;
       cursor: pointer;
       font-family: inherit;
       font-weight: bold;
@@ -137,7 +175,7 @@
     </div>
     <div class="chat-body" id="chatMessages"></div>
     <div class="chat-footer">
-      <input type="text" id="chatMsgInput" placeholder="Type a message..." autocomplete="off" />
+      <textarea id="chatMsgInput" rows="1" placeholder="Type a message..." autocomplete="off"></textarea>
       <button id="chatSendBtn">Send</button>
     </div>
   `;
@@ -154,56 +192,65 @@
     localStorage.setItem("chat_username", userInput.value.trim() || "Anonymous");
   });
 
+  function markAllRead() {
+    const badge = document.getElementById("chatNotifBadge");
+    if (badge) badge.remove();
+    if (latestSeenTime > latestTime) {
+      latestTime = latestSeenTime;
+      localStorage.setItem("latestTime", latestTime);
+    }
+  }
+
   // Minimize / Expand toggle
   toggleBtn.addEventListener("click", () => {
     container.classList.toggle("minimized");
-    toggleBtn.textContent = container.classList.contains("minimized") ? "+" : "_";
+    const isMinimized = container.classList.contains("minimized");
+    toggleBtn.textContent = isMinimized ? "+" : "_";
+    if (!isMinimized) {
+      markAllRead();
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
   });
-  
+
+  // Start minimized
   toggleBtn.click();
 
   function addNotif() {
-        // Prevent duplicate circles if polling in a loop
-        if (!document.getElementById("chatNotifBadge")) {
-            const badge = document.createElement("span");
-            badge.id = "chatNotifBadge";
-            badge.textContent = "!";
-            Object.assign(badge.style, {
-                backgroundColor: "#e60000",
-                color: "#ffea00",
-                fontWeight: "bold",
-                fontSize: "12px",
-                width: "18px",
-                height: "18px",
-                borderRadius: "50%",
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-                boxShadow: "0 0 4px rgba(0, 0, 0, 0.5)",
-                flexShrink: "0",
-                cursor: "pointer"
-            });
+    if (!document.getElementById("chatNotifBadge")) {
+      const badge = document.createElement("span");
+      badge.id = "chatNotifBadge";
+      badge.textContent = "!";
+      Object.assign(badge.style, {
+        backgroundColor: "#e60000",
+        color: "#ffea00",
+        fontWeight: "bold",
+        fontSize: "12px",
+        width: "18px",
+        height: "18px",
+        borderRadius: "50%",
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+        boxShadow: "0 0 4px rgba(0, 0, 0, 0.5)",
+        flexShrink: "0",
+        cursor: "pointer"
+      });
 
-            // Place it inside the header right before the '+' button
-            const header = document.getElementById("chatHeader");
-            const toggleBtn = document.getElementById("chatToggleBtn");
-            if (header && toggleBtn) {
-                header.insertBefore(badge, toggleBtn);
-            }
+      const header = document.getElementById("chatHeader");
+      if (header && toggleBtn) {
+        header.insertBefore(badge, toggleBtn);
+      }
 
-            // Dismiss the badge and mark message as read when clicked or expanded
-            const clearNotif = () => {
-                badge.remove();
-            };
-
-            badge.addEventListener("click", (e) => {
-                e.stopPropagation();
-                toggleBtn?.click();
-                clearNotif();
-            });
-            toggleBtn?.addEventListener("click", clearNotif, { once: true });
+      badge.addEventListener("click", (e) => {
+        e.stopPropagation();
+        if (container.classList.contains("minimized")) {
+          toggleBtn.click();
+        } else {
+          markAllRead();
         }
+      });
     }
+  }
 
   // Helper to safely render a message into the chatlog
   function appendMessage(sender, text, timestamp) {
@@ -217,14 +264,47 @@
     metaEl.innerHTML = `<span class="sender"></span><span>${timeStr}</span>`;
     metaEl.querySelector(".sender").textContent = sender;
 
+    const rowEl = document.createElement("div");
+    rowEl.className = "msg-row";
+
     const textEl = document.createElement("div");
-    textEl.textContent = text; // Uses textContent to prevent HTML injection
+    textEl.className = "msg-text";
+    textEl.textContent = text;
+
+    const copyIconSVG = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
+    const checkIconSVG = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+
+    const copyBtn = document.createElement("button");
+    copyBtn.className = "copy-msg-btn";
+    copyBtn.title = "Copy message text";
+    copyBtn.innerHTML = copyIconSVG;
+
+    copyBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      navigator.clipboard.writeText(text);
+      copyBtn.innerHTML = checkIconSVG;
+      setTimeout(() => {
+        copyBtn.innerHTML = copyIconSVG;
+      }, 1200);
+    });
+
+    rowEl.appendChild(textEl);
+    rowEl.appendChild(copyBtn);
 
     msgEl.appendChild(metaEl);
-    msgEl.appendChild(textEl);
+    msgEl.appendChild(rowEl);
     messagesDiv.appendChild(msgEl);
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
   }
+
+  // Auto-expand textarea height to fit multi-line text
+  function autoResizeInput() {
+    msgInput.style.height = "auto";
+    msgInput.style.height = Math.min(msgInput.scrollHeight, 100) + "px";
+    msgInput.style.overflowY = msgInput.scrollHeight > 100 ? "auto" : "hidden";
+  }
+
+  msgInput.addEventListener("input", autoResizeInput);
 
   // 4. Send Message (POST)
   async function sendMessage() {
@@ -237,6 +317,7 @@
     });
 
     msgInput.value = "";
+    autoResizeInput();
 
     await fetch(`https://ntfy.sh/${ROOM_TOPIC}`, {
       method: "POST",
@@ -246,11 +327,11 @@
 
   sendBtn.addEventListener("click", sendMessage);
 
-  // Isolate keyboard events so typing doesn't trigger page shortcuts
+  // Isolate keyboard events; Enter sends, Shift+Enter inserts newline
   [msgInput, userInput].forEach(el => {
     el.addEventListener("keydown", (e) => {
       e.stopPropagation();
-      if (e.key === "Enter" && el === msgInput) {
+      if (e.key === "Enter" && !e.shiftKey && el === msgInput) {
         e.preventDefault();
         sendMessage();
       }
@@ -258,7 +339,6 @@
   });
 
   // 5. Receive Live Messages & History (GET via Server-Sent Events)
-  // '?since=12h' loads the last 12 hours of chatlog immediately on connect
   const eventSource = new EventSource(`https://ntfy.sh/${ROOM_TOPIC}/sse?since=12h`);
 
   eventSource.onmessage = (event) => {
@@ -269,15 +349,20 @@
       const data = JSON.parse(packet.message);
       appendMessage(data.sender, data.text, packet.time);
     } catch {
-      // Fallback if a plain text message was sent to the topic
       appendMessage("System", packet.message, packet.time);
     }
-    
-    if (packet.time > latestTime) {
-        if (container.classList.contains("minimized")) addNotif();
-        else localStorage.setItem("latestTime", packet.time);
+
+    if (packet.time > latestSeenTime) {
+      latestSeenTime = packet.time;
     }
-    // TODO: make it work!!!
+
+    if (packet.time > latestTime) {
+      if (container.classList.contains("minimized")) {
+        addNotif();
+      } else {
+        markAllRead();
+      }
+    }
   };
 })();
 
@@ -285,7 +370,6 @@ async function getLatestMessage(topic = "my-secret-example-chat-84729") {
   const response = await fetch(`https://ntfy.sh/${topic}/json?poll=1&since=latest`);
   const rawText = await response.text();
 
-  // Returns null if no messages exist in the 12-hour cache
   if (!rawText.trim()) {
     return null;
   }
@@ -297,7 +381,6 @@ async function getLatestMessage(topic = "my-secret-example-chat-84729") {
     return null;
   }
 
-  // Extracts .text from our chat script's JSON format, or falls back to plain text
   try {
     const parsed = JSON.parse(packet.message);
     return parsed.text ?? packet.message;
