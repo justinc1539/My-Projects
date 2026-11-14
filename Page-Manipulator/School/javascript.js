@@ -1,4 +1,5 @@
-// V11.11.2026
+// V11.13.2026
+if (document.querySelector("span.menu-item__badge span")) alert("You have a Canvas Notification!")
 // Active Websites: All
 
 try {
@@ -1701,6 +1702,7 @@ document.addEventListener('keydown', (event) => {
     // Check if the pressed key is 'p' (case-sensitive by default)
     if (event.key === '\\' && ctrlHeld && altHeld) {
         blockEvents(event);
+        const lastCommand = command;
         command = prompt("Enter your command here:", command);
         let output = "SyntaxError"
         try {
@@ -1716,6 +1718,7 @@ document.addEventListener('keydown', (event) => {
             ctrlHeld = false;
             altHeld = false;
         }
+        if (!command) command = lastCommand;
     } else if (event.key === 'b' && ctrlHeld && altHeld) {
         blockEvents(event);
         bgImgSrcIter++;
@@ -1785,6 +1788,8 @@ B - Bruh
 C - Clapping
 E - Erm Actually (Loud Kid)
 F - Fah
+// MEME TODO: ADD STOP THE CAP
+// MEME TODO: ADD YAWN AUGHHHHHH
 G - Get Out
 H - Oh Hell No
 I - This Is Fine
@@ -2086,6 +2091,7 @@ async function simulateTyping(text, delay = 120) {
     
     // PALETTE TODO: ADD EXTRA CHARS
     // △∠√≈°θπ⁄
+    { char: '\t', name: 'tab' },
   ];
 
   // 3. Inject Modal Styles (with active selection state)
