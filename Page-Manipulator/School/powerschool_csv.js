@@ -1,5 +1,6 @@
 // V11.13.2026
 // Useful for https://docs.google.com/spreadsheets/d/1DoKdORl4rLTHS-SmeZf7L3-eYeqj1RXhQhfl5WQXWFA/edit?gid=1433644940#gid=1433644940
+// Inspired by Nicholas Baldino's grade calculator.xlsx (https://pcti.instructure.com/courses/18206/files/8176154?module_item_id=1722603) and (https://docs.google.com/spreadsheets/d/1dgzstyOCx6S6d6ZpMN6mX9wLc23AyjpI/edit?gid=22007649#gid=22007649)
 (() => {
   const container = document.getElementById('sps-assignment-categories-container');
   const heading = container?.querySelector('h2');
