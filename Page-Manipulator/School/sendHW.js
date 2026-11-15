@@ -4,7 +4,8 @@ if (mode === "Send") {
     try {
         (function() {
             if (!window.location.href.match(/^https:\/\/pcti\.instructure\.com\/?(?:\?.*)?$/)) return;
-            document.querySelector("#better-todo-see-more.canvasrefined-custom-btn").click();
+            const seeMoreBtn = document.querySelector("#better-todo-see-more.canvasrefined-custom-btn");
+            if (seeMoreBtn) seeMoreBtn.click();
         
             const dueDates = [];
             document.querySelectorAll(".todo-group-list").forEach(aList => {
