@@ -27,25 +27,26 @@
     const targetIn1 = getRelativeDateStr(1);
     const targetIn2 = getRelativeDateStr(2);
     
+    const overdue = dueDates.filter(d => d.trim() < target2Ago).length / 4;
     const due2Ago = dueDates.filter(d => d.trim() === target2Ago).length / 4;
     const due1Ago = dueDates.filter(d => d.trim() === target1Ago).length / 4;
     const dueToday = dueDates.filter(d => d.trim() === targetToday).length / 4;
     const dueIn1 = dueDates.filter(d => d.trim() === targetIn1).length / 4;
     const dueIn2 = dueDates.filter(d => d.trim() === targetIn2).length / 4;
     
-    const datesMessage = `You have ${due2Ago} assignments due two days ago.
+    const datesMessage = `You have ${overdue} assignments overdue.
+    You have ${due2Ago} assignments due two days ago.
     You have ${due1Ago} assignments due one day ago.
     You have ${dueToday} assignments due today.
     You have ${dueIn1} assignments due in one day.
     You have ${dueIn2} assignments due in two days.`;
-    return;
 
   // Change this to a unique, secret room name so random people don't join
   const ROOM_TOPIC = "so-i-stop-watching-youtube-432573654749862756";
 
   // 4. Send Message (POST)
-  async function sendMessage() {
-    const text = msgInput.value.trim();
+  (async () => {
+    const text = datesMessage;
     if (!text) return;
 
     const payload = JSON.stringify({
@@ -53,45 +54,24 @@
       text: text
     });
 
+    alert(`post https://ntfy.sh/${ROOM_TOPIC}`)
     await fetch(`https://ntfy.sh/${ROOM_TOPIC}`, {
       method: "POST",
       body: payload
     });
-  }
-  
-  sendMessage();
-
-  /*// 5. Receive Live Messages & History (GET via Server-Sent Events)
-  const eventSource = new EventSource(`https://ntfy.sh/${ROOM_TOPIC}/sse?since=12h`);
-
-  eventSource.onmessage = (event) => {
-    const packet = JSON.parse(event.data);
-    if (packet.event !== "message") return;
-
-    try {
-      const data = JSON.parse(packet.message);
-      appendMessage(data.sender, data.text, packet.time);
-    } catch {
-      appendMessage("System", packet.message, packet.time);
-    }
-
-    if (packet.time > latestSeenTime) {
-      latestSeenTime = packet.time;
-    }
-
-    if (packet.time > latestTime) {
-      if (container.classList.contains("minimized")) {
-        addNotif();
-      } else {
-        markAllRead();
-      }
-    }
-  };*/
+    alert("sent!")
+  })();
 })();
 
-async function getLatestMessage(topic = "my-secret-example-chat-84729") {
+(async () => {
+    alert(11)
+    const topic = "so-i-stop-watching-youtube-432573654749862756";
+    alert(12)
+    alert(`receive https://ntfy.sh/${topic}`)
   const response = await fetch(`https://ntfy.sh/${topic}/json?poll=1&since=latest`);
+  alert(13)
   const rawText = await response.text();
+  alert(14)
 
   if (!rawText.trim()) {
     return null;
@@ -110,4 +90,5 @@ async function getLatestMessage(topic = "my-secret-example-chat-84729") {
   } catch {
     return packet.message;
   }
-}
+    // TODO: alert not return
+})();
