@@ -2062,37 +2062,42 @@ async function simulateTyping(text, delay = 120) {
 
     // Math Operators & Calculus
     { char: '≠', name: 'not equal' }, { char: '±', name: 'plus minus' }, { char: '∓', name: 'minus plus' },
-    { char: '×', name: 'multiply times' }, { char: '÷', name: 'divide' }, { char: '√', name: 'square root rad' },
+    { char: '×', name: 'multiply/times' }, { char: '÷', name: 'divide' }, { char: '√', name: 'square root/radical/check' },
     { char: 'ⁿ√', name: 'n-th root' }, { char: '∞', name: 'infinity' }, { char: '∫', name: 'integral' },
-    { char: '∑', name: 'sum summation' }, { char: '∏', name: 'product' }, { char: '∂', name: 'partial derivative' },
-    { char: '∇', name: 'nabla grad del' }, { char: '≈', name: 'approx equal' }, { char: '≡', name: 'identical equivalent' },
+    { char: '∑', name: 'summation' }, { char: '∏', name: 'product' }, { char: '∂', name: 'partial derivative' },
+    { char: '∇', name: 'nabla/gradient/del/upside-down triangle' }, { char: '≈', name: 'approximately equal to' }, { char: '≡', name: 'identical equivalent' },
     { char: '∝', name: 'proportional' }, { char: '≤', name: 'less equal' }, { char: '≥', name: 'greater equal' },
     { char: '|x|', name: 'absolute value' }, { char: '⌊x⌋', name: 'floor' }, { char: '⌈x⌉', name: 'ceiling' },
     { char: 'log', name: 'logarithm' }, { char: 'lim', name: 'limit' },
 
     // Sets & Logic
-    { char: '∩', name: 'intersection cap' }, { char: '∪', name: 'union cup' }, { char: '⊂', name: 'subset' },
+    { char: '∩', name: 'intersection/cap' }, { char: '∪', name: 'union/cup' }, { char: '⊂', name: 'subset' },
     { char: '⊆', name: 'subset equal' }, { char: '⊄', name: 'not subset' }, { char: '∈', name: 'element in' },
-    { char: '∉', name: 'not element' }, { char: '∅', name: 'empty set null phi' }, { char: '∀', name: 'for all' },
+    { char: '∉', name: 'not element' }, { char: '∅', name: 'empty/set/null/phi' }, { char: '∀', name: 'for all' },
     { char: '∃', name: 'there exists' }, { char: '∄', name: 'there does not exist' }, { char: '∧', name: 'logical and' },
-    { char: '∨', name: 'logical or' }, { char: '¬', name: 'not negation' },
+    { char: '∨', name: 'logical or' }, { char: '¬', name: 'logical not/negation' },
 
     // Geometry & Vectors
     { char: '∠', name: 'angle' }, { char: '∡', name: 'measured angle' }, { char: '⊥', name: 'perpendicular' },
-    { char: '║', name: 'parallel' }, { char: '≅', name: 'congruent' }, { char: '°', name: 'degree' },
+    { char: '║', name: 'parallel' }, { char: '≅', name: 'congruent' }, { char: '°', name: 'degrees' },
     { char: '∴', name: 'therefore' }, { char: '∵', name: 'because' },
 
     // Arrows
     { char: '→', name: 'right arrow' }, { char: '←', name: 'left arrow' }, { char: '⇒', name: 'implies right arrow' },
-    { char: '↔', name: 'left right arrow bidirectional' }, { char: '⇔', name: 'equivalent right left arrow' },
+    { char: '↔', name: 'left right arrow/bidirectional' }, { char: '⇔', name: 'equivalent right left arrow/implies bidirectional' },
 
     // Music & Extra
     { char: '♩', name: 'quarter note' }, { char: '♪', name: 'eighth note' }, { char: '♫', name: 'beamed eighth notes' },
     { char: '♬', name: 'beamed sixteenth notes' },
-    
-    // PALETTE TODO: ADD EXTRA CHARS
-    // △∠√≈°θπ⁄
+
+    // GC Symbols
+    { char: '△', name: 'triangle' },
+    { char: '⁄', name: 'fraction slash' },
+
+    // Other
     { char: '\t', name: 'tab' },
+    { char: '\n', name: 'newline' },
+    { char: '\u2061', name: 'invisible unicode character' },
   ];
 
   // 3. Inject Modal Styles (with active selection state)
