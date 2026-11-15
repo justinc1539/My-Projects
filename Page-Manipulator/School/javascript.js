@@ -1,9 +1,10 @@
-// V11.13.2026
+// V11.15.2026
 if (document.querySelector("span.menu-item__badge span")) alert("You have a Canvas Notification!")
 // Active Websites: All
 
 try {
 // SET ACTIVE WEBSITES TO ALL
+// Ctrl + Alt + T to open Crosh (aka Command Prompt for Chromebook)
 // https://copilot.microsoft.com/chats/WtPeNsm5rvHac4qFa4hKX
 // Search + Shift + P to toggle the touchpad and Search + Shift + T to toggle the touchscreen
 if (document.title.toLowerCase().includes("edpuzzle")) {
@@ -2386,32 +2387,32 @@ function getCurrentPeriod(dayType) {
     return period;
 }
 
-// Black Box Window
+// Black Time Box Window
 (function() {
-    // Create the box
-    const box = document.createElement("div");
-    box.id = "timeBox";
-    box.style.position = "fixed";        // fixed beats Canvas layout
-    box.style.top = "10px";
-    box.style.left = "50%";
-    box.style.transform = "translateX(-50%)";
-    box.style.padding = "6px 10px";
-    box.style.background = "black";
-    box.style.color = "white";
-    box.style.fontFamily = "monospace";
-    box.style.fontSize = "12px";
-    box.style.borderRadius = "4px";
-    box.style.cursor = "move";
-    box.style.zIndex = "2147483646";      // Canvas can't beat this
-    // box.textContent = new Date().toLocaleTimeString();
-    document.body.appendChild(box);
+    // Create the timeBox
+    const timeBox = document.createElement("div");
+    timeBox.id = "timeBox";
+    timeBox.style.position = "fixed";        // fixed beats Canvas layout
+    timeBox.style.top = "10px";
+    timeBox.style.left = "50%";
+    timeBox.style.transform = "translateX(-50%)";
+    timeBox.style.padding = "6px 10px";
+    timeBox.style.background = "black";
+    timeBox.style.color = "white";
+    timeBox.style.fontFamily = "monospace";
+    timeBox.style.fontSize = "12px";
+    timeBox.style.borderRadius = "4px";
+    timeBox.style.cursor = "move";
+    timeBox.style.zIndex = "2147483646";      // Canvas can't beat this
+    // timeBox.textContent = new Date().toLocaleTimeString();
+    document.body.appendChild(timeBox);
 
     // Update time every second
     setInterval(() => {
         const dayType = "normal"; // Time Tracker: Not a Normal School Day? Not a Full Day? Change This!
-        // box.textContent = new Date().toLocaleTimeString();
+        // timeBox.textContent = new Date().toLocaleTimeString();
         currentTime = new Date().toLocaleTimeString("en-US", { timeZone: "America/New_York" });
-        box.textContent = `${currentTime} ${getCurrentPeriod(dayType)}`;
+        timeBox.textContent = `${currentTime} ${getCurrentPeriod(dayType)}`;
         
         const displayPeriodEnd = className => {
             for (let i = 0; i < 10; i++) {
@@ -2455,21 +2456,21 @@ function getCurrentPeriod(dayType) {
     let offsetX = 0;
     let offsetY = 0;
 
-    box.addEventListener("mousedown", e => {
+    timeBox.addEventListener("mousedown", e => {
         event.preventDefault();
         isDragging = true;
 
         // Remove centering transform once dragging starts
-        box.style.transform = "";
+        timeBox.style.transform = "";
 
-        offsetX = e.clientX - box.getBoundingClientRect().left;
-        offsetY = e.clientY - box.getBoundingClientRect().top;
+        offsetX = e.clientX - timeBox.getBoundingClientRect().left;
+        offsetY = e.clientY - timeBox.getBoundingClientRect().top;
     });
 
     window.addEventListener("mousemove", e => {
         if (!isDragging) return;
-        box.style.left = e.clientX - offsetX + "px";
-        box.style.top = e.clientY - offsetY + "px";
+        timeBox.style.left = e.clientX - offsetX + "px";
+        timeBox.style.top = e.clientY - offsetY + "px";
     });
 
     window.addEventListener("mouseup", () => {
@@ -2477,12 +2478,12 @@ function getCurrentPeriod(dayType) {
     });
 
     // Canvas sometimes re-renders the page.
-    // This keeps your box visible even if Canvas tries to remove it.
-    setInterval(() => {
+    // This keeps your timeBox visible even if Canvas tries to remove it.
+    /*setInterval(() => {
         if (!document.getElementById("timeBox")) {
-            document.body.appendChild(box);
+            document.body.appendChild(timeBox);
         }
-    }, 500);
+    }, 500);*/
 })();
 // Determine Current Period ^^^^^
 document.addEventListener('keyup', (event) => {
@@ -2589,7 +2590,7 @@ function enableBackgroundOverlay() {
     
     // Create <style> for the overlay
     const style = document.createElement("style");
-    style.id = "bg-overlay-style";
+    style.id = "bgImg";
     style.textContent = `
         .bg-image-overlay {
             position: fixed;
