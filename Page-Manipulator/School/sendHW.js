@@ -77,14 +77,14 @@ if (mode === "Send") {
       const rawText = await response.text();
     
       if (!rawText.trim()) {
-        return null;
+        return alert("No text was found!");
       }
     
       const lines = rawText.trim().split("\n");
       const packet = JSON.parse(lines[lines.length - 1]);
     
       if (packet.event !== "message") {
-        return null;
+        return alert("Latest packet was not a message.");
       }
     
       try {
@@ -94,4 +94,4 @@ if (mode === "Send") {
         alert(packet.message);
       }
     })();
-}
+} else alert("Invalid mode!");
