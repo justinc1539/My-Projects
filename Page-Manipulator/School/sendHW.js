@@ -1,9 +1,10 @@
 // V11.15.2026
-const mode = "Receive";
-if (mode === "Send") {
+const mode = "Auto";
+const inCanvas = window.location.href.match(/^https:\/\/pcti\.instructure\.com\/?(?:\?.*)?$/);
+if (mode === "Send" || (mode === "Auto" && inCanvas)) {
     try {
         (function() {
-            if (!window.location.href.match(/^https:\/\/pcti\.instructure\.com\/?(?:\?.*)?$/)) return;
+            if (!inCanvas) return;
             const seeMoreBtn = document.querySelector("#better-todo-see-more.canvasrefined-custom-btn");
             if (seeMoreBtn) seeMoreBtn.click();
         
@@ -71,7 +72,7 @@ if (mode === "Send") {
           })();
         })();
     } catch (e) {alert(e.stack)}
-} else if (mode === "Receive") {
+} else if (mode === "Receive" || (mode === "Auto" && !inCanvas)) {
     (async () => {
         const topic = "so-i-stop-watching-youtube-432573654749862756";
       const response = await fetch(`https://ntfy.sh/${topic}/json?poll=1&since=latest`);
