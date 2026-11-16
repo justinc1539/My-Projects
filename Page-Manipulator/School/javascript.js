@@ -2097,7 +2097,10 @@ async function simulateTyping(text, delay = 120) {
     // Other
     { char: '\t', name: 'tab' },
     { char: '\n', name: 'newline' },
-    { char: '\u2061', name: 'invisible unicode character' },
+    { char: '\u2061', name: 'Invisible Function Application' },
+    { char: '\u2062', name: 'Invisible Times' },
+    { char: '\u2063', name: 'Invisible Separator' },
+    { char: '\u2064', name: 'Invisible Plus' },
   ];
 
   // 3. Inject Modal Styles (with active selection state)
@@ -2624,7 +2627,24 @@ function enableBackgroundOverlay() {
     if (bgImgSrcIter < 0 || bgImgSrcIter >= srcs.length) {
         img.style.display = "none";
     } else {
+        function isEasternNightHours(date = new Date()) {
+        //   """Start bgImg as pitch black if between 11PM-5AM""";
+        //   const formatter = new Intl.DateTimeFormat('en-US', {
+        //     timeZone: 'America/New_York',
+        //     hour: 'numeric',
+        //     hour12: false,
+        //   });
+        
+        //   // Extract the current hour (0-23) in Eastern Time
+        //   const estHour = Number(formatter.format(date));
+        
+        //   // 11:00 PM is 23, 5:00 AM is 5
+        //   return estHour >= 23 || estHour < 5;
+        // }
+        
+        bgImg.style.display = "";
         img.src = srcs[bgImgSrcIter];
+        // img.src = srcs[isEasternNightHours() ? 4 : bgImgSrcIter];
     }
     img.alt = "Background Overlay";
     img.style.opacity = 0.15;
