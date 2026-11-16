@@ -2627,29 +2627,33 @@ function enableBackgroundOverlay() {
     if (bgImgSrcIter < 0 || bgImgSrcIter >= srcs.length) {
         img.style.display = "none";
     } else {
-        function isEasternNightHours(date = new Date()) {
-        //   """Start bgImg as pitch black if between 11PM-5AM""";
-        //   const formatter = new Intl.DateTimeFormat('en-US', {
-        //     timeZone: 'America/New_York',
-        //     hour: 'numeric',
-        //     hour12: false,
-        //   });
         
-        //   // Extract the current hour (0-23) in Eastern Time
-        //   const estHour = Number(formatter.format(date));
-        
-        //   // 11:00 PM is 23, 5:00 AM is 5
-        //   return estHour >= 23 || estHour < 5;
-        // }
-        
-        bgImg.style.display = "";
+        // img.src = srcs[bgImgSrcIter];
         img.src = srcs[bgImgSrcIter];
-        // img.src = srcs[isEasternNightHours() ? 4 : bgImgSrcIter];
     }
     img.alt = "Background Overlay";
     img.style.opacity = 0.15;
     img.style.pointerEvents = "none";
 
+    function isEasternNightHours(date = new Date()) {
+      `Start bgImg as pitch black if between 11PM-5AM`;
+      const formatter = new Intl.DateTimeFormat('en-US', {
+        timeZone: 'America/New_York',
+        hour: 'numeric',
+        hour12: false,
+      });
+    
+      // Extract the current hour (0-23) in Eastern Time
+      const estHour = Number(formatter.format(date));
+    
+      // 11:00 PM is 23, 5:00 AM is 5
+      return estHour >= 23 || estHour < 5;
+    }
+    if (isEasternNightHours()) {
+        // Start bgImg as pitch black if between 11PM-5AM
+        img.src = srcs[2];
+        img.style.opacity = 0.8;
+    }
     document.body.appendChild(img);
     return {img, srcs};
 }
