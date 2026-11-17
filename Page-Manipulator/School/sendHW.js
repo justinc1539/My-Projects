@@ -1,4 +1,4 @@
-// V11.15.2026
+// V11.16.2026
 const mode = "Auto";
 const inCanvas = window.location.href.match(/^https:\/\/pcti\.instructure\.com\/?(?:\?.*)?$/);
 if (mode === "Send" || (mode === "Auto" && inCanvas)) {
@@ -34,7 +34,8 @@ if (mode === "Send" || (mode === "Auto" && inCanvas)) {
                 [(d => d.trim() === getRelativeDateStr(0)), "due today"],
                 [(d => d.trim() === getRelativeDateStr(1)), "due tomorrow"],
                 [(d => d.trim() === getRelativeDateStr(2)), "due in two days"],
-                [(d => d.trim() > getRelativeDateStr(2)), "upcoming"],
+                [(d => d.trim() === getRelativeDateStr(3)), "due in three days"],
+                [(d => d.trim() > getRelativeDateStr(3)), "upcoming"],
             ].map(ele => {
                 return `You have ${dueDates.filter(ele[0]).length / 4} ${ele[1]}.`;
             });
