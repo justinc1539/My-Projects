@@ -1,4 +1,4 @@
-// V11.16.2026
+// V11.17.2026
 const mode = "Auto";
 const inCanvas = window.location.href.match(/^https:\/\/pcti\.instructure\.com\/?(?:\?.*)?$/);
 if (mode === "Send" || (mode === "Auto" && inCanvas)) {
@@ -90,11 +90,15 @@ if (mode === "Send" || (mode === "Auto" && inCanvas)) {
         return alert("Latest packet was not a message.");
       }
     
+      let message;
       try {
         const parsed = JSON.parse(packet.message);
-        alert(parsed.text ?? packet.message);
+        // alert(parsed.text ?? packet.message);
+        message = parsed.text ?? packet.message;
       } catch {
-        alert(packet.message);
+        // alert(packet.message);
+        message = packet.message;
       }
+      alert(message) // TODO: make timebox for todo list
     })();
 } else alert("Invalid mode!");
