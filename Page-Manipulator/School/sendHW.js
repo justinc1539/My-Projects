@@ -99,6 +99,97 @@ if (mode === "Send" || (mode === "Auto" && inCanvas)) {
         // alert(packet.message);
         message = packet.message;
       }
-      alert(message) // TODO: make timebox for todo list
+    //   alert(message) // TODO: make todoBox for todo list
+      
+        // Black Time Box Window
+        (function() {
+            // Create the todoBox
+            const todoBox = document.createElement("div");
+            todoBox.id = "todoBox";
+            todoBox.style.position = "fixed";        // fixed beats Canvas layout
+            todoBox.style.top = "0";
+            todoBox.style.left = "0";
+            todoBox.style.padding = "6px 10px";
+            todoBox.style.background = "black";
+            todoBox.style.color = "white";
+            todoBox.style.fontFamily = "monospace";
+            todoBox.style.fontSize = "12px";
+            todoBox.style.borderRadius = "4px";
+            todoBox.style.cursor = "move";
+            todoBox.style.zIndex = "2147483646";      // Canvas can't beat this
+            todoBox.style.whiteSpace = 'pre-line';
+            // todoBox.textContent = new Date().toLocaleTimeString();
+            document.body.appendChild(todoBox);
+        
+            // Update time every second
+            setInterval(() => {
+                const dayType = "normal"; // Time Tracker: Not a Normal School Day? Not a Full Day? Change This!
+                // todoBox.textContent = new Date().toLocaleTimeString();
+                currentTime = new Date().toLocaleTimeString("en-US", { timeZone: "America/New_York" });
+                todoBox.textContent = message;
+                
+                const displayPeriodEnd = className => {
+                    for (let i = 0; i < 10; i++) {
+                        alert(`${className} is ending!`);
+                    }
+                }
+        
+                // Optional TTTODO: Make function with array courses, arrray times (either values or a list including value and value to subtract from first value)
+                if (dayType === "normal") {
+                    if (currentTime === "8:55:20 AM") displayPeriodEnd("AP Physics C: Mechanics");
+                    else if (currentTime === "9:40:20 AM") displayPeriodEnd("AP Calculus B/C");
+                    else if (currentTime === "10:25:20 AM") displayPeriodEnd("Health");
+                    else if (currentTime === "11:09:20 AM") displayPeriodEnd("APUSH");
+                    else if (currentTime === "11:55:20 AM") displayPeriodEnd("English 4 (H)");
+                    else if (currentTime === "12:38:20 PM") displayPeriodEnd("AP Statistics");
+                    else if (currentTime === "1:02:20 PM") displayPeriodEnd("Lunch");
+                    else if (currentTime === "2:55:20 PM") displayPeriodEnd("AP Computer Science A");
+                } else if (dayType === "half") {
+                    if (currentTime === "8:41:20 AM") displayPeriodEnd("AP Physics C: Mechanics");
+                    else if (currentTime === "9:14:20 AM") displayPeriodEnd("AP Calculus B/C");
+                    else if (currentTime === "9:47:20 AM") displayPeriodEnd("Health");
+                    else if (currentTime === "10:19:20 AM") displayPeriodEnd("APUSH");
+                    else if (currentTime === "10:53:20 AM") displayPeriodEnd("English 4 (H)");
+                    else if (currentTime === "11:24:20 AM") displayPeriodEnd("AP Statistics");
+                    else if (currentTime === "11:42:20 PM") displayPeriodEnd("Lunch");
+                    else if (currentTime === "1:05:20 PM") displayPeriodEnd("AP Computer Science A");
+                } else if (dayType === "delayed") {
+                    if (currentTime === "10:39:20 AM") displayPeriodEnd("AP Physics C: Mechanics");
+                    else if (currentTime === "11:11:20 AM") displayPeriodEnd("AP Calculus B/C");
+                    else if (currentTime === "11:43:20 AM") displayPeriodEnd("Health");
+                    else if (currentTime === "12:14:20 PM") displayPeriodEnd("APUSH");
+                    else if (currentTime === "12:47:20 PM") displayPeriodEnd("English 4 (H)");
+                    else if (currentTime === "1:18:20 PM") displayPeriodEnd("AP Statistics");
+                    else if (currentTime === "1:34:20 PM") displayPeriodEnd("Lunch");
+                    else if (currentTime === "2:55:20 PM") displayPeriodEnd("AP Computer Science A");
+                }
+            }, 100);
+        
+            // Dragging logic
+            let isDragging = false;
+            let offsetX = 0;
+            let offsetY = 0;
+        
+            todoBox.addEventListener("mousedown", e => {
+                event.preventDefault();
+                isDragging = true;
+        
+                // Remove centering transform once dragging starts
+                todoBox.style.transform = "";
+        
+                offsetX = e.clientX - todoBox.getBoundingClientRect().left;
+                offsetY = e.clientY - todoBox.getBoundingClientRect().top;
+            });
+        
+            window.addEventListener("mousemove", e => {
+                if (!isDragging) return;
+                todoBox.style.left = e.clientX - offsetX + "px";
+                todoBox.style.top = e.clientY - offsetY + "px";
+            });
+        
+            window.addEventListener("mouseup", () => {
+                isDragging = false;
+            });
+        })();
     })();
 } else alert("Invalid mode!");
