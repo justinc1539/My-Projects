@@ -14,14 +14,13 @@ const url = window.location.href;
 
 // Opens Grades tab
 const gradesLink = document.querySelector('#grades-link.grades b.nav-badge');
-if (gradesLink) {
+if (gradesLink && !url.includes("grades")) {
     const event = new MouseEvent('click', {
       bubbles: true,
       cancelable: true,
       ctrlKey: true,
       metaKey: true // For macOS listeners
     });
-    
     gradesLink.dispatchEvent(event);
 }
 
