@@ -1,4 +1,4 @@
-// V11.15.2026
+// V11.17.2026
 if (document.querySelector("span.menu-item__badge span")) alert("You have a Canvas Notification!")
 // Active Websites: All
 
@@ -11,6 +11,19 @@ if (document.title.toLowerCase().includes("edpuzzle")) {
     alert("You can watch the EdPuzzle video in the background using split screen!");
 }
 const url = window.location.href;
+
+// Opens Grades tab
+const gradesLink = document.querySelector('#grades-link.grades b.nav-badge');
+if (gradesLink) {
+    const event = new MouseEvent('click', {
+      bubbles: true,
+      cancelable: true,
+      ctrlKey: true,
+      metaKey: true // For macOS listeners
+    });
+    
+    gradesLink.dispatchEvent(event);
+}
 
 function copyText(text, display=true) {
     navigator.clipboard.writeText(text)
@@ -2650,7 +2663,7 @@ function enableBackgroundOverlay() {
       return estHour >= 23 || estHour < 5;
     }
     if (isEasternNightHours()) {
-        // Start bgImg as pitch black if between 11PM-5AM
+        // Start bgImg as pitch black if between 11 PM-5 AM
         img.src = srcs[2];
         img.style.opacity = 0.8;
     }
