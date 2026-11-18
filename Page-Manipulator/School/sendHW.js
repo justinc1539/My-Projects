@@ -1,4 +1,4 @@
-// V11.17.2026
+// V11.18.2026
 const mode = "Auto";
 const inCanvas = window.location.href.match(/^https:\/\/pcti\.instructure\.com\/?(?:\?.*)?$/);
 if (mode === "Send" || (mode === "Auto" && inCanvas)) {
@@ -7,7 +7,7 @@ if (mode === "Send" || (mode === "Auto" && inCanvas)) {
             if (!inCanvas) return;
             const seeMoreBtn = document.querySelector("#better-todo-see-more.canvasrefined-custom-btn");
             if (seeMoreBtn) seeMoreBtn.click();
-        
+       
             const dueDates = [];
             document.querySelectorAll(".todo-group-list").forEach(aList => {
                 aList.querySelectorAll("div div div div").forEach(aDiv => {
@@ -26,7 +26,7 @@ if (mode === "Send" || (mode === "Auto" && inCanvas)) {
               const day = date.getDate();
               return `${month} ${day}`;
             }
-            
+           
             const assignmentCounts = [
                 [(d => d.trim() < getRelativeDateStr(-2)), "overdue"],
                 [(d => d.trim() === getRelativeDateStr(-2)), "due two days ago"],
@@ -52,20 +52,20 @@ if (mode === "Send" || (mode === "Auto" && inCanvas)) {
             });
             const formatted = `${datePart} at ${timePart}`;
             const datesMessage = `Last Check: ${formatted}\n${assignmentCounts.join("\n")}`;
-        
+       
           // Change this to a unique, secret room name so random people don't join
           const ROOM_TOPIC = "so-i-stop-watching-youtube-432573654749862756";
-        
+       
           // 4. Send Message (POST)
           (async () => {
             const text = datesMessage;
             if (!text) return;
-        
+       
             const payload = JSON.stringify({
               sender: "School Account",
               text: text
             });
-        
+       
             await fetch(`https://ntfy.sh/${ROOM_TOPIC}`, {
               method: "POST",
               body: payload
@@ -78,18 +78,18 @@ if (mode === "Send" || (mode === "Auto" && inCanvas)) {
         const topic = "so-i-stop-watching-youtube-432573654749862756";
       const response = await fetch(`https://ntfy.sh/${topic}/json?poll=1&since=latest`);
       const rawText = await response.text();
-    
+   
       if (!rawText.trim()) {
         return alert("No text was found!");
       }
-    
+   
       const lines = rawText.trim().split("\n");
       const packet = JSON.parse(lines[lines.length - 1]);
-    
+   
       if (packet.event !== "message") {
         return alert("Latest packet was not a message.");
       }
-    
+   
       let message;
       try {
         const parsed = JSON.parse(packet.message);
@@ -100,15 +100,19 @@ if (mode === "Send" || (mode === "Auto" && inCanvas)) {
         message = packet.message;
       }
     //   alert(message) // TODO: make todoBox for todo list
-      
+     
         // Black Time Box Window
         (function() {
             // Create the todoBox
             const todoBox = document.createElement("div");
             todoBox.id = "todoBox";
             todoBox.style.position = "fixed";        // fixed beats Canvas layout
-            todoBox.style.top = "0";
-            todoBox.style.left = "0";
+            // VVVVV Prevent Box stretching to oblivion when right = 0
+            todoBox.style.width = "max-content";
+            todoBox.style.height = "max-content";
+            // ^^^^^ Prevent Box stretching to oblivion when right = 0
+            todoBox.style.bottom = "0";
+            todoBox.style.right = "0";
             todoBox.style.padding = "6px 10px";
             todoBox.style.background = "black";
             todoBox.style.color = "white";
@@ -120,20 +124,20 @@ if (mode === "Send" || (mode === "Auto" && inCanvas)) {
             todoBox.style.whiteSpace = 'pre-line';
             // todoBox.textContent = new Date().toLocaleTimeString();
             document.body.appendChild(todoBox);
-        
+       
             // Update time every second
             setInterval(() => {
                 const dayType = "normal"; // Time Tracker: Not a Normal School Day? Not a Full Day? Change This!
                 // todoBox.textContent = new Date().toLocaleTimeString();
                 currentTime = new Date().toLocaleTimeString("en-US", { timeZone: "America/New_York" });
                 todoBox.textContent = message;
-                
+               
                 const displayPeriodEnd = className => {
                     for (let i = 0; i < 10; i++) {
                         alert(`${className} is ending!`);
                     }
                 }
-        
+       
                 // Optional TTTODO: Make function with array courses, arrray times (either values or a list including value and value to subtract from first value)
                 if (dayType === "normal") {
                     if (currentTime === "8:55:20 AM") displayPeriodEnd("AP Physics C: Mechanics");
@@ -164,29 +168,29 @@ if (mode === "Send" || (mode === "Auto" && inCanvas)) {
                     else if (currentTime === "2:55:20 PM") displayPeriodEnd("AP Computer Science A");
                 }
             }, 100);
-        
+       
             // Dragging logic
             let isDragging = false;
             let offsetX = 0;
             let offsetY = 0;
-        
+       
             todoBox.addEventListener("mousedown", e => {
                 event.preventDefault();
                 isDragging = true;
-        
+       
                 // Remove centering transform once dragging starts
                 todoBox.style.transform = "";
-        
+       
                 offsetX = e.clientX - todoBox.getBoundingClientRect().left;
                 offsetY = e.clientY - todoBox.getBoundingClientRect().top;
             });
-        
+       
             window.addEventListener("mousemove", e => {
                 if (!isDragging) return;
                 todoBox.style.left = e.clientX - offsetX + "px";
                 todoBox.style.top = e.clientY - offsetY + "px";
             });
-        
+       
             window.addEventListener("mouseup", () => {
                 isDragging = false;
             });
