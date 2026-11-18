@@ -1,4 +1,4 @@
-// V11.17.2026
+// V11.18.2026
 if (document.querySelector("span.menu-item__badge span")) alert("You have a Canvas Notification!")
 // Active Websites: All
 
@@ -1134,7 +1134,8 @@ setInterval(() => {
     link.textContent = "200%";
   });
 }, 1);
-} else if (/^https:\/\/quizlet\.com\/\d+\/match\/?(?:\?.*)?$/.test(url)) {
+} else if ((url.includes("quizlet.com") && (url.includes("/live")) || url.includes("/learn")) || /^https:\/\/quizlet\.com\/\d+\/match\/?(?:\?.*)?$/.test(url)) {
+    // QUIZLET TODO: Make it work for quizlet.live (should have a different URL)
     // TODO: Find JavaScript that handles stopwatch
     // https://copilot.microsoft.com/chats/WtPeNsm5rvHac4qFa4hKX
     setInterval(() => {
