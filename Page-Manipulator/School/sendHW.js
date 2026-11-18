@@ -111,7 +111,7 @@ if (mode === "Send" || (mode === "Auto" && inCanvas)) {
             todoBox.style.width = "max-content";
             todoBox.style.height = "max-content";
             // ^^^^^ Prevent Box stretching to oblivion when right = 0
-            todoBox.style.bottom = "0";
+            todoBox.style.top = "0";
             todoBox.style.right = "0";
             todoBox.style.padding = "6px 10px";
             todoBox.style.background = "black";
