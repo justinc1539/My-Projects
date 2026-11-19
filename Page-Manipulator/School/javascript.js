@@ -1140,6 +1140,51 @@ setInterval(() => {
     const question = document.querySelector("div.tb1u6te");
     const answers = document.querySelectorAll("div.am7y8xg div").filter((_, index) => index % 2 === 0);
     // QUIZLET TODO: For some reason, the list indexes are doubled, FIX IT!
+async function getTermDictFromUrl(setUrl = "https://quizlet.com/1237185505") {
+  const response = await fetch(setUrl);
+  if (!response.ok) {
+    throw new Error(`Failed to fetch set (${response.status})`);
+  }
+
+  const html = await response.text();
+  const doc = new DOMParser().parseFromString(html, "text/html");
+
+  // Grab the Next.js JSON payload from the fetched page
+  const nextDataEl =
+    doc.getElementById("__NEXT_DATA__") ||
+    [...doc.querySelectorAll("script")].pop();
+
+  const nextData = JSON.parse(nextDataEl.textContent);
+  const rawRedux = nextData.props.pageProps.dehydratedReduxStateKey;
+  const reduxState = typeof rawRedux === "string" ? JSON.parse(rawRedux) : rawRedux;
+  const cardPairs = reduxState.studyModesCommon.studiableData.studiableItems;
+
+  const termDict = {};
+  const reverseDict = {};
+
+  cardPairs.forEach(item => {
+    const getText = query => {
+      const side = item.cardSides.find(s => s.label === query);
+      return side?.media?.find(m => m.plainText)?.plainText.trim();
+    };
+
+    const wordText = getText("word");
+    const defText = getText("definition");
+
+    if (wordText && defText) {
+      termDict[wordText] = defText;
+      reverseDict[defText] = wordText;
+    }
+  });
+
+  return { termDict, reverseDict };
+}
+
+// Replace your old while-loop scraper with this:
+(async () => {
+  const { termDict, reverseDict } = await getTermDictFromUrl("https://quizlet.com/1237185505");
+  alert(JSON.stringify(termDict, 2, null));
+})();
 } else if (/^https:\/\/quizlet\.com\/\d+\/match\/?(?:\?.*)?$/.test(url)) {
     // TODO: Find JavaScript that handles stopwatch
     // https://copilot.microsoft.com/chats/WtPeNsm5rvHac4qFa4hKX
