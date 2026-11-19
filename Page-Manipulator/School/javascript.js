@@ -1134,8 +1134,13 @@ setInterval(() => {
     link.textContent = "200%";
   });
 }, 1);
-} else if ((url.includes("quizlet.com") && (url.includes("/live")) || url.includes("/learn")) || /^https:\/\/quizlet\.com\/\d+\/match\/?(?:\?.*)?$/.test(url)) {
+} else if (url.includes("quizlet.com") && url.includes("/live")) {
     // QUIZLET TODO: Make it work for quizlet.live (should have a different URL)
+    // alert("QUIZLET LIVE TODO!!!")
+    const question = document.querySelector("div.tb1u6te");
+    const answers = document.querySelectorAll("div.am7y8xg div").filter((_, index) => index % 2 === 0);
+    // QUIZLET TODO: For some reason, the list indexes are doubled, FIX IT!
+} else if (/^https:\/\/quizlet\.com\/\d+\/match\/?(?:\?.*)?$/.test(url)) {
     // TODO: Find JavaScript that handles stopwatch
     // https://copilot.microsoft.com/chats/WtPeNsm5rvHac4qFa4hKX
     setInterval(() => {
