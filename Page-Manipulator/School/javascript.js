@@ -115,21 +115,21 @@ box.dispatchEvent(new Event("input", { bubbles: true }));
     const fakeTwo = "dHMgc28gZmFrZSBsb2w=";
     if (localStorage.getItem("SnVzdGluJ3MgS2V5") === codeHSAPI) {
         const solution = window.pageSpecific.solution;
-        
+       
         function decodeEscapedString(str) {
             // Step 1: convert \uXXXX → actual characters
             const unicodeDecoded = str.replace(/\\u([\dA-F]{4})/gi, (_, code) =>
                 String.fromCharCode(parseInt(code, 16))
             );
-        
+       
             // Step 2: decode HTML entities (&quot;, &lt;, &gt;, etc.)
             const textarea = document.createElement("textarea");
             textarea.innerHTML = unicodeDecoded;
             return textarea.value;
         }
-        
+       
         readableCode = decodeEscapedString(solution);
-        
+       
         const editor = ace.edit(document.querySelector(".ace_editor"));
         const existingReadable = editor.getValue();
         const session = editor.getSession();
@@ -139,7 +139,7 @@ box.dispatchEvent(new Event("input", { bubbles: true }));
             // 1. Create the button
             successBtn.textContent = "Add solution to the end of editor";
             failureBtn.textContent = "Replace entire code in editor with solution";
-            
+           
             // 3. Add a click listener
             successBtn.addEventListener("click", () => {
                 setTimeout(() => {successBtn.style.display = "none";}, 5000);
@@ -163,7 +163,7 @@ box.dispatchEvent(new Event("input", { bubbles: true }));
                 editor.setValue(readableCode, -1);
             });
         }
-    
+   
         // 1. Create the button
         const btn = document.createElement("button");
         const successBtn = document.createElement("button");
@@ -171,7 +171,7 @@ box.dispatchEvent(new Event("input", { bubbles: true }));
         const cancelBtn = document.createElement("button");
         btn.textContent = "Show Solution";
         cancelBtn.textContent = "Cancel & Remove Buttons";
-    
+   
         // 2. Style it so it appears at the top
         btn.style.whiteSpace = "break-spaces";
         // btn.style.position = "fixed";
@@ -200,7 +200,7 @@ box.dispatchEvent(new Event("input", { bubbles: true }));
     cancelBtn.style.zIndex = "2147483646";   // make sure it's above everything
     cancelBtn.style.padding = "10px 15px";
     cancelBtn.style.fontSize = "16px";
-    
+   
     // 3. Add a click listener
     btn.addEventListener("click", () => {
         btn.innerHTML = readableCode.replace(/\n/g, "<br>");
@@ -215,7 +215,7 @@ box.dispatchEvent(new Event("input", { bubbles: true }));
         failureBtn.style.display = "none";
         cancelBtn.style.display = "none";
     });
-    
+   
     // 4. Add it to the page
     const container = document.createElement("div");
     container.style.position = "fixed";
@@ -224,12 +224,12 @@ box.dispatchEvent(new Event("input", { bubbles: true }));
     container.style.zIndex = "2147483646";
     container.style.display = "flex";
     container.style.flexDirection = "column";
-    
+   
     container.appendChild(btn);
     container.appendChild(successBtn);
     container.appendChild(failureBtn);
     container.appendChild(cancelBtn);
-    
+   
     document.body.appendChild(container);
     } else {
         localStorage.setItem("SnVzdGluJ3MgS2V5", prompt(globalThis.atob("Rm9yIEp1c3Rpbg==")));
@@ -245,7 +245,7 @@ box.dispatchEvent(new Event("input", { bubbles: true }));
         const failureBtn = document.createElement("button");
         successBtn.textContent = "It worked!";
         failureBtn.textContent = "It failed.";
-        
+       
         // 2. Style it so it appears at the top
         successBtn.style.position = "fixed";
         successBtn.style.top = "10px";
@@ -259,7 +259,7 @@ box.dispatchEvent(new Event("input", { bubbles: true }));
         failureBtn.style.zIndex = "2147483646";   // make sure it's above everything
         failureBtn.style.padding = "10px 15px";
         failureBtn.style.fontSize = "16px";
-        
+       
         // 3. Add a click listener
         successBtn.addEventListener("click", () => {
             successBtn.style.display = "none";
@@ -280,7 +280,7 @@ box.dispatchEvent(new Event("input", { bubbles: true }));
                 checkAviary(dataAPI);
             }
         });
-        
+       
         // 4. Add it to the page
         document.body.appendChild(successBtn);
         document.body.appendChild(failureBtn);
@@ -313,7 +313,7 @@ box.dispatchEvent(new Event("input", { bubbles: true }));
     cancelBtn.style.zIndex = "2147483646";   // make sure it's above everything
     cancelBtn.style.padding = "10px 15px";
     cancelBtn.style.fontSize = "16px";
-    
+   
     // 3. Add a click listener
     btn.addEventListener("click", () => {
         btn.style.display = "none";
@@ -345,7 +345,7 @@ box.dispatchEvent(new Event("input", { bubbles: true }));
         skipBtn.style.display = "none";
         cancelBtn.style.display = "none";
     });
-    
+   
     // 4. Add it to the page
     document.body.appendChild(btn);
     document.body.appendChild(skipBtn);
@@ -440,7 +440,7 @@ document.querySelectorAll("div.sc-cxFLnm.gouYvy").forEach(div => {
 }
 // Check Class Rank (class-rank.js)
 else if (url.includes("https://ps.pcti.tec.nj.us/guardian/r") && url.includes("_reportcard.html")) {
-    
+   
     fetch(url)
         .then(res => res.text())
         .then(html => {
@@ -466,17 +466,17 @@ else if (url.includes("https://ps.pcti.tec.nj.us/guardian/r") && url.includes("_
     setInterval(() => {
         // Deselect current answer
         document.querySelectorAll(".letter.--chosen").forEach(letter => {letter.className = "letter"});
-        
+       
         // Auto select correct answer
         document.querySelectorAll(".AccessibilityWrapper.mcq-option").forEach(option => {if (!option.className.includes("--correct") && option.querySelector(".response-analysis-wrapper").querySelector(".icon.--correct")) option.click();});
         document.querySelectorAll(".AccessibilityWrapper.mcq-option.--correct").forEach(letter => {letter.querySelector(".letter").className = "letter --chosen"});
-        
+       
         // Move percentage line to the very right
         document.querySelector(".percentage-line.percentage-line__right").style.marginRight = "0%"
-        
+       
         // Set score to max
         document.querySelectorAll(".flex.items-center.h-8.dark.performance-score").forEach(score => score.textContent = `${score.textContent.split("/")[1]}/${score.textContent.split("/")[1]}`)
-        
+       
         // Change all responses to correct
         document.querySelectorAll(".font-normal.text-default.text-red-500").forEach(s => {s.textContent = "1/1";s.className = ".font-normal text-default text-green-500"})
         document.querySelectorAll(".x-mark-big").forEach(mark => mark.className = "v-mark-big");
@@ -539,7 +539,7 @@ if (url.startsWith("https://ps.pcti.tec.nj.us/guardian/scores.html?frn=004211514
                             <!-- ngIf: studentAssignment._assignmentsections[0]._assignmentscores[0].iscollected --><div data-ng-if="studentAssignment._assignmentsections[0]._assignmentscores[0].iscollected" class="tt-collected ps-icon ps-collected-inverse-green ng-scope" role="presentation"></div><!-- end ngIf: studentAssignment._assignmentsections[0]._assignmentscores[0].iscollected -->`;
       }
   });
-  
+ 
   const pre = document.querySelector('.comment pre');
   if (pre) {
     //   [
@@ -596,7 +596,7 @@ if (url.startsWith("https://ps.pcti.tec.nj.us/guardian/scores.html?frn=004211514
     //   })
     }
   });
-  
+ 
   // Find the final grade cell by matching its content
   document.querySelectorAll('table.linkDescList td').forEach(td => {
     if (td.textContent.trim().endsWith('%')) {
@@ -610,8 +610,8 @@ if (url.startsWith("https://ps.pcti.tec.nj.us/guardian/scores.html?frn=004211514
     //   })
     }
   });
-  
-  
+ 
+ 
   const rows = document.querySelectorAll('#sps-assignment-categories tbody tr');
 
   rows.forEach(row => {
@@ -660,7 +660,7 @@ if (url.startsWith("https://ps.pcti.tec.nj.us/guardian/scores.html?frn=004211514
 // nvm it only affects google drive
 } else if (false && url === "https://www.desmos.com/calculator") { // TODO: Auto save feature?
     // try {
-    // setInterval(()=>{ 
+    // setInterval(()=>{
     //   let time = new Date();
     //   let state = Calc.getState();
     //   state.expressions.list[3].latex="t_I_R_L="+time.getHours()%12*3600+time.getMinutes()*60+time.getSeconds();
@@ -673,7 +673,7 @@ if (url.startsWith("https://ps.pcti.tec.nj.us/guardian/scores.html?frn=004211514
         // try{
         // const saveButton = Array.from(document.querySelectorAll('button'))
         //   .find(el => el.innerHTML.trim() === 'Save');
-        
+       
         // if (saveButton) {
         //   saveButton.click();
         //   saveButton.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
@@ -732,7 +732,7 @@ Save`);*/
       if (existingBox) existingBox.remove();
       const existingStyle = document.getElementById('aceSearchBoxStyles');
       if (existingStyle) existingStyle.remove();
-    
+   
       // 2. Add Styles (includes .minimized state)
       const style = document.createElement('style');
       style.id = 'aceSearchBoxStyles';
@@ -755,29 +755,29 @@ Save`);*/
           box-sizing: border-box;
           transition: width 0.15s ease, padding 0.15s ease;
         }
-    
+   
         .ace-dark-search-box.minimized {
           width: auto;
           padding: 4px;
         }
-    
+   
         .ace-dark-search-box.minimized .ace-search-body {
           display: none !important;
         }
-    
+   
         .ace-search-body {
           display: flex;
           flex-direction: column;
           gap: 6px;
           flex: 1;
         }
-    
+   
         .ace-search-row {
           display: flex;
           align-items: center;
           gap: 4px;
         }
-    
+   
         .ace-search-input {
           background-color: #1e1e1e;
           border: 1px solid #444444;
@@ -790,11 +790,11 @@ Save`);*/
           outline: none;
           min-width: 0;
         }
-    
+   
         .ace-search-input:focus {
           border-color: #4a8bf5;
         }
-    
+   
         .ace-btn {
           background-color: #363636;
           border: 1px solid #444444;
@@ -810,12 +810,12 @@ Save`);*/
           min-width: 22px;
           box-sizing: border-box;
         }
-    
+   
         .ace-btn:hover {
           background-color: #4a4a4a;
           color: #ffffff;
         }
-    
+   
         .ace-btn-close {
           border: none;
           background: transparent;
@@ -824,11 +824,11 @@ Save`);*/
           color: #888888;
           cursor: pointer;
         }
-    
+   
         .ace-btn-close:hover {
           color: #ffffff;
         }
-    
+   
         .ace-counter {
           color: #888888;
           font-size: 11px;
@@ -837,7 +837,7 @@ Save`);*/
         }
       `;
       document.head.appendChild(style);
-    
+   
       // 3. Inject Search Box DOM
       const searchBox = document.createElement('div');
       searchBox.id = 'customAceSearchBox';
@@ -863,26 +863,26 @@ Save`);*/
           <button id="aceSearchClose" class="ace-btn ace-btn-close" title="Minimize / Expand" style="margin-left: 4px;">&times;</button>
         </div>
       `;
-    
+   
       document.body.appendChild(searchBox);
-    
+   
       // 4. State Management
       let matches = [];
       let currentIndex = -1;
-    
+   
       const input = document.getElementById('aceSearchInput');
       const prevBtn = document.getElementById('aceSearchPrev');
       const nextBtn = document.getElementById('aceSearchNext');
       const counter = document.getElementById('aceSearchCounter');
       const closeBtn = document.getElementById('aceSearchClose');
-    
+   
       // 5. Query & Scroll Handler
       function highlightCurrent() {
         if (currentIndex >= 0 && currentIndex < matches.length) {
           matches[currentIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       }
-    
+   
       function runSearch() {
         const query = input.value.trim();
         if (!query) {
@@ -891,7 +891,7 @@ Save`);*/
           counter.textContent = '0 of 0';
           return;
         }
-    
+   
         try {
           matches = Array.from(document.querySelectorAll(query));
           if (matches.length > 0) {
@@ -908,7 +908,7 @@ Save`);*/
           counter.textContent = '0 of 0';
         }
       }
-    
+   
       // 6. Navigation Logic
       prevBtn.addEventListener('click', () => {
         if (matches.length === 0) return;
@@ -916,7 +916,7 @@ Save`);*/
         counter.textContent = `${currentIndex + 1} of ${matches.length}`;
         highlightCurrent();
       });
-    
+   
       nextBtn.addEventListener('click', () => {
         if (matches.length === 0) return;
         currentIndex = (currentIndex + 1) % matches.length;
@@ -924,10 +924,10 @@ Save`);*/
         highlightCurrent();
         if (event.isTrusted && matches && matches[currentIndex]) matches[currentIndex].focus();
       });
-    
+   
       // Re-run search whenever typing in input
       input.addEventListener('input', runSearch);
-    
+   
       // Enter / Shift+Enter key navigation
       input.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
@@ -942,12 +942,12 @@ Save`);*/
           closeBtn.click();
         }
       });
-    
+   
       // Minimize / Expand Toggle
       closeBtn.addEventListener('click', () => {
         searchBox.classList.toggle('minimized');
       });
-    
+   
       // Initial Run
       runSearch();
     })();
@@ -1135,56 +1135,190 @@ setInterval(() => {
   });
 }, 1);
 } else if (url.includes("quizlet.com") && url.includes("/live")) {
-    // QUIZLET TODO: Make it work for quizlet.live (should have a different URL)
-    // alert("QUIZLET LIVE TODO!!!")
-    const question = document.querySelector("div.tb1u6te");
-    const answers = document.querySelectorAll("div.am7y8xg div").filter((_, index) => index % 2 === 0);
-    // QUIZLET TODO: For some reason, the list indexes are doubled, FIX IT!
-async function getTermDictFromUrl(setUrl = "https://quizlet.com/1237185505") {
-  const response = await fetch(setUrl);
-  if (!response.ok) {
-    throw new Error(`Failed to fetch set (${response.status})`);
-  }
+  // Remove old box if re-running the script
+  document.getElementById("quizletLiveControlBox")?.remove();
 
-  const html = await response.text();
-  const doc = new DOMParser().parseFromString(html, "text/html");
+  let activeInterval = null;
 
-  // Grab the Next.js JSON payload from the fetched page
-  const nextDataEl =
-    doc.getElementById("__NEXT_DATA__") ||
-    [...doc.querySelectorAll("script")].pop();
-
-  const nextData = JSON.parse(nextDataEl.textContent);
-  const rawRedux = nextData.props.pageProps.dehydratedReduxStateKey;
-  const reduxState = typeof rawRedux === "string" ? JSON.parse(rawRedux) : rawRedux;
-  const cardPairs = reduxState.studyModesCommon.studiableData.studiableItems;
-
-  const termDict = {};
-  const reverseDict = {};
-
-  cardPairs.forEach(item => {
-    const getText = query => {
-      const side = item.cardSides.find(s => s.label === query);
-      return side?.media?.find(m => m.plainText)?.plainText.trim();
-    };
-
-    const wordText = getText("word");
-    const defText = getText("definition");
-
-    if (wordText && defText) {
-      termDict[wordText] = defText;
-      reverseDict[defText] = wordText;
-    }
+  // Build bottom-center control box
+  const box = document.createElement("div");
+  box.id = "quizletLiveControlBox";
+  Object.assign(box.style, {
+    position: "fixed",
+    bottom: "14px",
+    left: "50%",
+    transform: "translateX(-50%)",
+    backgroundColor: "#1e1e1e",
+    border: "1.5px solid #4a8bf5",
+    borderRadius: "8px",
+    padding: "20px 12px 10px 12px",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "stretch",
+    gap: "6px",
+    width: "260px",
+    boxShadow: "0 6px 20px rgba(0, 0, 0, 0.65)",
+    fontFamily: "Menlo, Monaco, Consolas, monospace",
+    fontSize: "12px",
+    color: "#ffffff",
+    zIndex: "2147483647"
   });
 
-  return { termDict, reverseDict };
-}
+  // Top-right close button (X)
+  const closeBtn = document.createElement("span");
+  closeBtn.textContent = "X";
+  closeBtn.title = "Close";
+  Object.assign(closeBtn.style, {
+    position: "absolute",
+    top: "4px",
+    right: "8px",
+    cursor: "pointer",
+    color: "#aaaaaa",
+    fontWeight: "bold",
+    fontSize: "12px",
+    userSelect: "none"
+  });
+  closeBtn.addEventListener("mouseenter", () => (closeBtn.style.color = "#ff5555"));
+  closeBtn.addEventListener("mouseleave", () => (closeBtn.style.color = "#aaaaaa"));
+  closeBtn.addEventListener("click", () => {
+    // if (activeInterval) clearInterval(activeInterval); // End loop
+    box.remove();
+  });
 
-// Replace your old while-loop scraper with this:
-(async () => {
-  const { termDict, reverseDict } = await getTermDictFromUrl("https://quizlet.com/1237185505");
-  alert(JSON.stringify(termDict, 2, null));
-})();
+  // URL Input
+  const linkInput = document.createElement("input");
+  linkInput.type = "text";
+  linkInput.value = "https://quizlet.com/1237185505";
+  linkInput.placeholder = "Paste Quizlet set URL...";
+  Object.assign(linkInput.style, {
+    backgroundColor: "#2d2d2d",
+    border: "1px solid #444",
+    borderRadius: "4px",
+    color: "#ffffff",
+    padding: "5px 8px",
+    fontFamily: "inherit",
+    fontSize: "11px",
+    outline: "none",
+    width: "100%",
+    boxSizing: "border-box"
+  });
+
+  // Prevent typing in the input from triggering Quizlet Live answer hotkeys
+  linkInput.addEventListener("keydown", (e) => e.stopPropagation());
+
+  // Begin / Restart button
+  const startBtn = document.createElement("button");
+  startBtn.textContent = "Begin";
+  Object.assign(startBtn.style, {
+    backgroundColor: "#4a8bf5",
+    color: "#ffffff",
+    border: "none",
+    borderRadius: "4px",
+    padding: "6px 10px",
+    fontFamily: "inherit",
+    fontSize: "12px",
+    fontWeight: "bold",
+    cursor: "pointer"
+  });
+
+  box.appendChild(closeBtn);
+  box.appendChild(linkInput);
+  box.appendChild(startBtn);
+  document.body.appendChild(box);
+
+  async function getTermDictFromUrl(setUrl) {
+    const response = await fetch(setUrl);
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+
+    const html = await response.text();
+    const doc = new DOMParser().parseFromString(html, "text/html");
+
+    const nextDataEl =
+      doc.getElementById("__NEXT_DATA__") ||
+      [...doc.querySelectorAll("script")].pop();
+
+    const nextData = JSON.parse(nextDataEl.textContent);
+    const rawRedux = nextData.props.pageProps.dehydratedReduxStateKey;
+    const reduxState = typeof rawRedux === "string" ? JSON.parse(rawRedux) : rawRedux;
+    const cardPairs = reduxState.studyModesCommon.studiableData.studiableItems;
+
+    const termDict = {};
+    const reverseDict = {};
+
+    cardPairs.forEach((item) => {
+      const getText = (query) => {
+        const side = item.cardSides.find((s) => s.label === query);
+        return side?.media?.find((m) => m.plainText)?.plainText.trim();
+      };
+
+      const wordText = getText("word");
+      const defText = getText("definition");
+
+      if (wordText && defText) {
+        termDict[wordText] = defText;
+        reverseDict[defText] = wordText;
+      }
+    });
+
+    return { termDict, reverseDict };
+  }
+
+  startBtn.addEventListener("click", async () => {
+    const targetUrl = linkInput.value.trim();
+    if (!targetUrl) return;
+
+    // Stop any existing matcher loop before restarting
+    if (activeInterval) {
+      clearInterval(activeInterval);
+      activeInterval = null;
+    }
+
+    startBtn.textContent = "Loading...";
+    startBtn.style.backgroundColor = "#4a8bf5";
+
+    try {
+      const { termDict, reverseDict } = await getTermDictFromUrl(targetUrl);
+      const count = Object.keys(termDict).length;
+
+      if (count === 0) throw new Error("No cards found");
+
+      startBtn.textContent = `Running (${count} terms) - Restart`;
+      startBtn.style.backgroundColor = "#2e8b57";
+
+      let lastQuestion = "";
+
+      activeInterval = setInterval(() => {
+        const questionEl = document.querySelector("div.tb1u6te");
+        const answers = [...document.querySelectorAll("div.am7y8xg div")]
+          .filter((_, index) => index % 2 === 0);
+
+        if (!questionEl || answers.length === 0) {
+          lastQuestion = "";
+          return;
+        }
+
+        const qText = questionEl.textContent.trim();
+        if (!qText || qText === lastQuestion) return;
+
+        const expectedAnswer = termDict[qText] || reverseDict[qText];
+        if (!expectedAnswer) return;
+
+        const matchingBox = answers.find(
+          (el) => el.textContent.trim() === expectedAnswer
+        );
+
+        if (matchingBox) {
+          matchingBox.click();
+          lastQuestion = qText;
+        }
+      }, 200);
+    } catch (err) {
+      startBtn.textContent = "Invalid Link - Retry";
+      startBtn.style.backgroundColor = "#c0392b";
+    }
+  });
 } else if (/^https:\/\/quizlet\.com\/\d+\/match\/?(?:\?.*)?$/.test(url)) {
     // TODO: Find JavaScript that handles stopwatch
     // https://copilot.microsoft.com/chats/WtPeNsm5rvHac4qFa4hKX
@@ -1214,7 +1348,7 @@ async function getTermDictFromUrl(setUrl = "https://quizlet.com/1237185505") {
             };
             const wordText = getText("word");
             const defText = getText("definition");
-        
+       
             if (wordText && defText) {
               termDict[wordText] = defText;
             }
@@ -1226,10 +1360,10 @@ async function getTermDictFromUrl(setUrl = "https://quizlet.com/1237185505") {
     for (const [key, value] of Object.entries(termDict)) {
       reverseDict[value] = key;
     }
-    
+   
     let cardsMatched = [];
 
-    
+   
     // Start game
     document.querySelectorAll('*').forEach(el => {
       if (el.textContent.trim() === "Start game") {
@@ -1242,12 +1376,12 @@ async function getTermDictFromUrl(setUrl = "https://quizlet.com/1237185505") {
     while (true) {
       const tiles = [...document.querySelectorAll('div.FormattedText')];
       const tileMap = new Map();
-    
+   
       tiles.forEach(div => {
         const text = div.textContent.trim();
         tileMap.set(text, div);
       });
-    
+   
       for (const div of tiles) {
         const text = div.getAttribute("aria-label");
         const matchText = termDict[text] || reverseDict[text];
@@ -1257,7 +1391,7 @@ async function getTermDictFromUrl(setUrl = "https://quizlet.com/1237185505") {
             const label = other.getAttribute("aria-label")
             return label === matchText;
           });
-    
+   
           if (matchDiv && matchDiv !== div && !(cardsMatched.includes(div) || cardsMatched.includes(matchDiv))) {
             div.click();
             await sleep(0); // 1 frame delay from clicking the second tile
@@ -1268,7 +1402,7 @@ async function getTermDictFromUrl(setUrl = "https://quizlet.com/1237185505") {
           }
         }
       }
-    
+   
       await sleep(0); // small delay before next full scan
     //   if (tiles.length <= 0) break;
     }
@@ -1295,10 +1429,10 @@ if (wrapper) {
     // Create the inner text div
     const bannerText = document.createElement("div");
     bannerText.id = "bannerText";
-    
+   
     // Append the inner div to the wrapper
     wrapper.appendChild(bannerText);
-    
+   
     // Finally, append the wrapper to the body
     document.body.insertBefore(wrapper, document.body.firstChild);
 }
@@ -1335,7 +1469,7 @@ style.textContent = `
       will-change: transform;
       text-align: center;
     }
-    
+   
     .bannerSpan {
         transition: color 1000ms linear !important;
     }
@@ -1460,12 +1594,12 @@ if (false) {
     function getValidSpan(iterations=1) {
       const spans = document.querySelectorAll("span");
       let i = 1;
-    
+   
       for (const span of spans) {
         const hasText = span.textContent.trim().length > 0;
         const invalidId = span.id === "page-manipulator-event-target";
         const invalidClass = span.className === "bannerSpan";
-    
+   
         if (hasText && !invalidId && !invalidClass) {
           if (i == iterations) {
             return span; // stop at the first valid one
@@ -1474,10 +1608,10 @@ if (false) {
           }
         }
       }
-    
+   
       return null; // none found
     }
-    
+   
     // Apply the color of the first valid span to all spans with class="bannerSpan"
     function applyColorToBannerSpans(colorIter=1) {
       const validSpan = getValidSpan(colorIter);
@@ -1487,16 +1621,16 @@ if (false) {
           applyColorToBannerSpans();
           return;
       }
-    
+   
       const spanColor = window.getComputedStyle(validSpan).color;
       const spans = bannerText.querySelectorAll("span");
       bannerText.querySelectorAll("span").forEach(span => {
           span.style.color = spanColor;
       });
-      
+     
       setTimeout(() => {applyColorToBannerSpans(colorIter);}, transitionTime);
     }
-    
+   
     // Run once
     applyColorToBannerSpans();
 } else if (Math.floor(Math.random() * 2) == 1) {
@@ -1511,14 +1645,14 @@ if (false) {
         const nextColor = `hsl(${(hueValue) % 360}, 100%, 50%)`;
         span.style.color = nextColor;
       });
-    
+   
       // Increment hue (wrap around at 360)
       hue = (hue + 3*transitionTime) % 360;
-    
+   
       // Run Again
       setTimeout(cycleColors, transitionTime);
     }
-    
+   
     // Start chroma effect
     cycleColors();
 } else {
@@ -1547,19 +1681,19 @@ if (false) {
     function cycleColors() {
       // Pick next color
       const nextColor = colors[index % colors.length];
-    
+   
       // Apply to all banner spans
       bannerText.querySelectorAll("span").forEach(span => {
         span.style.color = nextColor;
       });
-    
+   
       // Advance index
       index++;
-    
+   
       // Schedule next change
       setTimeout(cycleColors, transitionTime); // matches transition duration
     }
-    
+   
     // Start chroma effect
     cycleColors();
 }
@@ -1578,7 +1712,7 @@ if (false) {
       if (Math.abs(scrollOffset) >= bannerText.offsetWidth / repeatCount) {
         scrollOffset = 0;
       }
-    
+   
       requestAnimationFrame(scrollBanner);
   }
   scrollBanner();
@@ -1689,7 +1823,7 @@ document.addEventListener("click", e => {
 
   container.addEventListener("animationend", () => container.remove());
     }
-    
+   
     if (false) { // Explosion
   const numParticles = 12;
   for (let i = 0; i < numParticles; i++) {
@@ -1831,11 +1965,11 @@ document.addEventListener('keydown', (event) => {
             document.querySelector("button[title='formula']").click();
         } else if (event.key === "c" && altHeld) {
             blockEvents(event);
-            
+           
             // 1. Target the picker label using a static class/title
-            const colorPickerLabel = document.querySelector(".ql-color .ql-picker-label") 
+            const colorPickerLabel = document.querySelector(".ql-color .ql-picker-label")
                                   || document.querySelector("span[title='text color'] .ql-picker-label");
-            
+           
             if (colorPickerLabel) {
                 // 2. Dispatch mousedown (which Quill listens for to open dropdowns)
                 colorPickerLabel.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true }));
@@ -1897,7 +2031,7 @@ Y - Yay/Yippie`);
     if (soundboardActive && !event.ctrlKey) {
         if (event.key === "0" && event.altKey) {
             blockEvents(event);
-            
+           
             audios.forEach(audioObject => {
                 audioObject.pause();
             });
@@ -1998,15 +2132,15 @@ Y - Yay/Yippie`);
                     if (currentMeme[1] !== memeIter) {
                         // 1. Play vine boom obviously
                         playAudio(event, vineBoom);
-    
+   
                         // 2. Clone the image (false means shallow copy, which is enough for an <img>)
                         const clonedImg = bgImg.cloneNode(false);
                         memes.push(clonedImg);
-                        
+                       
                         // Optional: Change an attribute like id or class to prevent duplicate IDs
                         clonedImg.id = 'tempImageClone';
                         clonedImg.src = memeSrcs[memeIter];
-    
+   
                         clonedImg.style.position = 'fixed';
                         clonedImg.style.top = '0';
                         clonedImg.style.left = '0';
@@ -2014,10 +2148,10 @@ Y - Yay/Yippie`);
                         clonedImg.style.height = '100vh';
                         clonedImg.style.objectFit = 'fill'; // Distorts the image to fit exact dimensions
                         clonedImg.style.pointerEvents = ''; // Prevents clicks from passing through
-    
+   
                         clonedImg.style.opacity = 1;
                         clonedImg.style.transition = `opacity ${memePopupTime}s ease-in-out`;
-                        
+                       
                         // 3. Temporarily append the clone to the DOM (e.g., inside the body or a container)
                         document.body.appendChild(clonedImg);
                         currentMeme[0] = clonedImg;
@@ -2036,7 +2170,7 @@ Y - Yay/Yippie`);
                     // 2. Clone the image (false means shallow copy, which is enough for an <img>)
                     const clonedImg = bgImg.cloneNode(false);
                     memes.push(clonedImg);
-                    
+                   
                     // Optional: Change an attribute like id or class to prevent duplicate IDs
                     clonedImg.id = 'tempImageClone';
                     clonedImg.src = memeSrcs[memeIter];
@@ -2051,7 +2185,7 @@ Y - Yay/Yippie`);
 
                     clonedImg.style.opacity = 1;
                     clonedImg.style.transition = `opacity ${memePopupTime}s ease-in-out`;
-                    
+                   
                     // 3. Temporarily append the clone to the DOM (e.g., inside the body or a container)
                     document.body.appendChild(clonedImg);
 
@@ -2327,7 +2461,7 @@ async function simulateTyping(text, delay = 120) {
     grid.innerHTML = '';
     const query = filter.toLowerCase().trim();
 
-    currentMatches = symbols.filter(sym => 
+    currentMatches = symbols.filter(sym =>
       !query || sym.name.toLowerCase().includes(query) || sym.char.includes(query)
     );
 
@@ -2445,7 +2579,7 @@ function getCurrentPeriod(dayType) {
         // return now.getHours() * 60 + now.getMinutes();
         const njHour = parseInt(now.toLocaleString("en-US", { timeZone: "America/New_York", hour: "2-digit", hour12: false }), 10);
         const njMinute = parseInt(now.toLocaleString("en-US", { timeZone: "America/New_York", minute: "2-digit" }), 10);
-        
+       
         return njHour * 60 + njMinute;
     }
 
@@ -2484,7 +2618,7 @@ function getCurrentPeriod(dayType) {
         // timeBox.textContent = new Date().toLocaleTimeString();
         currentTime = new Date().toLocaleTimeString("en-US", { timeZone: "America/New_York" });
         timeBox.textContent = `${currentTime} ${getCurrentPeriod(dayType)}`;
-        
+       
         const displayPeriodEnd = className => {
             for (let i = 0; i < 10; i++) {
                 alert(`${className} is ending!`);
@@ -2597,7 +2731,7 @@ function playVideo(event, videoSrc, memePlayer) {
       videos.push(memePlayer);
       // 3. Assemble and inject into the DOM
       document.body.appendChild(memePlayer);
-    
+   
       // 4. Remove the element automatically when finished
       memePlayer.addEventListener('ended', () => {
         memePlayer.remove();
@@ -2658,7 +2792,7 @@ function enableBackgroundOverlay() {
     // Disable old img.html
     const oldImg = document.getElementsByClassName("bg-image")[0];
     if (oldImg) oldImg.style.display = "none";
-    
+   
     // Create <style> for the overlay
     const style = document.createElement("style");
     style.id = "bgImg";
@@ -2690,7 +2824,7 @@ function enableBackgroundOverlay() {
     if (bgImgSrcIter < 0 || bgImgSrcIter >= srcs.length) {
         img.style.display = "none";
     } else {
-        
+       
         // img.src = srcs[bgImgSrcIter];
         img.src = srcs[bgImgSrcIter];
     }
@@ -2705,10 +2839,10 @@ function enableBackgroundOverlay() {
         hour: 'numeric',
         hour12: false,
       });
-    
+   
       // Extract the current hour (0-23) in Eastern Time
       const estHour = Number(formatter.format(date));
-    
+   
       // 11:00 PM is 23, 5:00 AM is 5
       return estHour >= 23 || estHour < 5;
     }
@@ -2748,7 +2882,7 @@ function onYouTubeIframeAPIReady() {
 // 3. Change the speed once the player is ready
 function onPlayerReady(event) {
     // Set speed: 0.25, 0.5, 1, 1.5, or 2
-    player.setPlaybackRate(1); 
+    player.setPlaybackRate(1);
 }
 
 // Alternative: Change speed later via a button click
