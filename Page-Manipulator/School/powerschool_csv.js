@@ -1,6 +1,34 @@
-// V11.13.2026
+// V11.22.2026
 // Useful for https://docs.google.com/spreadsheets/d/1DoKdORl4rLTHS-SmeZf7L3-eYeqj1RXhQhfl5WQXWFA/edit?gid=1433644940#gid=1433644940
 // Inspired by Nicholas Baldino's grade calculator.xlsx (https://pcti.instructure.com/courses/18206/files/8176154?module_item_id=1722603) and (https://docs.google.com/spreadsheets/d/1dgzstyOCx6S6d6ZpMN6mX9wLc23AyjpI/edit?gid=22007649#gid=22007649)
+// Store this variable outside your function/event handler so it persists across runs
+let pasteValuesTab = null;
+
+function openOrFocusTab() {
+  // 1. If we already have a reference and pasteValuesTab hasn't been closed, just focus it
+  if (pasteValuesTab && !pasteValuesTab.closed) {
+    pasteValuesTab.focus();
+    return;
+  }
+
+  // 2. Otherwise, check if pasteValuesTab ("pasteValuesHere") is already open (e.g., after a page refresh)
+  pasteValuesTab = window.open("", "pasteValuesHere");
+
+  if (pasteValuesTab) {
+    // 3. If pasteValuesTab is brand-new and blank, load your initial Google Sheets URL
+    try {
+      if (pasteValuesTab.location.href === "about:blank") {
+        pasteValuesTab.location.href = "https://docs.google.com/spreadsheets/d/1DoKdORl4rLTHS-SmeZf7L3-eYeqj1RXhQhfl5WQXWFA/copy";
+      }
+    } catch (e) {
+      // A SecurityError means pasteValuesTab is already on a different domain (like example.com),
+      // so we leave its URL intact and just let focus() bring it to the front
+    }
+
+    pasteValuesTab.focus();
+  }
+}
+
 (() => {
   const container = document.getElementById('sps-assignment-categories-container');
   const heading = container?.querySelector('h2');
@@ -77,7 +105,8 @@
       btn.innerHTML = copyIcon;
     }, 1500);
     
-    alert("Go to \"https://docs.google.com/spreadsheets/d/1DoKdORl4rLTHS-SmeZf7L3-eYeqj1RXhQhfl5WQXWFA/edit?gid=1433644940#gid=1433644940\" and paste your values in Cell B4!")
+    // alert("Go to \"https://docs.google.com/spreadsheets/d/1DoKdORl4rLTHS-SmeZf7L3-eYeqj1RXhQhfl5WQXWFA/edit?gid=1433644940#gid=1433644940\" and paste your values in Cell B4!")
+    openOrFocusTab();
   });
 
   heading.appendChild(btn);
