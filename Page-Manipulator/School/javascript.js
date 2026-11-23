@@ -1,4 +1,4 @@
-// V11.18.2026
+// V11.23.2026
 if (document.querySelector("span.menu-item__badge span")) alert("You have a Canvas Notification!")
 // Active Websites: All
 
@@ -6,7 +6,9 @@ try {
 // SET ACTIVE WEBSITES TO ALL
 // Ctrl + Alt + T to open Crosh (aka Command Prompt for Chromebook)
 // https://copilot.microsoft.com/chats/WtPeNsm5rvHac4qFa4hKX
-// Go to "chrome:flags", Search "ash-debug-shortcuts" and enable, then Search + Shift + P to toggle the touchpad and Search + Shift + T to toggle the touchscreen
+// Go to "chrome:flags#ash-debug-shortcuts" and enable,
+// then Search + Shift + P to toggle the touchpad and Search + Shift + T to toggle the touchscreen
+// Also check out "chrome://flags/#enable-force-dark"
 if (document.title.toLowerCase().includes("edpuzzle")) {
     alert("You can watch the EdPuzzle video in the background using split screen!");
 }
