@@ -1,4 +1,4 @@
-// V11.23.2026
+// V11.25.2026
 if (document.querySelector("span.menu-item__badge span")) alert("You have a Canvas Notification!")
 // Active Websites: All
 
@@ -1090,14 +1090,13 @@ document.querySelectorAll('span.score-display').forEach(span => {
 });
 }, 1);
 // Double Canvas Grade (3/4)
-} else if (false && /^https:\/\/pcti\.instructure\.com\/courses\/\d+\/grades(?:\?.*)?$/.test(url)) {
-    if (!url.endsWith("?grading_period_id=0")) {
+} else if (!url.endsWith("?grading_period_id=0")) {
 const match = url.match(/^https:\/\/pcti\.instructure\.com\/courses\/(\d+)\/grades(?:\?.*)?$/);
 if (match) {
   const courseId = match[1];
   window.location.href = `https://pcti.instructure.com/courses/${courseId}/grades?grading_period_id=0`;
 }
-    }
+    } else if (false && /^https:\/\/pcti\.instructure\.com\/courses\/\d+\/grades(?:\?.*)?$/.test(url)) {
     document.querySelectorAll('span.grade').forEach(span => {
     const match = span.textContent.trim().match(/^\d{1,3}(?:\.\d{1,2})?%$/);
     if (match) {
