@@ -2785,6 +2785,13 @@ async function getLatestDayType(topic = SCHEDULE_ROOM_TOPIC) {
     let offsetX = 0;
     let offsetY = 0;
 
+    timeBox.addEventListener("contextmenu", e => {
+        e.preventDefault();
+        wrapper.style.top = "10px";
+        wrapper.style.left = "50%";
+        wrapper.style.transform = "translateX(-50%)";
+    });
+
     timeBox.addEventListener("mousedown", e => {
         e.preventDefault();
         isDragging = true;
