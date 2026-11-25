@@ -2549,24 +2549,21 @@ if (window.location.href === "https://pcti.instructure.com/?login_success=0") {
     document.body.textContent = "login failed fahhh";
 }
 // Determine Current Period VVVVV - Time Tracker program - (time-period-tracker.js)
-function formatTime(minutes, includeEnd=0) {
+function formatTime(minutes, includeEnd = 0) {
     const hour = Math.floor(minutes / 60);
     const mins = minutes % 60;
     const meridiem = hour > 12 ? "PM" : "AM";
     let timeString = `${hour % 12 === 0 ? "12" : hour % 12}:${String(mins).padStart(2, "0")} ${meridiem}`;
-    if (includeEnd) timeString += `-${formatTime(minutes + includeEnd)}`
+    if (includeEnd) timeString += `-${formatTime(minutes + includeEnd)}`;
     return timeString;
 }
 
 function getCurrentPeriodStr(dayType, mins, times, periodLength, firstPeriodExtra, breakTime) {
-    // Period 1 Extra: {normal: +6; delayed: +12; half: +4}
-    // Break: {normal: +5; delayed: +4; half: +5}
-    // Tell me why Delayed Opening gives 1st period a whole 12 EXTRA MINUTES and only gives us 4 minutes of break instead of 5
     for (let i = 0; i < times.length; i++) {
         if (mins < times[i]) {
             if (i === 0) return `Before School (<${formatTime(times[0])})`;
             if (i === 1) return `Period 1 (${formatTime(times[0], periodLength + firstPeriodExtra)})`;
-            return `Period ${i} (${formatTime(times[i-1] + breakTime, periodLength)})`;
+            return `Period ${i} (${formatTime(times[i - 1] + breakTime, periodLength)})`;
         }
     }
     return `After School (>${formatTime(times[times.length - 1])})`;
@@ -2577,10 +2574,8 @@ function getCurrentPeriod(dayType) {
 
     function getMinutes() {
         const now = new Date();
-        // return now.getHours() * 60 + now.getMinutes();
         const njHour = parseInt(now.toLocaleString("en-US", { timeZone: "America/New_York", hour: "2-digit", hour12: false }), 10);
         const njMinute = parseInt(now.toLocaleString("en-US", { timeZone: "America/New_York", minute: "2-digit" }), 10);
-       
         return njHour * 60 + njMinute;
     }
 
@@ -2593,40 +2588,168 @@ function getCurrentPeriod(dayType) {
     return period;
 }
 
+// 1. Unique Secret Room Topic for Schedule Syncing
+const SCHEDULE_ROOM_TOPIC = "pcti-bell-schedule-sync-94821";
+
+// Helper to fetch the latest schedule message from the room
+async function getLatestDayType(topic = SCHEDULE_ROOM_TOPIC) {
+    try {
+        // Check recent cached messages (since=24h) so it still catches today's setting even if sent earlier
+        const response = await fetch(`https://ntfy.sh/${topic}/json?poll=1&since=24h`);
+        const rawText = await response.text();
+        if (!rawText.trim()) return null;
+
+        const lines = rawText.trim().split("\n");
+        for (let i = lines.length - 1; i >= 0; i--) {
+            const packet = JSON.parse(lines[i]);
+            if (packet.event !== "message") continue;
+
+            let msgText = packet.message;
+            try {
+                const parsed = JSON.parse(packet.message);
+                msgText = parsed.text ?? packet.message;
+            } catch {}
+
+            const normalized = String(msgText).trim().toLowerCase();
+            if (["normal", "half", "delayed"].includes(normalized)) {
+                return normalized;
+            }
+        }
+    } catch (err) {
+        console.error("Failed to fetch dayType from ntfy:", err);
+    }
+    return null;
+}
+
 // Black Time Box Window
-(function() {
-    // Create the timeBox
+(async function() {
+    // Remove old instance if re-running
+    document.getElementById("timeBoxWrapper")?.remove();
+
+    // 4. Check room topic's latest message on startup, otherwise default to "normal"
+    let dayType = (await getLatestDayType()) || "normal";
+
+    // Create wrapper so the 3 buttons stay directly underneath the timeBox even when dragged
+    const wrapper = document.createElement("div");
+    wrapper.id = "timeBoxWrapper";
+    Object.assign(wrapper.style, {
+        position: "fixed",
+        top: "10px",
+        left: "50%",
+        transform: "translateX(-50%)",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: "4px",
+        zIndex: "2147483646",
+        fontFamily: "monospace",
+        fontSize: "12px"
+    });
+
+    // Main time display box
     const timeBox = document.createElement("div");
     timeBox.id = "timeBox";
-    timeBox.style.position = "fixed";        // fixed beats Canvas layout
-    timeBox.style.top = "10px";
-    timeBox.style.left = "50%";
-    timeBox.style.transform = "translateX(-50%)";
-    timeBox.style.padding = "6px 10px";
-    timeBox.style.background = "black";
-    timeBox.style.color = "white";
-    timeBox.style.fontFamily = "monospace";
-    timeBox.style.fontSize = "12px";
-    timeBox.style.borderRadius = "4px";
-    timeBox.style.cursor = "move";
-    timeBox.style.zIndex = "2147483646";      // Canvas can't beat this
-    // timeBox.textContent = new Date().toLocaleTimeString();
-    document.body.appendChild(timeBox);
+    Object.assign(timeBox.style, {
+        padding: "6px 10px",
+        background: "black",
+        color: "white",
+        borderRadius: "4px",
+        cursor: "move",
+        whiteSpace: "nowrap",
+        userSelect: "none"
+    });
 
-    // Update time every second
+    // 2. Three boxes right below the timeBox for Normal, Half, Delayed
+    const btnRow = document.createElement("div");
+    Object.assign(btnRow.style, {
+        display: "flex",
+        gap: "4px",
+        width: "100%"
+    });
+
+    const modes = ["Normal", "Half", "Delayed"];
+    const modeButtons = {};
+
+    function updateActiveButtonStyles() {
+        modes.forEach(label => {
+            const btn = modeButtons[label];
+            const isSelected = label.toLowerCase() === dayType;
+            btn.style.background = isSelected ? "#4a8bf5" : "#1e1e1e";
+            btn.style.color = isSelected ? "#ffffff" : "#bbbbbb";
+            btn.style.borderColor = isSelected ? "#4a8bf5" : "#444444";
+            btn.style.fontWeight = isSelected ? "bold" : "normal";
+        });
+    }
+
+    modes.forEach(label => {
+        const btn = document.createElement("button");
+        btn.textContent = label;
+        Object.assign(btn.style, {
+            flex: "1",
+            padding: "3px 6px",
+            background: "#1e1e1e",
+            color: "#bbbbbb",
+            border: "1px solid #444444",
+            borderRadius: "4px",
+            fontFamily: "inherit",
+            fontSize: "11px",
+            cursor: "pointer"
+        });
+
+        // Prevent dragging the wrapper when clicking a mode button
+        btn.addEventListener("mousedown", e => e.stopPropagation());
+
+        // 3. Send "Normal", "Half", or "Delayed" to the room topic when clicked
+        btn.addEventListener("click", async () => {
+            dayType = label.toLowerCase();
+            updateActiveButtonStyles();
+
+            await fetch(`https://ntfy.sh/${SCHEDULE_ROOM_TOPIC}`, {
+                method: "POST",
+                body: label // Sends exact string: "Normal", "Half", or "Delayed"
+            });
+        });
+
+        modeButtons[label] = btn;
+        btnRow.appendChild(btn);
+    });
+
+    updateActiveButtonStyles();
+
+    wrapper.appendChild(timeBox);
+    wrapper.appendChild(btnRow);
+    document.body.appendChild(wrapper);
+
+    // Optional: Live-sync across open tabs via SSE if you click a button in another tab
+    const eventSource = new EventSource(`https://ntfy.sh/${SCHEDULE_ROOM_TOPIC}/sse`);
+    eventSource.onmessage = event => {
+        const packet = JSON.parse(event.data);
+        if (packet.event !== "message") return;
+
+        let msgText = packet.message;
+        try {
+            const parsed = JSON.parse(packet.message);
+            msgText = parsed.text ?? packet.message;
+        } catch {}
+
+        const normalized = String(msgText).trim().toLowerCase();
+        if (["normal", "half", "delayed"].includes(normalized)) {
+            dayType = normalized;
+            updateActiveButtonStyles();
+        }
+    };
+
+    // Update time every 100ms
     setInterval(() => {
-        const dayType = "half"; // Time Tracker: Not a Normal School Day? Not a Full Day? Change This!
-        // timeBox.textContent = new Date().toLocaleTimeString();
-        currentTime = new Date().toLocaleTimeString("en-US", { timeZone: "America/New_York" });
+        const currentTime = new Date().toLocaleTimeString("en-US", { timeZone: "America/New_York" });
         timeBox.textContent = `${currentTime} ${getCurrentPeriod(dayType)}`;
-       
+
         const displayPeriodEnd = className => {
             for (let i = 0; i < 10; i++) {
                 alert(`${className} is ending!`);
             }
-        }
+        };
 
-        // Optional TTTODO: Make function with array courses, arrray times (either values or a list including value and value to subtract from first value)
         if (dayType === "normal") {
             if (currentTime === "8:55:20 AM") displayPeriodEnd("AP Physics C: Mechanics");
             else if (currentTime === "9:40:20 AM") displayPeriodEnd("AP Calculus B/C");
@@ -2657,39 +2780,29 @@ function getCurrentPeriod(dayType) {
         }
     }, 100);
 
-    // Dragging logic
+    // Dragging logic (moves the entire wrapper so buttons stay attached below timeBox)
     let isDragging = false;
     let offsetX = 0;
     let offsetY = 0;
 
     timeBox.addEventListener("mousedown", e => {
-        event.preventDefault();
+        e.preventDefault();
         isDragging = true;
 
-        // Remove centering transform once dragging starts
-        timeBox.style.transform = "";
-
-        offsetX = e.clientX - timeBox.getBoundingClientRect().left;
-        offsetY = e.clientY - timeBox.getBoundingClientRect().top;
+        wrapper.style.transform = "";
+        offsetX = e.clientX - wrapper.getBoundingClientRect().left;
+        offsetY = e.clientY - wrapper.getBoundingClientRect().top;
     });
 
     window.addEventListener("mousemove", e => {
         if (!isDragging) return;
-        timeBox.style.left = e.clientX - offsetX + "px";
-        timeBox.style.top = e.clientY - offsetY + "px";
+        wrapper.style.left = e.clientX - offsetX + "px";
+        wrapper.style.top = e.clientY - offsetY + "px";
     });
 
     window.addEventListener("mouseup", () => {
         isDragging = false;
     });
-
-    // Canvas sometimes re-renders the page.
-    // This keeps your timeBox visible even if Canvas tries to remove it.
-    /*setInterval(() => {
-        if (!document.getElementById("timeBox")) {
-            document.body.appendChild(timeBox);
-        }
-    }, 500);*/
 })();
 // Determine Current Period ^^^^^
 document.addEventListener('keyup', (event) => {
