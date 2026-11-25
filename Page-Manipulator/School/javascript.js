@@ -2615,7 +2615,7 @@ function getCurrentPeriod(dayType) {
 
     // Update time every second
     setInterval(() => {
-        const dayType = "normal"; // Time Tracker: Not a Normal School Day? Not a Full Day? Change This!
+        const dayType = "half"; // Time Tracker: Not a Normal School Day? Not a Full Day? Change This!
         // timeBox.textContent = new Date().toLocaleTimeString();
         currentTime = new Date().toLocaleTimeString("en-US", { timeZone: "America/New_York" });
         timeBox.textContent = `${currentTime} ${getCurrentPeriod(dayType)}`;
